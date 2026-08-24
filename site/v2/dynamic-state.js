@@ -142,12 +142,40 @@ export const EAS_IDEAL = Object.freeze({
    * Still AUTHORED, and still the weakest link in the chain: nothing in
    * this repo validates S. Lowering it shrinks the exposure; it does not
    * remove it. */
-  s: 0.12,
+  /* S 12% -> 28% (Toby, 2026-08-24, ruled with the deployed-tail Cd
+   * margin below as ONE package): "Cd = 0.028... and the S setting =
+   * 28% — this gives numbers i'm happy with, basically same output
+   * numbers, also means w/o BLI the orange weight warning appears."
+   * The package trades the flagship's Cd conservatism against a larger
+   * S credit and lands the ideal cell essentially where it was — with
+   * one deliberate storytelling gain: the BARE ship without BLI now
+   * honestly shows the orange weight warning, so BLI visibly matters.
+   * 28% sits in the 15-35% EAS recovery-credit band (the zone bar says
+   * so on the slider), no longer inside the published-results band the
+   * 2026-08-18 ruling chose — that trade is the owner's, dated here.
+   * Still AUTHORED; nothing in this repo validates S. */
+  s: 0.28,
   scenario: 'VISION',
   cdSource: 'estimated', sSource: 'authored',
-  cdLabel: 'ESTIMATED — deployed Smart Tail geometry (derived 2026-08-18)',
-  sLabel: 'EAS IDEAL — S 12%, within published BLI results (ruled 2026-08-18)',
+  cdLabel: 'ESTIMATED — deployed Smart Tail geometry + design margin (ruled 2026-08-24)',
+  sLabel: 'EAS IDEAL — S 28%, within the EAS recovery-credit bound (re-ruled 2026-08-24)',
 });
+
+/* DEPLOYED-TAIL Cd, RULED (Toby, 2026-08-24; part of the package above).
+ * WHAT: the deployed-Smart-Tail Sunship's coefficient is pinned at 0.028
+ *   — the cell, the tracking slider and the estimator MARKER all read it
+ *   (one value at the compute() seam, so the display can never split).
+ * WHY: the sectional estimator measures the deployed fairing at
+ *   0.0217-0.0226; the owner rules a design margin on top ("Cd = 0.028
+ *   and to move the estimator line to match").
+ * PROVENANCE: measured base per the 2026-08-18 derivation (true-section
+ *   r20 + B1 roughness included); margin authored 2026-08-24.
+ * LIMITATION: the margin is a judgement, not a measurement — the
+ *   estimator itself is UNTOUCHED (its calibration and fixtures stand;
+ *   every other body still shows the pure measurement).
+ * REPLACE WHEN: a validated drag figure for the deployed configuration
+ *   exists, or the owner re-rules the margin. */
+export const SUNSHIP_DEPLOYED_CD_RULED = 0.028;
 
 export const SUNSHIP_SHAPE = Object.freeze({ kind: 'preset', id: 'sunship', name: 'SUNSHIP' });
 
@@ -157,7 +185,7 @@ const ESTIMATED_BARE_LABEL = 'ESTIMATED — bare hull, sectional estimator (M6, 
 const ESTIMATED_GENERIC_TAIL_LABEL = 'ESTIMATED — generic Smart Tail, 20% of pressure removed (REFERENCE ASSUMPTION §5.4)';
 /* The Sunship's tail is not a generic 20%-of-pressure assumption — it is
  * an authored geometry the estimator measures directly (2026-08-18). */
-const ESTIMATED_SUNSHIP_TAIL_LABEL = 'ESTIMATED — deployed Smart Tail geometry, sectional estimator (2026-08-18)';
+const ESTIMATED_SUNSHIP_TAIL_LABEL = 'ESTIMATED — deployed Smart Tail geometry + design margin (ruled 2026-08-24)';
 
 /* LAST-RESORT Cd, and nothing more (2026-08-18). §5.5 says the page may
  * never wedge on the estimator's absence, so a caller wiring no estimator
@@ -438,9 +466,27 @@ export function compute(state, computeDynamics, geometry = SUNSHIP_GEOMETRY, est
   const geo = deployed ? tailedBody.geometry(geometry.lengthM) : geometry;
   const proxyRec = deployed && estimator ? tailedBody.proxyRecord()
     : (estimator ? estimator.proxyRecord : null);
-  const bareEst = estimator
+  let bareEst = estimator
     ? estimator.estimateCd(proxyRec, geo, state.airspeedKmh)
     : null;
+  /* the deployed-tail Sunship reads the RULED coefficient (see
+   * SUNSHIP_DEPLOYED_CD_RULED) — applied to the estimate object itself so
+   * the marker, the tracking value and the cell agree by construction.
+   * The object stays engine-consistent (cd = friction + pressure; band
+   * brackets at the standard fraction): friction is the real measured
+   * skin term, so the ruled margin lands in PRESSURE drag — which is
+   * where design conservatism physically belongs. */
+  if (deployed && bareEst && bareEst.status === 'ok' && Number.isFinite(bareEst.cdEstimate)) {
+    const e = SUNSHIP_DEPLOYED_CD_RULED;
+    bareEst = {
+      ...bareEst,
+      cdEstimate: e,
+      pressureCd: e - bareEst.frictionCd,
+      band: [0.8 * e, 1.2 * e],
+      provenance: { ...bareEst.provenance,
+        ruledMargin: 'deployed-tail Cd pinned at 0.028 over the measured 0.0217-0.0226 (owner design margin, 2026-08-24)' },
+    };
+  }
   // When the fairing is deployed the caller's geometry IS the tailed body,
   // so bareEst already is the tailed estimate. Other shapes have only their
   // bare geometry and keep the §5.4 generic-tail model.

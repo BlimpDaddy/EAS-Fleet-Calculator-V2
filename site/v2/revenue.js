@@ -300,7 +300,7 @@ recapPanel.appendChild(shareRow);
 // capex/opex-per-ship assumptions, and the "(80% creditable)" qualifier.
 // Displayed version (Toby, 2026-08-17) — the header chip and the copy
 // summary title read from this one constant.
-const EAS_VERSION = '1.8';
+const EAS_VERSION = '2.0';
 
 // Small "Ver x.x" chip beside the top-left logo (Toby, 2026-08-17).
 // Runtime-placed: the logo sits in a display:contents anchor inside
