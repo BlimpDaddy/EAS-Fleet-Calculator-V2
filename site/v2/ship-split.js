@@ -448,12 +448,12 @@ function buildChooser(shipSection) {
   // Direct syncModeBadge() calls after each transition we cause —
   // the observers alone proved lazy on the chooser path (dots stayed
   // grey ~1s after the pick; caught 2026-08-17).
-  const statics = mk('☁︎↺', 'Aero-Statics', 'Can it lift? Size, buoyancy, net lift.', () => {
+  const statics = mk('☁︎↺', 'Aero-Statics', 'First - add size and heat for buoyant lift', () => {
     setMode('statics');
     overlay.classList.add('swipe-out');
     setTimeout(() => { overlay.remove(); syncModeBadge(); }, 500);
   });
-  const dynamics = mk('≋→', 'Aero-Dynamics', 'Can it fly? Drag, power, fuel.', () => {
+  const dynamics = mk('≋→', 'Aero-Dynamics', 'Second - add speed for movement', () => {
     setMode('dynamics');
     // NO swipe-out on the dynamics pick (Toby's second flash catch,
     // 2026-08-17): the swipe animation itself was the flash — the
