@@ -14,7 +14,7 @@
  *   node viz/run-payloads.mjs                 build all presets, write viz/fixtures/
  *   node viz/run-payloads.mjs --hash-only sunship   print payloadId only (byte-stability fixture)
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseObjVertices, parseObjMesh, facesToEdgeList } from '../src/obj.js';
@@ -30,7 +30,12 @@ import { finalizePayload } from './layer1/canonical-json.mjs';
 import { SIZE_WARN_BYTES, SIZE_FAIL_BYTES } from './layer1/constants.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const OBJ_DIR = join(here, '..', '..', '..', '3D OBJ');
+/* the local shape corpus sits beside the working repos in CodeEverything;
+   in the consolidated public repo (engine/ one level deeper) it is one
+   further up. Try both so this file ships byte-identical in every layout
+   (node-only runner — the browser never executes it). */
+const OBJ_DIR = [join(here, '..', '..', '3D OBJ'), join(here, '..', '..', '..', '3D OBJ')]
+  .find((d) => existsSync(d)) ?? join(here, '..', '..', '3D OBJ');
 const FIXTURE_DIR = join(here, 'fixtures');
 
 /* declared file-frame → payload-frame (+X flight) relabels, right-handed */

@@ -56,8 +56,12 @@ const CODE_EXT = new Set(['.mjs', '.js', '.html', '.md']);
 /* G0b's drift harness (run-smart-tail-g0.mjs) uses an absolute
  * dev-machine ROOT to compare the two WORKING repos byte-for-byte —
  * that is still its job until cutover, so it is copied untouched.
- * CUTOVER TODO: re-point it at engine/src vs site/calcv2/src. */
-const TRANSFORM_EXCLUDE = new Set(['run-smart-tail-g0.mjs']);
+ * CUTOVER TODO: re-point it at engine/src vs site/calcv2/src.
+ * run-payloads.mjs SHIPS in the baked tree, so it must stay
+ * byte-identical in every layout — it carries its own two-location
+ * corpus fallback at source and needs (and must not get) no transform
+ * (the tuple rewrite below would corrupt its fallback array). */
+const TRANSFORM_EXCLUDE = new Set(['run-smart-tail-g0.mjs', 'run-payloads.mjs']);
 const PATH_REF = /(\.\.\/)+CalcV1-site\/|'CalcV1-site', 'assets'/;
 let transformed = 0, leftovers = [];
 (function walk(dir) {
