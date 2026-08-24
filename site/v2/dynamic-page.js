@@ -372,7 +372,7 @@ controlsHeading.className = 'fleet-controls-heading';
 // Properties' was redundant — the user selected these properties —
 // and the tiny mode word under the nav dots retired with it; the
 // panel title now does the naming, two problems one fix).
-controlsHeading.textContent = 'DYNAMICS';
+controlsHeading.textContent = 'Aero-Dynamics';
 const idealBtn = document.createElement('button');
 idealBtn.className = 'fleet-control-preset';
 idealBtn.dataset.v2 = 'dynamic-ideal';
@@ -500,6 +500,10 @@ function toggleRow(labelText) {
 }
 const tailToggle = toggleRow('Smart Tail');
 const bliToggle = toggleRow('BLI');
+// Hover expansions (owner, 2026-08-24). Native title so phones' tap-to-
+// reveal (mobile.js OURS list) is unaffected; desktop hovers explain.
+tailToggle.row.title = 'Retractable rear-mast';
+bliToggle.row.title = 'Boundary Layer Ingestion';
 // EAS-mode chip: self-identifies engineer-unlocked states (visible while
 // the chord is held, and while any generic shape has systems ON) — a
 // screenshot of an unlocked configuration can never pass as public.
