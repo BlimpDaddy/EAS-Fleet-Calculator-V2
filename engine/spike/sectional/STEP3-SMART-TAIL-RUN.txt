@@ -1,0 +1,189 @@
+
+STEP 3 — SMART TAIL OAT SWEEPS (spec 84)
+  100 km/h. ONE geometry: convex envelope + authored Smart Tail, concavity intact.
+  NO global 3D hull before ribbons. The hull path is the 78 sensitivity diagnostic only.
+  Estimator-response experiment, NOT aerodynamic validation. No Cd direction pre-registered.
+
+  BASELINE (84.1), and the two recorded values it must reproduce:
+    compositeV1 0.161170   vs 80.4's recorded 0.161170
+    Cd          0.0222       vs 81.3 R3's recorded 0.0222
+    class rounded   eligibility ELIGIBLE   caps 1 (tip-only)
+    F1 0.5778  F2a 1.973  F3 1.9526  F4 0.3289  F5 0.000
+    pressure 0.01183  friction 0.01035  wetted 253,972 m2  frontal 40,056 m2
+
+==============================================================================================================================
+  T-LEN  DEPLOYED LENGTH (EXTRA_M, m)
+    extraM  proxy      Cd       press    fric     class    elig        F1      F2a     F4      z4+z5   caps  dCd%  dPx%  path                  conf        exploit
+    0       0.791694 0.45389  0.44540  0.00850  pinned   ELIGIBLE    0.5536  22.503 0.3873  22.503    1   3.0   2.4  ROBUST                REDUCED     -
+    54      0.770994 0.17919  0.17041  0.00878  rounded  ELIGIBLE    0.5513  28.394 0.3901  28.394    1   0.4   0.3  ROBUST                REDUCED     -
+    108     0.482354 0.10235  0.09310  0.00925  rounded  ELIGIBLE    0.4998  20.313 0.3694  20.313    1   5.5   4.3  ROBUST                REDUCED     -
+    162     0.259152 0.04312  0.03333  0.00979  rounded  ELIGIBLE    0.5007  11.473 0.3551  11.473    1  38.2  23.8  DIVERGENT_CD          REDUCED     -
+    216     0.161170 0.02217  0.01183  0.01035  rounded  ELIGIBLE    0.5778   1.973 0.3289   1.973    1   7.5  40.3  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    270     0.132307 0.02197  0.01107  0.01090  rounded  ELIGIBLE    0.6762   1.713 0.3184   1.713    1   9.1  60.0  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    324     0.116937 0.02212  0.01067  0.01145  rounded  ELIGIBLE    0.8142   1.511 0.3014   1.511    1   9.4  73.1  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4,EX5
+
+    zone turning histories (deg), all 8 zones; earned domain is 1-5 (55.2):
+      extraM=0        13.46   25.33   12.95    8.37    9.16   13.34   30.03    8.27
+      extraM=54       20.08   27.93   14.72    6.32   15.57   12.82    3.29    8.90
+      extraM=108      21.50   25.21   10.92   15.85   18.68    1.63    2.82    8.16
+      extraM=162      27.60   23.61   10.37   22.40   10.10    1.37    2.39    7.19
+      extraM=216      33.71   21.31   14.74   24.36    0.80    1.17    2.06    6.32
+      extraM=270      34.86   19.78   21.86   18.23    0.70    1.02    1.80    5.59
+      extraM=324      36.83   18.62   29.48    9.47    0.61    0.90    1.59    5.00
+
+    boundaries: 
+      *** class pinned -> rounded between extraM=0 and 54  [extraM=0 pinned by: (d) aft shoulder 0.1924 > 0.13]
+      *** confidence REDUCED -> SUPPORTED between extraM=162 and 216
+
+    baseline local response: Cd 0.02217; neighbours 0.04312 / 0.02197  (-94.5% below, -0.9% above)  
+    contiguous Cd 0.02x-0.03x run through baseline: extraM 216 .. 324  (3 of 7 steps)
+    full Cd series:    0.45389  0.17919  0.10235  0.04312  0.02217  0.02197  0.02212
+    full proxy series: 0.791694  0.770994  0.482354  0.259152  0.161170  0.132307  0.116937
+
+==============================================================================================================================
+  T-ATT  ATTACHMENT / FAIRING START (ATTACH)
+    attach  proxy      Cd       press    fric     class    elig        F1      F2a     F4      z4+z5   caps  dCd%  dPx%  path                  conf        exploit
+    0.6     0.090221 0.02044  0.00997  0.01047  pinned   ELIGIBLE    0.9329   2.045 0.2643   2.045    1   0.1   0.0  ROBUST                SUPPORTED   -
+    0.65    0.094949 0.02064  0.01009  0.01054  rounded  ELIGIBLE    0.9051   2.069 0.2682   2.069    1   0.1   0.1  ROBUST                SUPPORTED   -
+    0.7     0.095693 0.02066  0.01011  0.01055  rounded  ELIGIBLE    0.8891   2.070 0.2707   2.070    1   0.1   0.4  ROBUST                SUPPORTED   -
+    0.75    0.099452 0.02070  0.01021  0.01048  rounded  ELIGIBLE    0.7445   2.043 0.2978   2.043    1   0.7   4.9  ROBUST                SUPPORTED   -
+    0.8     0.161170 0.02217  0.01183  0.01035  rounded  ELIGIBLE    0.5778   1.973 0.3289   1.973    1   7.5  40.3  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.85    0.317764 0.11947  0.10944  0.01003  pinned   ELIGIBLE    0.4047   9.710 0.3721   9.710    1  82.8  67.3  DIVERGENT_CD          REDUCED     -
+    0.9     0.490240 0.24184  0.23170  0.01014  pinned   ELIGIBLE    0.3346  37.828 0.4159  37.828    1  91.5  77.2  DIVERGENT_CD          REDUCED     -
+
+    zone turning histories (deg), all 8 zones; earned domain is 1-5 (55.2):
+      attach=0.6      33.71   21.31   15.87    0.63    0.83    1.21    2.13    6.51
+      attach=0.65     33.69   21.31   14.98    1.74    0.84    1.23    2.15    6.57
+      attach=0.7      33.69   21.31   14.66    2.42    0.84    1.23    2.15    6.57
+      attach=0.75     33.71   21.31   14.74   10.33    0.83    1.21    2.13    6.50
+      attach=0.8      33.71   21.31   14.74   24.36    0.80    1.17    2.06    6.32
+      attach=0.85     33.71   21.31   14.74   43.32    8.65    1.06    1.87    5.79
+      attach=0.9      33.69   21.31   14.74   33.88   36.95    0.88    1.55    4.89
+
+    boundaries: 
+      *** class pinned -> rounded between attach=0.6 and 0.65  [attach=0.6 pinned by: (d) aft shoulder 0.1615 > 0.13]
+      *** class rounded -> pinned between attach=0.8 and 0.85  [attach=0.85 pinned by: (d) aft shoulder 0.1328 > 0.13]
+      *** confidence SUPPORTED -> REDUCED between attach=0.8 and 0.85
+
+    baseline local response: Cd 0.02217; neighbours 0.02070 / 0.11947  (6.7% below, 438.9% above)  
+    contiguous Cd 0.02x-0.03x run through baseline: attach 0.6 .. 0.8  (5 of 7 steps)
+    full Cd series:    0.02044  0.02064  0.02066  0.02070  0.02217  0.11947  0.24184
+    full proxy series: 0.090221  0.094949  0.095693  0.099452  0.161170  0.317764  0.490240
+
+==============================================================================================================================
+  T-EXP  TAPER EXPONENT / CLOSURE LAW (P)
+    P       proxy      Cd       press    fric     class    elig        F1      F2a     F4      z4+z5   caps  dCd%  dPx%  path                  conf        exploit
+    0.4     0.239371 0.03942  0.02803  0.01139  rounded  ELIGIBLE    0.5110   3.676 0.3464   3.676    1  41.6  37.5  DIVERGENT_CD          REDUCED     -
+    0.6     0.183581 0.02388  0.01309  0.01079  rounded  ELIGIBLE    0.5392   3.297 0.3402   3.297    1  11.2  42.8  DIVERGENT_CD          SUPPORTED   -
+    0.7     0.167928 0.02256  0.01200  0.01055  rounded  ELIGIBLE    0.5572   2.733 0.3351   2.733    1   8.1  42.6  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.8     0.161170 0.02217  0.01183  0.01035  rounded  ELIGIBLE    0.5778   1.973 0.3289   1.973    1   7.5  40.3  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.9     0.164958 0.02209  0.01193  0.01016  rounded  ELIGIBLE    0.6013   1.052 0.3214   1.052    1   6.7  35.4  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    1       0.176120 0.02222  0.01222  0.01000  rounded  ELIGIBLE    0.6276   0.000 0.3127   0.000    1   6.5  33.5  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX3,EX4
+    1.25    0.231885 0.03612  0.02602  0.01009  rounded  ELIGIBLE    0.6244   3.052 0.3237   3.052    1  42.5  49.5  DIVERGENT_CD          REDUCED     -
+    1.5     0.329931 0.06237  0.05228  0.01009  rounded  ELIGIBLE    0.5944   6.482 0.3400   6.482    1  66.7  64.5  DIVERGENT_CD          REDUCED     -
+    2       0.574530 0.12788  0.11779  0.01009  rounded  ELIGIBLE    0.5064  13.741 0.3736  13.741    1  83.8  79.6  DIVERGENT_CD          REDUCED     -
+
+    zone turning histories (deg), all 8 zones; earned domain is 1-5 (55.2):
+      P=0.4      33.71   21.31   14.74   30.82    1.38    2.29    4.88   21.45
+      P=0.6      33.71   21.31   14.74   27.51    1.29    2.00    3.85   13.99
+      P=0.7      33.69   21.31   14.74   25.92    1.09    1.64    3.01   10.06
+      P=0.8      33.71   21.31   14.74   24.36    0.80    1.17    2.06    6.32
+      P=0.9      33.69   21.31   14.74   22.85    0.44    0.62    1.04    2.93
+      P=1        33.71   21.31   14.74   21.39    0.00    0.00    0.00    0.00
+      P=1.25     33.71   21.31   14.74   18.64    1.33    1.72    2.53    5.15
+      P=1.5      33.71   21.31   14.74   18.11    2.91    3.57    4.77    7.58
+      P=2        33.69   21.31   14.74   21.40    6.49    7.25    7.90    7.73
+
+    boundaries: 
+      *** confidence REDUCED -> SUPPORTED between P=0.4 and 0.6
+      *** confidence SUPPORTED -> REDUCED between P=1 and 1.25
+
+    baseline local response: Cd 0.02217; neighbours 0.02256 / 0.02209  (-1.7% below, -0.4% above)  
+    contiguous Cd 0.02x-0.03x run through baseline: P 0.6 .. 1  (5 of 9 steps)
+    full Cd series:    0.03942  0.02388  0.02256  0.02217  0.02209  0.02222  0.03612  0.06237  0.12788
+    full proxy series: 0.239371  0.183581  0.167928  0.161170  0.164958  0.176120  0.231885  0.329931  0.574530
+
+==============================================================================================================================
+  T-WST  FLARE / WAIST DEPTH (W)
+    W       proxy      Cd       press    fric     class    elig        F1      F2a     F4      z4+z5   caps  dCd%  dPx%  path                  conf        exploit
+    -0.2    0.243404 0.03937  0.02911  0.01026  rounded  ELIGIBLE    0.5534  10.610 0.3573  10.610    1  47.8  57.7  DIVERGENT_CD          REDUCED     -
+    -0.1    0.176573 0.02235  0.01223  0.01012  rounded  ELIGIBLE    0.5938   4.431 0.3324   4.431    1   8.2  43.2  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    -0.05   0.163692 0.02212  0.01189  0.01023  rounded  ELIGIBLE    0.6047   1.335 0.3209   1.335    1   7.3  39.9  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0       0.161170 0.02217  0.01183  0.01035  rounded  ELIGIBLE    0.5778   1.973 0.3289   1.973    1   7.5  40.3  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.05    0.165911 0.02241  0.01195  0.01046  rounded  ELIGIBLE    0.5305   5.246 0.3466   5.246    1   8.2  42.8  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.1     0.178454 0.02286  0.01228  0.01058  rounded  ELIGIBLE    0.4891   8.557 0.3619   8.557    1   8.9  43.8  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.2     0.223298 0.03455  0.02372  0.01082  rounded  ELIGIBLE    0.4215  15.260 0.3866  15.260    1  36.4  39.9  DIVERGENT_CD          REDUCED     -
+
+    zone turning histories (deg), all 8 zones; earned domain is 1-5 (55.2):
+      W=-0.2     33.69   21.31   14.74   18.49    5.64    4.97    1.79    9.75
+      W=-0.1     33.71   21.31   14.74   20.23    2.54    1.89    1.38    8.00
+      W=-0.05    33.69   21.31   14.74   22.23    0.89    0.44    1.65    7.15
+      W=0        33.71   21.31   14.74   24.36    0.80    1.17    2.06    6.32
+      W=0.05     33.71   21.31   14.74   26.65    2.55    2.70    2.45    5.50
+      W=0.1      33.69   21.31   14.74   29.10    4.34    4.22    2.84    4.70
+      W=0.2      33.69   21.31   14.74   34.21    8.01    7.25    3.56    3.15
+
+    boundaries: 
+      *** confidence REDUCED -> SUPPORTED between W=-0.2 and -0.1
+      *** confidence SUPPORTED -> REDUCED between W=0.1 and 0.2
+
+    baseline local response: Cd 0.02217; neighbours 0.02212 / 0.02241  (0.2% below, 1.1% above)  
+    contiguous Cd 0.02x-0.03x run through baseline: W -0.1 .. 0.1  (5 of 7 steps)
+    full Cd series:    0.03937  0.02235  0.02212  0.02217  0.02241  0.02286  0.03455
+    full proxy series: 0.243404  0.176573  0.163692  0.161170  0.165911  0.178454  0.223298
+
+==============================================================================================================================
+  T-BAS  TERMINAL RADIUS / BASE (rTip / ra)
+    rTip    proxy      Cd       press    fric     class    elig        F1      F2a     F4      z4+z5   caps  dCd%  dPx%  path                  conf        exploit
+    0       0.161170 0.02217  0.01183  0.01035  rounded  ELIGIBLE    0.5778   1.973 0.3289   1.973    1   7.5  40.3  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.05    0.157511 0.02222  0.01173  0.01049  rounded  ELIGIBLE    0.5727   1.888 0.3296   1.888    2   7.8  43.4  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.1     0.156642 0.02234  0.01171  0.01063  rounded  ELIGIBLE    0.5677   1.802 0.3302   1.802    2   8.2  46.2  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.2     0.163075 0.02281  0.01188  0.01094  rounded  ELIGIBLE    0.5578   1.623 0.3316   1.623    2   8.7  48.2  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.28    0.178270 0.02347  0.01227  0.01119  pinned   ELIGIBLE    0.5501   1.475 0.3326   1.475    2   8.8  46.5  DIVERGENT_GEOMETRY_SHALLOW_MAP SUPPORTED   EX4
+    0.35    0.202036 0.03883  0.02740  0.01143  pinned   ELIGIBLE    0.5435   1.342 0.3334   1.342    2  42.9  43.1  DIVERGENT_CD          REDUCED     -
+
+    zone turning histories (deg), all 8 zones; earned domain is 1-5 (55.2):
+      rTip=0        33.71   21.31   14.74   24.36    0.80    1.17    2.06    6.32
+      rTip=0.05     33.69   21.31   14.74   25.01    0.77    1.12    1.97    6.09
+      rTip=0.1      33.69   21.31   14.74   25.65    0.73    1.07    1.89    5.97
+      rTip=0.2      33.69   21.31   14.74   26.95    0.66    0.96    1.71    5.33
+      rTip=0.28     33.71   21.31   14.74   28.01    0.60    0.88    1.55    4.89
+      rTip=0.35     33.71   21.31   14.74   28.94    0.54    0.80    1.42    4.94
+
+    boundaries: 
+      *** class rounded -> pinned between rTip=0.2 and 0.28  [rTip=0.28 pinned by: (b) terminal base 0.0574 > TAU 0.05]
+      *** confidence SUPPORTED -> REDUCED between rTip=0.28 and 0.35
+
+    baseline local response: Cd 0.02217; neighbours n/a / 0.02222  (n/a below, 0.2% above)  
+    contiguous Cd 0.02x-0.03x run through baseline: rTip 0 .. 0.28  (5 of 6 steps)
+    full Cd series:    0.02217  0.02222  0.02234  0.02281  0.02347  0.03883
+    full proxy series: 0.161170  0.157511  0.156642  0.163075  0.178270  0.202036
+
+==============================================================================================================================
+  A5 PASS — the production engine is byte-identical before and after the run.
+
+  SUMMARY — one row per family
+    family  n   Cd min      at        Cd max      at        Cd range   elig    flips  worst dPx%  0.02x-0.03x run
+    T-LEN    7  0.02197  270       0.45389  0         0.43192    7/7        1      73.1      extraM 216 .. 324  (3 of 7 steps)
+    T-ATT    7  0.02044  0.6       0.24184  0.9       0.22141    7/7        2      77.2      attach 0.6 .. 0.8  (5 of 7 steps)
+    T-EXP    9  0.02209  0.9       0.12788  2         0.10580    9/9        0      79.6      P 0.6 .. 1  (5 of 9 steps)
+    T-WST    7  0.02212  -0.05     0.03937  -0.2      0.01724    7/7        0      57.7      W -0.1 .. 0.1  (5 of 7 steps)
+    T-BAS    6  0.02217  0         0.03883  0.35      0.01666    6/6        1      48.2      rTip 0 .. 0.28  (5 of 6 steps)
+
+  BASIN COUNT: 19 of 32 distinct variants land in Cd 0.02-0.03.
+    rTip=0(0.0222)  extraM=270(0.0220)  extraM=324(0.0221)  attach=0.6(0.0204)  attach=0.65(0.0206)  attach=0.7(0.0207)  attach=0.75(0.0207)  P=0.6(0.0239)  P=0.7(0.0226)  P=0.9(0.0221)  P=1(0.0222)  W=-0.1(0.0224)  W=-0.05(0.0221)  W=0.05(0.0224)  W=0.1(0.0229)  rTip=0.05(0.0222)  rTip=0.1(0.0223)  rTip=0.2(0.0228)  rTip=0.28(0.0235)
+
+  EXPLOIT-PATTERN FLAGS (84.8.1) — reported, NEVER gating. 2 row(s) trip two or more:
+    T-LEN extraM=324         Cd 0.02212  proxy 0.116937  F2a 1.511  z4+z5 1.51  wetted 287,155  [EX4,EX5]
+    T-EXP P=1                Cd 0.02222  proxy 0.176120  F2a 0.000  z4+z5 0.00  wetted 245,478  [EX3,EX4]
+
+  ANOMALIES RECORDED (not repaired): 4
+    - T-LEN: CLASSIFIER FLIP — class pinned -> rounded between extraM=0 and 54  [extraM=0 pinned by: (d) aft shoulder 0.1924 > 0.13]
+    - T-ATT: CLASSIFIER FLIP — class pinned -> rounded between attach=0.6 and 0.65  [attach=0.6 pinned by: (d) aft shoulder 0.1615 > 0.13]
+    - T-ATT: CLASSIFIER FLIP — class rounded -> pinned between attach=0.8 and 0.85  [attach=0.85 pinned by: (d) aft shoulder 0.1328 > 0.13]
+    - T-BAS: CLASSIFIER FLIP — class rounded -> pinned between rTip=0.2 and 0.28  [rTip=0.28 pinned by: (b) terminal base 0.0574 > TAU 0.05]
+
+  Nothing retuned. No calibration read or written. Production Cd path untouched.
+
+  wrote C:/Users/Toby/AppData/Local/Temp/claude/C--Users-Toby-Desktop-CodeEverything/f43d7c0e-d817-4e82-a2e0-166450772ca9/scratchpad/s3a.json (S1 determinism compare)
+

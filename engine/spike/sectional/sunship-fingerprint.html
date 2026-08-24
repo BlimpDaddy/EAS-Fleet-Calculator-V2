@@ -1,0 +1,194 @@
+<title>Sunship Ribbon Fingerprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --linen:#E8ECE8; --surface:#F3F6F2; --ink:#16211E; --ink-2:#3A4A46; --muted:#6B7C78;
+  --rule:#CBD5D0; --rust:#A2451F;
+  --t0:#DCE9E6; --t1:#B9D5D0; --t2:#8DBBB4; --t3:#5D9C94; --t4:#2F7A72; --t5:#0C4F49;
+  --bg:var(--linen); --card:var(--surface); --fg:var(--ink); --fg2:var(--ink-2);
+}
+:root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+  --bg:#101917; --card:#17231F; --fg:#E4EBE7; --fg2:#AFC0BA; --muted:#869893; --rule:#2A3A35;
+  --t0:#183833; --t1:#1F4E47; --t2:#2F7A72; --t3:#4FA298; --t4:#7FC4BA; --t5:#B6E0D8; --rust:#D9784A;
+}}
+:root[data-theme="dark"]{
+  --bg:#101917; --card:#17231F; --fg:#E4EBE7; --fg2:#AFC0BA; --muted:#869893; --rule:#2A3A35;
+  --t0:#183833; --t1:#1F4E47; --t2:#2F7A72; --t3:#4FA298; --t4:#7FC4BA; --t5:#B6E0D8; --rust:#D9784A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 24px 96px;display:flex;flex-direction:column;gap:48px}
+h1,h2,h3{font-family:Spectral,Georgia,serif;font-weight:600;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.08}
+h2{font-size:1.5rem;line-height:1.2}
+h3{font-size:1.02rem;font-weight:500}
+p{margin:0;max-width:66ch;color:var(--fg2)}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:14px;border-bottom:1px solid var(--rule);padding-bottom:28px}
+.prov{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.72rem;color:var(--muted)}
+.prov b{font-weight:500;color:var(--fg2)}
+.shadow-flag{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  border:1px solid var(--rust);color:var(--rust);border-radius:2px;padding:4px 10px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule)}
+.tile{background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.tile .v{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:1.9rem;font-variant-numeric:tabular-nums;
+  color:var(--fg);line-height:1}
+.tile .u{font-size:1rem;color:var(--muted)}
+.tile .k{font-size:.78rem;color:var(--fg2)}
+section{display:flex;flex-direction:column;gap:18px}
+figure{margin:0;display:flex;flex-direction:column;gap:14px}
+.figwrap{background:var(--card);border:1px solid var(--rule);padding:20px;overflow-x:auto}
+figcaption{font-size:.82rem;color:var(--muted);max-width:70ch}
+svg{display:block;max-width:100%;height:auto}
+.scale{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;color:var(--muted)}
+.swatches{display:flex}
+.swatches i{width:34px;height:10px;display:block}
+table{border-collapse:collapse;width:100%;font-size:.82rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--card)}
+th,td{padding:7px 12px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);font-weight:500}
+td{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;color:var(--fg2)}
+tbody tr:last-child td{border-bottom:none}
+td.reg{font-family:"IBM Plex Sans",sans-serif;color:var(--fg)}
+.chip{display:inline-block;padding:1px 7px;border:1px solid var(--rule);border-radius:2px;
+  font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chip.pass{border-color:var(--t4);color:var(--t4)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.note{background:var(--card);padding:20px 22px;display:flex;flex-direction:column;gap:8px}
+.note p{font-size:.88rem}
+.bound{border-left:2px solid var(--rust);padding:14px 18px;background:var(--card);
+  border-top:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.bound p{font-size:.88rem;color:var(--fg2)}
+.bound strong{color:var(--fg)}
+:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){
+  .spoke{transition:opacity .15s ease}
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Calc V2 &middot; geometry context &middot; spec 70&ndash;74</div>
+  <h1>Sunship Ribbon Fingerprint</h1>
+  <p>The bare Sunship hull, read as 48 longitudinal ribbons around a clockface. Where the production
+  scalar returns one number for the whole body, this shows <em>which directions</em> carry the surface
+  turning &mdash; and they differ by a factor of four hundred.</p>
+  <div class="shadow-flag">Shadow mode &middot; no Cd, no calibration</div>
+  <div class="prov">
+    <span><b>Geometry</b> convex hull of Sunship.obj &middot; 2119 hull vertices</span>
+    <span><b>Skin</b> support-function, &sigma;<sub>x</sub> 0.005&thinsp;L, &sigma;<sub>&theta;</sub> 2&deg;</span>
+    <span><b>Axis</b> volume centroid &middot; &theta;&nbsp;=&nbsp;0 is UP</span>
+    <span><b>Eligibility</b> PASS</span>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="k">Production scalar (unchanged)</div>
+    <div class="v">0.7657</div><div class="k">compositeV1 &mdash; copied, never modified</div></div>
+  <div class="tile"><div class="k">Aft turning burden, median</div>
+    <div class="v">31.8<span class="u">&deg;</span></div><div class="k">but the clock runs 0.09&deg; to 37.0&deg;</div></div>
+  <div class="tile"><div class="k">Opposite-pair disagreement</div>
+    <div class="v">22.4<span class="u">&deg;</span></div><div class="k">median across 24 opposing pairs</div></div>
+  <div class="tile"><div class="k">Port vs starboard</div>
+    <div class="v">0.00<span class="u">&deg;</span></div><div class="k">&theta;&nbsp;90&deg; vs 270&deg; &mdash; exact lateral symmetry</div></div>
+</div>
+
+<section>
+  <h2>Where the turning actually happens</h2>
+  <p>Each wedge is one of 48 ribbons, drawn at its own azimuth. Length and colour both encode
+  <span class="mono">F2a</span>, the absolute turning accumulated late in the earned domain
+  (zones&nbsp;4&ndash;5). &theta;&nbsp;=&nbsp;0&deg; is up, so &theta;&nbsp;=&nbsp;180&deg; is the flat underside.</p>
+  <figure>
+    <div class="figwrap" style="display:flex;justify-content:center"><svg viewBox="0 0 500 500" role="img" aria-label="Polar plot of aft turning burden F2a by direction around the Sunship hull, 48 directions, theta zero is up">
+<circle cx="250" cy="250" r="62" fill="none" stroke="var(--rule)" stroke-width="1"/>
+<circle cx="250" cy="250" r="106.9" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="2 4"/><circle cx="250" cy="250" r="151.7" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="2 4"/><circle cx="250" cy="250" r="196.6" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="2 4"/><path class="spoke" d="M246.49,188.10 A62,62 0 0 1 253.51,188.10 L261.35,50.11 A200.21,200.21 0 0 0 238.65,50.11 Z" fill="var(--t4)"><title>theta 0° — up — F2a 30.81°</title></path><path class="spoke" d="M254.59,188.17 A62,62 0 0 1 261.56,189.09 L288.13,49.15 A204.44,204.44 0 0 0 265.15,46.13 Z" fill="var(--t4)"><title>theta 7.5° — up — F2a 31.76°</title></path><path class="spoke" d="M262.63,189.30 A62,62 0 0 1 269.42,191.12 L315.41,51.64 A208.87,208.87 0 0 0 292.53,45.51 Z" fill="var(--t4)"><title>theta 15° — upper — F2a 32.75°</title></path><path class="spoke" d="M270.44,191.47 A62,62 0 0 1 276.94,194.16 L342.63,57.95 A213.22,213.22 0 0 0 320.30,48.70 Z" fill="var(--t4)"><title>theta 22.5° — upper — F2a 33.72°</title></path><path class="spoke" d="M277.91,194.64 A62,62 0 0 1 283.99,198.15 L369.94,67.05 A218.76,218.76 0 0 0 348.46,54.65 Z" fill="var(--t4)"><title>theta 30° — upper — F2a 34.95°</title></path><path class="spoke" d="M284.89,198.75 A62,62 0 0 1 290.47,203.03 L396.56,79.91 A224.52,224.52 0 0 0 376.36,64.41 Z" fill="var(--t4)"><title>theta 37.5° — upper — F2a 36.24°</title></path><path class="spoke" d="M291.28,203.74 A62,62 0 0 1 296.26,208.72 L420.10,98.18 A228.00,228.00 0 0 0 401.82,79.90 Z" fill="var(--t5)"><title>theta 45° — upper — F2a 37.01°</title></path><path class="spoke" d="M296.97,209.53 A62,62 0 0 1 301.25,215.11 L437.69,122.21 A227.07,227.07 0 0 0 422.02,101.78 Z" fill="var(--t4)"><title>theta 52.5° — upper — F2a 36.80°</title></path><path class="spoke" d="M301.85,216.01 A62,62 0 0 1 305.36,222.09 L449.71,149.34 A223.64,223.64 0 0 0 437.03,127.38 Z" fill="var(--t4)"><title>theta 60° — upper — F2a 36.04°</title></path><path class="spoke" d="M305.84,223.06 A62,62 0 0 1 308.53,229.56 L455.40,178.27 A217.56,217.56 0 0 0 445.96,155.48 Z" fill="var(--t4)"><title>theta 67.5° — upper — F2a 34.68°</title></path><path class="spoke" d="M308.88,230.58 A62,62 0 0 1 310.70,237.37 L458.49,206.63 A212.95,212.95 0 0 0 452.24,183.31 Z" fill="var(--t4)"><title>theta 75° — side — F2a 33.66°</title></path><path class="spoke" d="M310.91,238.44 A62,62 0 0 1 311.83,245.41 L458.89,234.48 A209.46,209.46 0 0 0 455.79,210.93 Z" fill="var(--t4)"><title>theta 82.5° — side — F2a 32.88°</title></path><path class="spoke" d="M311.90,246.49 A62,62 0 0 1 311.90,253.51 L455.94,261.69 A206.27,206.27 0 0 0 455.94,238.31 Z" fill="var(--t4)"><title>theta 90° — side — F2a 32.17°</title></path><path class="spoke" d="M311.83,254.59 A62,62 0 0 1 310.91,261.56 L449.21,287.82 A202.77,202.77 0 0 0 452.21,265.03 Z" fill="var(--t4)"><title>theta 97.5° — side — F2a 31.39°</title></path><path class="spoke" d="M310.70,262.63 A62,62 0 0 1 308.88,269.42 L413.95,304.06 A172.63,172.63 0 0 0 419.01,285.15 Z" fill="var(--t3)"><title>theta 105° — lower — F2a 24.67°</title></path><path class="spoke" d="M308.53,270.44 A62,62 0 0 1 305.84,276.94 L370.09,307.93 A133.33,133.33 0 0 0 375.88,293.96 Z" fill="var(--t2)"><title>theta 112.5° — lower — F2a 15.90°</title></path><path class="spoke" d="M305.36,277.91 A62,62 0 0 1 301.85,283.99 L339.08,308.40 A106.52,106.52 0 0 0 345.12,297.94 Z" fill="var(--t1)"><title>theta 120° — lower — F2a 9.93°</title></path><path class="spoke" d="M301.25,284.89 A62,62 0 0 1 296.97,290.47 L311.56,303.04 A81.26,81.26 0 0 0 317.17,295.73 Z" fill="var(--t0)"><title>theta 127.5° — lower — F2a 4.29°</title></path><path class="spoke" d="M296.26,291.28 A62,62 0 0 1 291.28,296.26 L297.11,302.78 A70.75,70.75 0 0 0 302.78,297.11 Z" fill="var(--t0)"><title>theta 135° — lower — F2a 1.95°</title></path><path class="spoke" d="M290.47,296.97 A62,62 0 0 1 284.89,301.25 L289.21,307.59 A69.67,69.67 0 0 0 295.48,302.78 Z" fill="var(--t0)"><title>theta 142.5° — lower — F2a 1.71°</title></path><path class="spoke" d="M283.99,301.85 A62,62 0 0 1 277.91,305.36 L281.11,311.72 A69.12,69.12 0 0 0 287.90,307.80 Z" fill="var(--t0)"><title>theta 150° — lower — F2a 1.59°</title></path><path class="spoke" d="M276.94,305.84 A62,62 0 0 1 270.44,308.53 L270.72,309.34 A62.85,62.85 0 0 0 277.30,306.61 Z" fill="var(--t0)"><title>theta 157.5° — lower — F2a 0.19°</title></path><path class="spoke" d="M269.42,308.88 A62,62 0 0 1 262.63,310.70 L262.74,311.23 A62.54,62.54 0 0 0 269.59,309.39 Z" fill="var(--t0)"><title>theta 165° — underside — F2a 0.12°</title></path><path class="spoke" d="M261.56,310.91 A62,62 0 0 1 254.59,311.83 L254.63,312.25 A62.42,62.42 0 0 0 261.64,311.33 Z" fill="var(--t0)"><title>theta 172.5° — underside — F2a 0.09°</title></path><path class="spoke" d="M253.51,311.90 A62,62 0 0 1 246.49,311.90 L246.46,312.32 A62.42,62.42 0 0 0 253.54,312.32 Z" fill="var(--t0)"><title>theta 180° — underside — F2a 0.09°</title></path><path class="spoke" d="M245.41,311.83 A62,62 0 0 1 238.44,310.91 L238.36,311.33 A62.42,62.42 0 0 0 245.37,312.25 Z" fill="var(--t0)"><title>theta 187.5° — underside — F2a 0.09°</title></path><path class="spoke" d="M237.37,310.70 A62,62 0 0 1 230.58,308.88 L230.41,309.39 A62.54,62.54 0 0 0 237.26,311.23 Z" fill="var(--t0)"><title>theta 195° — lower — F2a 0.12°</title></path><path class="spoke" d="M229.56,308.53 A62,62 0 0 1 223.06,305.84 L222.70,306.61 A62.85,62.85 0 0 0 229.28,309.34 Z" fill="var(--t0)"><title>theta 202.5° — lower — F2a 0.19°</title></path><path class="spoke" d="M222.09,305.36 A62,62 0 0 1 216.01,301.85 L212.10,307.80 A69.12,69.12 0 0 0 218.89,311.72 Z" fill="var(--t0)"><title>theta 210° — lower — F2a 1.59°</title></path><path class="spoke" d="M215.11,301.25 A62,62 0 0 1 209.53,296.97 L204.52,302.78 A69.67,69.67 0 0 0 210.79,307.59 Z" fill="var(--t0)"><title>theta 217.5° — lower — F2a 1.71°</title></path><path class="spoke" d="M208.72,296.26 A62,62 0 0 1 203.74,291.28 L197.22,297.11 A70.75,70.75 0 0 0 202.89,302.78 Z" fill="var(--t0)"><title>theta 225° — lower — F2a 1.95°</title></path><path class="spoke" d="M203.03,290.47 A62,62 0 0 1 198.75,284.89 L182.83,295.73 A81.26,81.26 0 0 0 188.44,303.04 Z" fill="var(--t0)"><title>theta 232.5° — lower — F2a 4.29°</title></path><path class="spoke" d="M198.15,283.99 A62,62 0 0 1 194.64,277.91 L154.88,297.94 A106.52,106.52 0 0 0 160.92,308.40 Z" fill="var(--t1)"><title>theta 240° — lower — F2a 9.93°</title></path><path class="spoke" d="M194.16,276.94 A62,62 0 0 1 191.47,270.44 L124.12,293.96 A133.33,133.33 0 0 0 129.91,307.93 Z" fill="var(--t2)"><title>theta 247.5° — lower — F2a 15.90°</title></path><path class="spoke" d="M191.12,269.42 A62,62 0 0 1 189.30,262.63 L80.99,285.15 A172.63,172.63 0 0 0 86.05,304.06 Z" fill="var(--t3)"><title>theta 255° — side — F2a 24.67°</title></path><path class="spoke" d="M189.09,261.56 A62,62 0 0 1 188.17,254.59 L47.79,265.03 A202.77,202.77 0 0 0 50.79,287.82 Z" fill="var(--t4)"><title>theta 262.5° — side — F2a 31.39°</title></path><path class="spoke" d="M188.10,253.51 A62,62 0 0 1 188.10,246.49 L44.06,238.31 A206.27,206.27 0 0 0 44.06,261.69 Z" fill="var(--t4)"><title>theta 270° — side — F2a 32.17°</title></path><path class="spoke" d="M188.17,245.41 A62,62 0 0 1 189.09,238.44 L44.21,210.93 A209.46,209.46 0 0 0 41.11,234.48 Z" fill="var(--t4)"><title>theta 277.5° — side — F2a 32.88°</title></path><path class="spoke" d="M189.30,237.37 A62,62 0 0 1 191.12,230.58 L47.76,183.31 A212.95,212.95 0 0 0 41.51,206.63 Z" fill="var(--t4)"><title>theta 285° — upper — F2a 33.66°</title></path><path class="spoke" d="M191.47,229.56 A62,62 0 0 1 194.16,223.06 L54.04,155.48 A217.56,217.56 0 0 0 44.60,178.27 Z" fill="var(--t4)"><title>theta 292.5° — upper — F2a 34.68°</title></path><path class="spoke" d="M194.64,222.09 A62,62 0 0 1 198.15,216.01 L62.97,127.38 A223.64,223.64 0 0 0 50.29,149.34 Z" fill="var(--t4)"><title>theta 300° — upper — F2a 36.04°</title></path><path class="spoke" d="M198.75,215.11 A62,62 0 0 1 203.03,209.53 L77.98,101.78 A227.07,227.07 0 0 0 62.31,122.21 Z" fill="var(--t4)"><title>theta 307.5° — upper — F2a 36.80°</title></path><path class="spoke" d="M203.74,208.72 A62,62 0 0 1 208.72,203.74 L98.18,79.90 A228.00,228.00 0 0 0 79.90,98.18 Z" fill="var(--t5)"><title>theta 315° — upper — F2a 37.01°</title></path><path class="spoke" d="M209.53,203.03 A62,62 0 0 1 215.11,198.75 L123.64,64.41 A224.52,224.52 0 0 0 103.44,79.91 Z" fill="var(--t4)"><title>theta 322.5° — upper — F2a 36.24°</title></path><path class="spoke" d="M216.01,198.15 A62,62 0 0 1 222.09,194.64 L151.54,54.65 A218.76,218.76 0 0 0 130.06,67.05 Z" fill="var(--t4)"><title>theta 330° — upper — F2a 34.95°</title></path><path class="spoke" d="M223.06,194.16 A62,62 0 0 1 229.56,191.47 L179.70,48.70 A213.22,213.22 0 0 0 157.37,57.95 Z" fill="var(--t4)"><title>theta 337.5° — upper — F2a 33.72°</title></path><path class="spoke" d="M230.58,191.12 A62,62 0 0 1 237.37,189.30 L207.47,45.51 A208.87,208.87 0 0 0 184.59,51.64 Z" fill="var(--t4)"><title>theta 345° — up — F2a 32.75°</title></path><path class="spoke" d="M238.44,189.09 A62,62 0 0 1 245.41,188.17 L234.85,46.13 A204.44,204.44 0 0 0 211.87,49.15 Z" fill="var(--t4)"><title>theta 352.5° — up — F2a 31.76°</title></path><text x="254" y="143.1" class="mono" font-size="9" fill="var(--muted)">10°</text><text x="254" y="98.3" class="mono" font-size="9" fill="var(--muted)">20°</text><text x="254" y="53.4" class="mono" font-size="9" fill="var(--muted)">30°</text><text x="250.0" y="0.0" text-anchor="middle" dy="-0.1em" class="mono" font-size="10" letter-spacing="1.4" fill="var(--fg2)">UP</text><line x1="250.0" y1="194.0" x2="250.0" y2="16.0" stroke="var(--rule)" stroke-width="1"/><text x="500.0" y="250.0" text-anchor="start" dy="0.32em" class="mono" font-size="10" letter-spacing="1.4" fill="var(--fg2)">SIDE</text><line x1="306.0" y1="250.0" x2="484.0" y2="250.0" stroke="var(--rule)" stroke-width="1"/><text x="250.0" y="500.0" text-anchor="middle" dy="0.8em" class="mono" font-size="10" letter-spacing="1.4" fill="var(--fg2)">UNDERSIDE</text><line x1="250.0" y1="306.0" x2="250.0" y2="484.0" stroke="var(--rule)" stroke-width="1"/><text x="0.0" y="250.0" text-anchor="end" dy="0.32em" class="mono" font-size="10" letter-spacing="1.4" fill="var(--fg2)">SIDE</text><line x1="194.0" y1="250.0" x2="16.0" y2="250.0" stroke="var(--rule)" stroke-width="1"/>
+<line x1="418.3" y1="81.7" x2="432.3" y2="81.7" stroke="var(--rust)" stroke-width="1.5"/><text x="436.3" y="81.7" dy="0.32em" text-anchor="start" class="mono" font-size="10" fill="var(--rust)">max 37.0°</text>
+<line x1="250.0" y1="322.4" x2="236.0" y2="322.4" stroke="var(--rust)" stroke-width="1.5"/><text x="232.0" y="322.4" dy="0.32em" text-anchor="end" class="mono" font-size="10" fill="var(--rust)">min 0.09°</text>
+<text x="250" y="246" text-anchor="middle" class="mono" font-size="10" fill="var(--muted)">F2a</text>
+<text x="250" y="260" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">deg</text>
+</svg></div>
+    <div class="scale"><span>F2a</span><span class="swatches"><i style="background:var(--t0)"></i><i style="background:var(--t1)"></i><i style="background:var(--t2)"></i><i style="background:var(--t3)"></i><i style="background:var(--t4)"></i><i style="background:var(--t5)"></i></span><span>0&deg; &rarr; 37&deg;</span></div>
+    <figcaption>The flat underside contributes almost no aft turning &mdash; it is flat, so there is nothing to
+    turn. The upper quarters carry the maximum. A single median of 31.8&deg; describes no actual ribbon on
+    this body.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>The disagreement is up&ndash;down, and it sits forward</h2>
+  <p>Turning accumulated in zone&nbsp;1 &mdash; the first earned zone, just aft of the nose &mdash; plotted
+  right around the body. The two lobes are the lower quarters; the troughs are up and the sides.</p>
+  <figure>
+    <div class="figwrap"><svg viewBox="0 0 900 260" role="img" aria-label="Zone 1 turning against azimuth, showing a two lobe pattern with maxima in the lower quarters">
+<rect x="224.9" y="18" width="69.2" height="202" fill="var(--t0)" opacity="0.55"/><rect x="432.4" y="18" width="69.2" height="202" fill="var(--t0)" opacity="0.55"/><rect x="639.9" y="18" width="69.2" height="202" fill="var(--t0)" opacity="0.55"/><line x1="52" y1="220.0" x2="882" y2="220.0" stroke="var(--rule)" stroke-width="1"/><text x="44" y="220.0" dy="0.32em" text-anchor="end" class="mono" font-size="9" fill="var(--muted)">0</text><line x1="52" y1="152.7" x2="882" y2="152.7" stroke="var(--rule)" stroke-width="1"/><text x="44" y="152.7" dy="0.32em" text-anchor="end" class="mono" font-size="9" fill="var(--muted)">15</text><line x1="52" y1="85.3" x2="882" y2="85.3" stroke="var(--rule)" stroke-width="1"/><text x="44" y="85.3" dy="0.32em" text-anchor="end" class="mono" font-size="9" fill="var(--muted)">30</text><line x1="52" y1="18.0" x2="882" y2="18.0" stroke="var(--rule)" stroke-width="1"/><text x="44" y="18.0" dy="0.32em" text-anchor="end" class="mono" font-size="9" fill="var(--muted)">45</text><path d="M52.0,134.0 L69.3,134.7 L86.6,137.0 L103.9,143.3 L121.2,152.3 L138.5,163.2 L155.8,167.7 L173.0,168.4 L190.3,167.4 L207.6,159.8 L224.9,153.5 L242.2,148.2 L259.5,142.0 L276.8,135.4 L294.1,109.5 L311.4,116.4 L328.7,83.5 L346.0,53.2 L363.2,40.7 L380.5,38.3 L397.8,38.6 L415.1,33.9 L432.4,36.4 L449.7,40.6 L467.0,49.2 L484.3,40.6 L501.6,36.4 L518.9,33.9 L536.2,38.6 L553.5,38.3 L570.8,40.7 L588.0,53.2 L605.3,83.5 L622.6,116.4 L639.9,109.5 L657.2,135.4 L674.5,142.0 L691.8,148.2 L709.1,153.5 L726.4,159.8 L743.7,167.4 L761.0,168.4 L778.2,167.7 L795.5,163.2 L812.8,152.3 L830.1,143.3 L847.4,137.0 L864.7,134.7 L882.0,134.0 L882.0,220.0 L52.0,220.0 Z" fill="var(--t2)" opacity="0.30"/>
+<path d="M52.0,134.0 L69.3,134.7 L86.6,137.0 L103.9,143.3 L121.2,152.3 L138.5,163.2 L155.8,167.7 L173.0,168.4 L190.3,167.4 L207.6,159.8 L224.9,153.5 L242.2,148.2 L259.5,142.0 L276.8,135.4 L294.1,109.5 L311.4,116.4 L328.7,83.5 L346.0,53.2 L363.2,40.7 L380.5,38.3 L397.8,38.6 L415.1,33.9 L432.4,36.4 L449.7,40.6 L467.0,49.2 L484.3,40.6 L501.6,36.4 L518.9,33.9 L536.2,38.6 L553.5,38.3 L570.8,40.7 L588.0,53.2 L605.3,83.5 L622.6,116.4 L639.9,109.5 L657.2,135.4 L674.5,142.0 L691.8,148.2 L709.1,153.5 L726.4,159.8 L743.7,167.4 L761.0,168.4 L778.2,167.7 L795.5,163.2 L812.8,152.3 L830.1,143.3 L847.4,137.0 L864.7,134.7 L882.0,134.0" fill="none" stroke="var(--t5)" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="415.1" cy="33.9" r="4" fill="var(--rust)"/><text x="415.1" y="23.9" text-anchor="middle" class="mono" font-size="10" fill="var(--rust)">41.5° at 158°</text><circle cx="173.0" cy="168.4" r="4" fill="var(--rust)"/><text x="173.0" y="188.4" text-anchor="middle" class="mono" font-size="10" fill="var(--rust)">11.5°</text><text x="52.0" y="236" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">0°</text><text x="259.5" y="236" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">90°</text><text x="467.0" y="236" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">180°</text><text x="674.5" y="236" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">270°</text><text x="882.0" y="236" text-anchor="middle" class="mono" font-size="9" fill="var(--muted)">360°</text>
+<text x="467.0" y="30" text-anchor="middle" class="mono" font-size="9" letter-spacing="1" fill="var(--muted)">UNDERSIDE</text>
+<text x="58.0" y="30" class="mono" font-size="9" letter-spacing="1" fill="var(--muted)">UP</text>
+</svg></div>
+    <figcaption>Lower quarters reach 41.5&deg; of zone&nbsp;1 turning; the upper quarters sit near
+    11.5&deg;. Every worst opposing pair is upper-versus-lower, and every one of them is worst in
+    zone&nbsp;1 &mdash; the disagreement is not spread along the hull, it is concentrated where the flat
+    underside establishes itself against the curved upper surface.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Sector readout</h2>
+  <p>Every 15&deg;. <span class="mono">F2a</span> is aft turning burden, <span class="mono">pair gap</span>
+  is the worst zone-wise disagreement with the ribbon 180&deg; opposite.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>&theta;</th><th>Region</th><th>F2a (&deg;)</th><th>Pair gap (&deg;)</th><th>Zone 1 (&deg;)</th><th>Eligibility</th></tr></thead>
+      <tbody><tr><td class="reg">0°</td><td class="reg">up</td><td>30.81</td><td>18.89</td><td>19.2</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">15°</td><td class="reg">upper</td><td>32.75</td><td>22.40</td><td>18.5</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">30°</td><td class="reg">upper</td><td>34.95</td><td>25.34</td><td>15.1</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">45°</td><td class="reg">upper</td><td>37.01</td><td>28.31</td><td>11.6</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">60°</td><td class="reg">upper</td><td>36.04</td><td>18.69</td><td>11.7</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">75°</td><td class="reg">side</td><td>33.66</td><td>9.81</td><td>14.8</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">90°</td><td class="reg">side</td><td>32.17</td><td>0.00</td><td>17.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">105°</td><td class="reg">lower</td><td>24.67</td><td>9.81</td><td>24.6</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">120°</td><td class="reg">lower</td><td>9.93</td><td>18.69</td><td>30.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">135°</td><td class="reg">lower</td><td>1.95</td><td>28.31</td><td>40.0</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">150°</td><td class="reg">lower</td><td>1.59</td><td>25.34</td><td>40.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">165°</td><td class="reg">underside</td><td>0.12</td><td>22.40</td><td>40.9</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">180°</td><td class="reg">underside</td><td>0.09</td><td>18.89</td><td>38.1</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">195°</td><td class="reg">lower</td><td>0.12</td><td>22.40</td><td>40.9</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">210°</td><td class="reg">lower</td><td>1.59</td><td>25.34</td><td>40.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">225°</td><td class="reg">lower</td><td>1.95</td><td>28.31</td><td>40.0</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">240°</td><td class="reg">lower</td><td>9.93</td><td>18.69</td><td>30.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">255°</td><td class="reg">side</td><td>24.67</td><td>9.81</td><td>24.6</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">270°</td><td class="reg">side</td><td>32.17</td><td>0.00</td><td>17.4</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">285°</td><td class="reg">upper</td><td>33.66</td><td>9.81</td><td>14.8</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">300°</td><td class="reg">upper</td><td>36.04</td><td>18.69</td><td>11.7</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">315°</td><td class="reg">upper</td><td>37.01</td><td>28.31</td><td>11.6</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">330°</td><td class="reg">upper</td><td>34.95</td><td>25.34</td><td>15.1</td><td><span class="chip pass">pass</span></td></tr><tr><td class="reg">345°</td><td class="reg">up</td><td>32.75</td><td>22.40</td><td>18.5</td><td><span class="chip pass">pass</span></td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Reading this</h2>
+  <div class="notes">
+    <div class="note"><h3>The underside is quiet</h3>
+      <p>&theta; 172.5&ndash;195&deg; returns F2a of 0.09&ndash;0.12&deg;. A flat surface has no turning to
+      accumulate, and the operator reports that faithfully.</p></div>
+    <div class="note"><h3>The upper quarters do the work</h3>
+      <p>&theta; 37.5&ndash;52.5&deg; and its mirror carry 36.2&ndash;37.0&deg; &mdash; the whole aft burden is
+      concentrated in four diagonal sectors.</p></div>
+    <div class="note"><h3>Forward, not aft</h3>
+      <p>The 22.4&deg; directional disagreement lives in zone&nbsp;1. By zones 4&ndash;5 the opposing sides have
+      largely converged.</p></div>
+    <div class="note"><h3>The pipeline checks out</h3>
+      <p>Port and starboard agree to 0.00&deg; on a real production mesh, through hull, skin and ribbons, with
+      nothing tuned to make it happen.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="bound">
+    <p><strong>What this is, and is not.</strong> This is a geometric fingerprint. It says the bare Sunship
+    lies far outside the present measured analogue corpus in absolute ribbon turning, distributes that
+    turning unusually evenly in the median, and carries strong directional disagreement that the scalar
+    representation cannot express. It does <strong>not</strong> say any of that is aerodynamically bad:
+    the reference corpus is axisymmetric, so a large F2a against it is a statement about geometry, not
+    about adverse pressure gradient. No measured non-axisymmetric analogue corpus exists to support a
+    drag claim. Nothing here alters Cd, calibration, or the production estimator, which stays byte-for-byte
+    unchanged.</p>
+  </div>
+  <p class="eyebrow">Tailed Sunship excluded &mdash; ineligible under the frozen convergence criterion (E4, 5.29% against 5%)</p>
+</section>
+
+</div>

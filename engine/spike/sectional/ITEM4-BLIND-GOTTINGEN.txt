@@ -1,0 +1,9 @@
+ITEM 4 — GÖTTINGEN BLIND PREDICTIONS (spec 90.7 R2). FROZEN BEFORE the
+measured c_w tables are joined. Declared blind condition: v = 30 m/s.
+Disclosure (90.7): T35 oblate rows were displayed during inventory; the
+oblate reveal is procedurally blind, not epistemically blind. T36 is clean.
+
+GOTT-oblate  proxy 0.891485  class rounded  Cd 0.44503  press 0.42416  fric 0.02087  F1 0.3979  F2a 35.498  F3 1.0104  F4 0.4376  F5 0.0000  A1 0.0000  A2 0.0000  A4 0.0001  elig ELIGIBLE  conf REDUCED
+GOTT-prolate  proxy 0.596579  class rounded  Cd 0.21304  press 0.18137  fric 0.03166  F1 0.4661  F2a 16.649  F3 1.3622  F4 0.4155  F5 0.0000  A1 0.0000  A2 0.0000  A4 0.0001  elig ELIGIBLE  conf REDUCED
+
+engine obj.js:84f52aee18ec062f sections.js:90c925e9a7e490db cdEstimator.js:b4aff600a6b33233 dynamicsGeometry.js:8e8482dfcfcaa6ab dynamicsCore.js:7ec3a19a6f21b1e8

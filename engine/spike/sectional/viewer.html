@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EAS — Sectional Estimator Viewer (dev)</title>
+<style>
+  :root { --bg:#111; --panel:#1a1a1a; --text:#eee; --dim:#888; --orange:#ff9900; --berry:#c628a4; --red:#ff2a2a; }
+  body { background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; margin:0; padding:1.2rem; }
+  h1 { font-size:1.1rem; color:var(--orange); margin:0 0 .2rem; }
+  .sub { color:var(--dim); font-size:.8rem; margin-bottom:1rem; }
+  .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-bottom:1rem; }
+  select,button { background:var(--panel); color:var(--text); border:1px solid #333; padding:.35rem .6rem; font-size:.9rem; }
+  canvas { background:var(--panel); border:1px solid #2a2a2a; width:100%; max-width:1100px; display:block; }
+  .scores { display:flex; gap:2rem; flex-wrap:wrap; margin-top:.8rem; font-size:.95rem; }
+  .scores div span { color:var(--dim); font-size:.75rem; display:block; }
+  .big { color:var(--berry); font-size:1.4rem; }
+  .note { color:var(--dim); font-size:.72rem; margin-top:1rem; max-width:900px; line-height:1.4; }
+</style>
+</head>
+<body>
+<h1>Sectional Estimator — what it sees</h1>
+<div class="sub">DEV INSTRUMENT (spike, never deployed). The body's area curve as equivalent radius; the envelopes the
+scorer walks; where the penalties bite. Same module the battery runs — this page just draws its mind.</div>
+<div class="row">
+  <select id="shape"></select>
+  <select id="axis"><option>+Z</option><option>-Z</option><option>+X</option><option>-X</option><option>+Y</option><option>-Y</option></select>
+  <button id="run">MEASURE</button>
+  <span id="status" style="color:var(--dim)"></span>
+</div>
+<canvas id="c" width="1100" height="380"></canvas>
+<div class="sub" style="margin-top:.8rem">TRUE silhouettes (what the ship actually looks like — asymmetry the scorer's abstraction discards; flat base visible here):</div>
+<canvas id="sil" width="1100" height="360"></canvas>
+<div class="scores">
+  <div><span>fore (face penalty)</span><b id="sFore">—</b></div>
+  <div><span>aft (closure severity)</span><b id="sAft">—</b></div>
+  <div><span>composite = max(fore, aft)</span><b id="sComp" class="big">—</b></div>
+  <div><span>calibrated pressure Cd</span><b id="sPress">—</b></div>
+  <div><span>+ ITTC friction (300 m @ 100 km/h)</span><b id="sFric">—</b></div>
+  <div><span>ESTIMATED Cd · screening range ±30%</span><b id="sCd" class="big">—</b></div>
+  <div><span>measure time</span><b id="sMs">—</b></div>
+</div>
+<div class="note">
+  Reading the picture: <b style="color:var(--text)">solid outline</b> = the body's sectional profile r(x) (equivalent radius of the
+  blocked area at each station — the "mountain"). <b style="color:var(--berry)">berry dashes</b> = the monotone envelopes the scorer
+  actually walks (a neck that re-expands never counted as closure). <b style="color:var(--orange)">orange shading</b> = where the aft
+  closure penalty accrues (quartic of slope / tan 30°); <b style="color:var(--red)">red bar at the nose</b> = face-like frontal area the
+  fore walk can't reach at 75°. Flow left → right. Calibration knots frozen from the battery (2026-08-15); M6 computes them live.
+</div>
+<script type="module">
+import { measureSections } from '/spike/sectional/sections.mjs';
+import { measureDynamicsGeometry } from '/src/dynamicsGeometry.js';
+import { ittcCf, NU_M2_S } from '/src/dynamicsCore.js';
+import { parseObjMesh } from '/src/obj.js';
+import { makeSphere, makeCube, makePlate, makeTeardrop, makeEllipsoid, makeFlatFrontBoatTail, makeNeckBody } from '/spike/flow-chamber/shapes.mjs';
+
+const SYNTH = {
+  'synthetic: teardrop f3': [makeTeardrop(3), '+X'], 'synthetic: sphere': [makeSphere(), '+X'],
+  'synthetic: cube': [makeCube(), '+X'], 'synthetic: plate': [makePlate(), '+X'],
+  'synthetic: ellipsoid 3:1': [makeEllipsoid(3), '+X'],
+  'synthetic: flat-front boat-tail': [makeFlatFrontBoatTail(4), '+X'],
+  'synthetic: neck body': [makeNeckBody(), '+X'],
+};
+// Frozen from the battery run 2026-08-15 (M6 computes these live from anchors).
+const KNOTS = [[0.042, 0.030], [0.816, 0.462], [1.000, 1.102]];
+const calibrate = (x) => {
+  if (!Number.isFinite(x)) return KNOTS[KNOTS.length - 1][1];
+  if (x <= KNOTS[0][0]) return Math.max(0, KNOTS[0][1] * (x / KNOTS[0][0] || 0));
+  for (let i = 0; i + 1 < KNOTS.length; i++) if (x <= KNOTS[i + 1][0]) {
+    const t = (x - KNOTS[i][0]) / (KNOTS[i + 1][0] - KNOTS[i][0]);
+    return KNOTS[i][1] + t * (KNOTS[i + 1][1] - KNOTS[i][1]);
+  }
+  return KNOTS[KNOTS.length - 1][1];
+};
+const S_AFT = Math.tan(30 * Math.PI / 180), S_FORE = Math.tan(75 * Math.PI / 180);
+
+const $ = (id) => document.getElementById(id);
+const shapeSel = $('shape');
+for (const name of Object.keys(SYNTH)) shapeSel.add(new Option(name));
+try {
+  const names = await (await fetch('/objs-list')).json();
+  for (const n of names) shapeSel.add(new Option(n));
+  shapeSel.value = names.includes('Sunship.obj') ? 'Sunship.obj' : shapeSel.value;
+} catch { /* corpus absent */ }
+
+async function loadMesh(name) {
+  if (SYNTH[name]) return { mesh: SYNTH[name][0], axis: SYNTH[name][1] };
+  const text = await (await fetch(`/objs/${encodeURIComponent(name)}`)).text();
+  return { mesh: parseObjMesh(text), axis: '+Z' };
+}
+
+function draw(m) {
+  const { A, cell } = m, N = A.length;
+  const r = Array.from(A, (a) => Math.sqrt((a * cell * cell) / Math.PI));
+  const rMax = Math.max(...r), iMax = r.indexOf(rMax);
+  const dx = m.L / N;
+  // envelopes exactly as the scorer builds them
+  const envA = r.slice(); for (let i = N - 2; i >= iMax; i--) envA[i] = Math.max(envA[i], envA[i + 1]);
+  const envF = r.slice(); for (let i = 1; i <= iMax; i++) envF[i] = Math.max(envF[i], envF[i - 1]);
+  // fore deficit station
+  let rFore = 0, foreI = 0;
+  for (let i = 0; i <= iMax; i++) {
+    const v = envF[i] - S_FORE * ((i + 0.5) * dx);
+    if (v > rFore) { rFore = v; foreI = i; }
+  }
+  const cv = $('c'), ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height, mid = H / 2, pad = 40;
+  // TRUE ASPECT RATIO (Toby's catch 2026-08-15: independent axis scaling
+  // drew the 1.32-fineness Sunship as a ~3:1 cigar). One px-per-unit
+  // scale for both axes; the shape's real proportions are the point.
+  const pxu = Math.min((W - 2 * pad) / m.L, (H - 60) / (2 * (rMax || 1)));
+  const x0 = (W - m.L * pxu) / 2;
+  const X = (i) => x0 + ((i + 0.5) / N) * m.L * pxu;
+  const Y = (rad) => rad * pxu;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = '#333'; ctx.beginPath(); ctx.moveTo(x0, mid); ctx.lineTo(x0 + m.L * pxu, mid); ctx.stroke();
+  // aft penalty shading (quartic weight per station)
+  for (let i = iMax; i + 1 < N; i++) {
+    const dA = envA[i] ** 2 - envA[i + 1] ** 2; if (dA <= 0) continue;
+    const w = Math.min(1, (((envA[i] - envA[i + 1]) / dx) / S_AFT) ** 4);
+    if (w < 0.02) continue;
+    ctx.fillStyle = `rgba(255,153,0,${0.12 + 0.5 * w})`;
+    ctx.fillRect(X(i), mid - Y(envA[i]), Math.max(X(i + 1) - X(i), 1), 2 * Y(envA[i]));
+  }
+  // terminal base
+  if (envA[N - 1] > 1e-6) {
+    ctx.fillStyle = 'rgba(255,153,0,0.75)';
+    ctx.fillRect(X(N - 1), mid - Y(envA[N - 1]), 4, 2 * Y(envA[N - 1]));
+  }
+  // fore face bar
+  if (rFore / (rMax || 1) > 0.02) {
+    ctx.fillStyle = 'rgba(255,42,42,0.8)';
+    ctx.fillRect(X(foreI) - 4, mid - Y(rFore), 4, 2 * Y(rFore));
+  }
+  // body profile
+  ctx.strokeStyle = '#eee'; ctx.lineWidth = 2; ctx.beginPath();
+  for (let i = 0; i < N; i++) { const x = X(i), y = mid - Y(r[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  for (let i = N - 1; i >= 0; i--) ctx.lineTo(X(i), mid + Y(r[i]));
+  ctx.closePath(); ctx.stroke();
+  // envelopes
+  ctx.strokeStyle = '#c628a4'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.beginPath();
+  for (let i = 0; i < N; i++) { const e = i < iMax ? envF[i] : envA[i]; const x = X(i), y = mid - Y(e); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+  ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = '#888'; ctx.font = '11px system-ui';
+  ctx.fillText('flow → · equivalent-radius abstraction (what the SCORER walks)', pad, 16);
+
+  // TRUE silhouettes: elevation (flow × vertical) and plan (flow × lateral).
+  const sv = $('sil'), sctx = sv.getContext('2d');
+  sctx.clearRect(0, 0, sv.width, sv.height);
+  const bands = [['elevation (side view — flat base shows here)', m.silhouettes.elev],
+                 ['plan (top view)', m.silhouettes.plan]];
+  bands.forEach(([label, sil], bi) => {
+    const bandH = sv.height / 2, bandMid = bi * bandH + bandH / 2 + 8;
+    let lo = Infinity, hi = -Infinity;
+    for (let i = 0; i < N; i++) {
+      if (sil.lo[i] < lo) lo = sil.lo[i];
+      if (sil.hi[i] > hi) hi = sil.hi[i];
+    }
+    if (!Number.isFinite(lo)) return;
+    const span = hi - lo || 1;
+    const spxu = Math.min((sv.width - 2 * pad) / m.L, (bandH - 40) / span);
+    const sx0 = (sv.width - m.L * spxu) / 2;
+    const SX = (i) => sx0 + ((i + 0.5) / N) * m.L * spxu;
+    const SY = (v) => bandMid - (v - (lo + hi) / 2) * spxu; // canvas up = +cross
+    sctx.strokeStyle = '#eee'; sctx.lineWidth = 1.8; sctx.beginPath();
+    let started = false;
+    for (let i = 0; i < N; i++) {
+      if (!Number.isFinite(sil.hi[i]) || sil.hi[i] === -Infinity) continue;
+      const x = SX(i), y = SY(sil.hi[i]);
+      started ? sctx.lineTo(x, y) : sctx.moveTo(x, y); started = true;
+    }
+    for (let i = N - 1; i >= 0; i--) {
+      if (!Number.isFinite(sil.lo[i]) || sil.lo[i] === Infinity) continue;
+      sctx.lineTo(SX(i), SY(sil.lo[i]));
+    }
+    if (started) { sctx.closePath(); sctx.stroke(); }
+    sctx.fillStyle = '#888'; sctx.font = '11px system-ui';
+    sctx.fillText(`flow → · ${label}`, pad, bi * bandH + 14);
+  });
+}
+
+async function run() {
+  $('status').textContent = 'measuring…';
+  const { mesh, axis } = await loadMesh(shapeSel.value);
+  const useAxis = SYNTH[shapeSel.value] ? axis : $('axis').value;
+  const m = measureSections(mesh.verts, mesh.faces, { axis: useAxis, silhouettes: true });
+  // Recompute the two consumed scores (display duplication of the scorer's
+  // walks — dev instrument only; the engine remains the single authority).
+  const { A, cell } = m, N = A.length, dx = m.L / N;
+  const r = Array.from(A, (a) => Math.sqrt((a * cell * cell) / Math.PI));
+  const rMax = Math.max(...r), iMax = r.indexOf(rMax), Amax = Math.PI * rMax * rMax;
+  const envA = r.slice(); for (let i = N - 2; i >= iMax; i--) envA[i] = Math.max(envA[i], envA[i + 1]);
+  let soft = 0;
+  for (let i = iMax; i + 1 < N; i++) {
+    const dA = Math.PI * (envA[i] ** 2 - envA[i + 1] ** 2); if (dA <= 0) continue;
+    soft += Math.min(1, (((envA[i] - envA[i + 1]) / dx) / S_AFT) ** 4) * dA;
+  }
+  soft += Math.PI * envA[N - 1] ** 2;
+  const softAft = Amax ? soft / Amax : 0;
+  const envF = r.slice(); for (let i = 1; i <= iMax; i++) envF[i] = Math.max(envF[i], envF[i - 1]);
+  let rFore = 0;
+  for (let i = 0; i <= iMax; i++) rFore = Math.max(rFore, envF[i] - S_FORE * ((i + 0.5) * dx));
+  const softFore = rMax ? (rFore / rMax) ** 2 : 0;
+  const composite = Math.max(softAft, softFore);
+  const pressure = calibrate(composite);
+  let friction = NaN;
+  try {
+    const ax = useAxis.replace(/^[+-]/, '');
+    const g = measureDynamicsGeometry(mesh.verts, mesh.faces, { flightAxis: ax, lengthM: 300 });
+    friction = ittcCf(((100 / 3.6) * 300) / NU_M2_S) * (g.wettedArea / g.frontalArea);
+  } catch { /* geometry rejected */ }
+  const cd = pressure + (Number.isFinite(friction) ? friction : 0);
+  $('sFore').textContent = softFore.toFixed(3);
+  $('sAft').textContent = softAft.toFixed(3);
+  $('sComp').textContent = composite.toFixed(3);
+  $('sPress').textContent = pressure.toFixed(3);
+  $('sFric').textContent = Number.isFinite(friction) ? friction.toFixed(4) : 'n/a';
+  $('sCd').textContent = `${cd.toFixed(3)}  (${(0.7 * cd).toFixed(2)}–${(1.3 * cd).toFixed(2)})`;
+  $('sMs').textContent = `${Math.round(m.ms)} ms`;
+  $('status').textContent = m.quality.oddFraction > 0.05
+    ? `⚠ mesh quality: ${(m.quality.oddFraction * 100).toFixed(0)}% odd rays` : '';
+  draw(m);
+}
+$('run').addEventListener('click', run);
+shapeSel.addEventListener('change', run);
+run();
+</script>
+</body>
+</html>

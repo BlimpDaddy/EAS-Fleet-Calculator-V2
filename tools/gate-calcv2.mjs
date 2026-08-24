@@ -41,7 +41,7 @@ import { spawnSync } from 'node:child_process';
 const here = fileURLToPath(new URL('.', import.meta.url));          // tools/
 const root = fileURLToPath(new URL('../', import.meta.url));        // repo root
 const site = fileURLToPath(new URL('../site/', import.meta.url));
-const calcV2 = fileURLToPath(new URL('../../CalcV2/', import.meta.url));
+const calcV2 = fileURLToPath(new URL('../engine/', import.meta.url));   // consolidated layout (2026-08-24)
 const BAKED_DIRS = ['src', 'vendor', 'web'];
 const BAKE_EXCLUDE = new Set(['dynamic-bench.html']); // keep in sync with bake-calcv2.mjs
 const SUITES = ['test/dynamics-fixtures.mjs', 'test/dynamics-core-fixtures.mjs', 'test/estimator-fixtures.mjs'];

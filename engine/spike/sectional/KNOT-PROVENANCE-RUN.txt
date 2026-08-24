@@ -1,0 +1,59 @@
+
+CALIBRATION KNOT 2 — PROVENANCE RECONCILIATION (spec 85.11.1, step 2)
+  Historical geometry and paths ONLY. No Sunship geometry is touched.
+  NOTHING IS CHANGED — this establishes WHY two numbers differ.
+
+  frozen knot 2 (ROUNDED_KNOTS[1])     0.1807885483529704
+  recorded harness value (81.4)        0.186851
+  gap                                  3.35%
+
+  THE 2x2 — TN614-332, the knot body
+    interpolation  mesh    proxy       class     vs knot 2   vs harness
+    pchip          lathe   0.180789  rounded      0.00%     -3.24%
+    pchip          hull    0.182618  rounded      1.01%     -2.27%
+    lerp           lathe   0.183412  rounded      1.45%     -1.84%
+    lerp           hull    0.186851  rounded      3.35%      0.00%
+
+  MAIN EFFECTS (absolute proxy)
+    interpolation  pchip -> lerp :  +0.002623 on the lathe,  +0.004233 on the hull
+    mesh           lathe -> hull :  +0.001829 under pchip,  +0.003439 under lerp
+
+  THE OTHER REAL ANCHOR, AND THE REST OF THE TN-614 SET
+    body      pchip/lathe   lerp/hull    delta      delta %
+    111       0.017428     0.017243    -0.000186    -1.07%
+    221       0.041502     0.041121    -0.000380    -0.92%
+    222       0.119592     0.116806    -0.002787    -2.33%
+    332       0.180789     0.186851    +0.006062     3.35%
+    121T      0.041472     0.040536    -0.000936    -2.26%
+    211T      0.017409     0.017169    -0.000241    -1.38%
+
+  WHAT THE GAP IS WORTH IN PRESSURE Cd (rounded line, the knot body is rounded)
+    frozen knot     proxy 0.180789  ->  pressure 0.012339
+    harness value   proxy 0.186851  ->  pressure 0.013963
+    knot 2 pressure as stored          0.012339
+
+  RESOLUTION LADDER — pchip lathe, both scales doubling together
+
+    TN614-111   frozen knot 0.017428
+      rings x segs      proxy       vs knot   step
+         96 x 28        0.017428    -0.00%         
+        192 x 56        0.017653     1.29%    1.29%
+        384 x 112       0.017681     1.45%    0.16%
+        768 x 224       0.017726     1.71%    0.26%
+       1536 x 448       0.017745     1.82%    0.11%
+
+    TN614-332   frozen knot 0.180789
+      rings x segs      proxy       vs knot   step
+         96 x 28        0.180789     0.00%         
+        192 x 56        0.182359     0.87%    0.87%
+        384 x 112       0.184081     1.82%    0.94%
+        768 x 224       0.182744     1.08%   -0.73%
+       1536 x 448       0.182896     1.17%    0.08%
+
+  THE ANCHOR SPACING — what a convention change does to the MAP, not to a point
+    frozen  96x28 pchip lathe   0.163360
+    refined 1536x448 same path  0.165151   1.10%
+    harness lerp + hull         0.169608   3.82%
+
+  KNOTS UNCHANGED. Nothing written. No Sunship geometry involved.
+

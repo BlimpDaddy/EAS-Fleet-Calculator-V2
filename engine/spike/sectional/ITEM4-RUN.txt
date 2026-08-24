@@ -1,0 +1,97 @@
+
+ITEM 4 — THE CORPUS RESCORE (spec 90, rulings 90.7)
+  55 bodies, one canonical convention. No calibration read or written.
+
+  id                    role                          proxy      class    CdPred   CdMeas   fricCanon resid    F2a     A2      A4      elig        conf       resDrift
+  TN614-111             calibration-consumed          0.017428  rounded  0.06606  0.04010  0.03204   0.00806  9.669  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.7%
+  TN614-221             spent                         0.041502  rounded  0.07237  0.04370  0.03517   0.00853 10.131  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.6%
+  TN614-222             spent                         0.119592  rounded  0.07677  0.04720  0.03647   0.01073  6.226  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.9%
+  TN614-332             calibration-consumed          0.180789  rounded  0.08197  0.05080  0.03846   0.01234  5.869  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.1%
+  TN614-121T            spent                         0.041472  rounded  0.06838  0.04050  0.03297   0.00753 10.263  0.0000  0.0001  ELIGIBLE    REDUCED      1.3%
+  TN614-211T            spent                         0.017409  rounded  0.06925  0.04150  0.03380   0.00770  9.748  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.2%
+  sphere                calibration-consumed          0.823487  rounded  0.19851  0.19000  0.00767   0.18233 28.222  0.0000  0.0001  ELIGIBLE    REDUCED     -0.2%
+  cube                  calibration-consumed          1.000000  pinned   1.12619  1.05000  0.01800   1.03200  0.000  0.0000  0.1337  ELIGIBLE    REDUCED      n/a
+  flat-plate            calibration-consumed          1.000000  pinned   1.11139  1.17000  0.00696   1.16304  0.000  0.0000  0.1337  ELIGIBLE    REDUCED      n/a
+  TR432-Akron           spent                         0.090419  rounded  0.06560  0.05201  0.05182   0.00019  6.302  0.0000  0.0001  ELIGIBLE    SUPPORTED   -2.9%
+  TR397-los-angeles     spent/ordering+bounded        0.296558  pinned   0.13628  0.07166  0.04029   0.03137  4.653  0.0000  0.0001  ELIGIBLE    REDUCED      2.5%
+  TR397-tc-10           spent/ordering+bounded        0.425683  pinned   0.21716  0.09066  0.03122   0.05944 11.831  0.0000  0.0001  ELIGIBLE    REDUCED      4.8%
+  TR397-tc-6            spent/ordering+bounded        0.425683  pinned   0.21716  0.07973  0.03122   0.04851 11.831  0.0000  0.0001  ELIGIBLE    REDUCED      4.8%
+  TR397-puritan-1       spent/ordering+bounded        0.387401  pinned   0.18599  0.08360  0.02718   0.05642 21.006  0.0000  0.0001  ELIGIBLE    REDUCED      2.0%
+  TR397-puritan-2       spent/ordering+bounded        0.387401  pinned   0.18599  0.09321  0.02718   0.06603 21.006  0.0000  0.0001  ELIGIBLE    REDUCED      2.0%
+  TR397-zmc-2           spent/ordering+bounded        0.442637  pinned   0.21911  0.06831  0.02115   0.04715 16.484  0.0000  0.0001  ELIGIBLE    REDUCED     -0.0%
+  TR397-te-2            spent/ordering+bounded        0.518184  pinned   0.28347  0.09472  0.03195   0.06277 14.196  0.0000  0.0001  ELIGIBLE    REDUCED     -1.4%
+  TR291-fr1.00          independent/outcome-exposed — 0.710625  rounded  0.36910  0.08960  0.02650   0.06310 15.021  0.0000  0.0001  ELIGIBLE    REDUCED     -0.4%
+  TR291-fr1.50          independent/outcome-exposed — 0.473288  rounded  0.18549  0.05412  0.03213   0.02200 11.025  0.0000  0.0001  ELIGIBLE    REDUCED      0.4%
+  TR291-fr2.00          independent/outcome-exposed — 0.325233  rounded  0.11993  0.04624  0.03796   0.00828  8.577  0.0000  0.0001  ELIGIBLE    REDUCED     -0.5%
+  TR291-fr3.00          independent/outcome-exposed — 0.193669  rounded  0.06807  0.05162  0.04952   0.00210  5.876  0.0000  0.0001  ELIGIBLE    REDUCED      2.3%
+  TR291-fr4.62          independent/outcome-exposed — 0.105463  rounded  0.07795  0.06337  0.06758  -0.00421  3.865  0.0000  0.0001  ELIGIBLE    SUPPORTED   -1.5%
+  TR291-fr6.00          independent/outcome-exposed — 0.074506  rounded  0.09185  0.08020  0.08229  -0.00209  2.988  0.0000  0.0001  ELIGIBLE    SUPPORTED   -0.5%
+  TR291-fr8.00          independent/outcome-exposed — 0.058001  rounded  0.11191  0.10332  0.10279   0.00054  2.246  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.6%
+  TR291-fr10.00         independent/outcome-exposed — 0.043035  rounded  0.13123  0.12311  0.12249   0.00062  1.799  0.0000  0.0001  ELIGIBLE    SUPPORTED    0.6%
+  S58-4154              spent/ordering (EXPOSED)      0.149306  rounded  0.05118     -     0.03799      -     7.251  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.0%
+  S58-4155              spent/ordering (EXPOSED)      0.073332  rounded  0.05690     -     0.04707      -     5.826  0.0000  0.0001  ELIGIBLE    SUPPORTED   -0.3%
+  S58-4156              spent/ordering (EXPOSED)      0.041598  rounded  0.06490     -     0.05621      -     4.867  0.0000  0.0001  ELIGIBLE    SUPPORTED   -1.8%
+  S58-4157              spent/ordering                0.027994  rounded  0.07371     -     0.06537      -     4.177  0.0000  0.0001  ELIGIBLE    SUPPORTED  -15.7%
+  S58-4158              spent/ordering                0.019858  rounded  0.08268     -     0.07456      -     3.659  0.0000  0.0001  ELIGIBLE    SUPPORTED  -23.3%
+  S58-4159              spent/ordering                0.009082  rounded  0.09717     -     0.09297      -     2.930  0.0000  0.0001  ELIGIBLE    SUPPORTED   -9.3%
+  S58-4160              spent/ordering                0.029263  rounded  0.07386     -     0.06548      -     3.279  0.0000  0.0001  ELIGIBLE    SUPPORTED  -13.5%
+  S58-4161              spent/ordering                0.028597  rounded  0.07369     -     0.06533      -     4.906  0.0000  0.0001  ELIGIBLE    SUPPORTED  -14.6%
+  S58-4162              spent/ordering (EXPOSED)      0.031180  rounded  0.07376     -     0.06534      -     5.524  0.0000  0.0001  ELIGIBLE    SUPPORTED  -13.6%
+  S58-4163              spent/ordering (EXPOSED)      0.035788  rounded  0.07394     -     0.06540      -     6.036  0.0000  0.0001  ELIGIBLE    SUPPORTED  -10.0%
+  S58-4164              spent/ordering (EXPOSED)      0.010170  rounded  0.06341     -     0.05871      -     4.895  0.0000  0.0001  ELIGIBLE    SUPPORTED  -35.5%
+  S58-4165              spent/ordering                0.016087  rounded  0.06969     -     0.06225      -     4.311  0.0000  0.0001  ELIGIBLE    SUPPORTED  -32.5%
+  S58-4166              spent/ordering                0.049976  rounded  0.07714     -     0.06823      -     4.281  0.0000  0.0001  ELIGIBLE    SUPPORTED   -6.8%
+  S58-4167              spent/ordering                0.044519  rounded  0.07365     -     0.06487      -     3.480  0.0000  0.0001  ELIGIBLE    SUPPORTED   -8.2%
+  S58-4168              spent/ordering                0.033561  rounded  0.07374     -     0.06525      -     3.881  0.0000  0.0001  ELIGIBLE    SUPPORTED  -10.8%
+  S58-4169              spent/ordering                0.023282  rounded  0.07364     -     0.06543      -     4.500  0.0000  0.0001  ELIGIBLE    SUPPORTED  -21.3%
+  S58-4170              spent/ordering (EXPOSED)      0.017900  rounded  0.07348     -     0.06540      -     5.041  0.0000  0.0001  ELIGIBLE    SUPPORTED  -28.6%
+  S58-4171              spent/ordering (EXPOSED)      0.019214  rounded  0.07321     -     0.06510      -     4.627  0.0000  0.0001  ELIGIBLE    SUPPORTED    2.1%
+  S58-4172              spent/ordering                0.022957  rounded  0.07345     -     0.06524      -     4.403  0.0000  0.0001  ELIGIBLE    SUPPORTED   -9.8%
+  S58-4173              spent/ordering                0.032444  rounded  0.07394     -     0.06549      -     3.951  0.0000  0.0001  ELIGIBLE    SUPPORTED   -6.2%
+  S58-4174              spent/ordering                0.038331  rounded  0.07420     -     0.06559      -     3.725  0.0000  0.0001  ELIGIBLE    SUPPORTED   -0.5%
+  S58-4175              spent/ordering                0.032153  rounded  0.05354     -     0.04481      -     5.999  0.0000  0.0001  ELIGIBLE    SUPPORTED   -0.2%
+  S58-4176              spent/ordering                0.018867  rounded  0.05063     -     0.04226      -     6.787  0.0000  0.0001  ELIGIBLE    SUPPORTED  -11.3%
+  S58-4177              spent/ordering                0.031109  rounded  0.07400     -     0.06558      -     2.737  0.0000  0.0001  ELIGIBLE    SUPPORTED  -11.8%
+  GOTT-oblate           held-out -> SPENT BY THIS RUN 0.891485  rounded  0.44503  0.57700  0.02087   0.55613 35.498  0.0000  0.0001  ELIGIBLE    REDUCED     -0.2%
+  GOTT-prolate          held-out -> SPENT BY THIS RUN 0.596579  rounded  0.21304  0.07000  0.03166   0.03834 16.649  0.0000  0.0001  ELIGIBLE    REDUCED     -0.1%
+  R451-original         ordering-only/outcome-exposed 0.053257  rounded  0.08593     -     0.05681      -     6.296  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.4%
+  R451-altered          ordering-only/outcome-exposed 0.136447  rounded  0.08791     -     0.05628      -     5.519  0.0000  0.0001  ELIGIBLE    SUPPORTED   -2.8%
+  TM267-round           geometry-only/control         0.002440  rounded  0.07473     -     0.07360      -     1.337  0.0000  0.0001  ELIGIBLE    SUPPORTED    1.3%
+  TM267-square          geometry-only/control         0.004280  rounded  0.08107     -     0.07909      -     1.307  0.0000  0.1139  INELIGIBLE  SUPPORTED    n/a
+
+  ABSOLUTE-CAPABLE AIR BODIES (excl. appendaged TR-397), sorted by proxy — the Q1/Q5 spine:
+    id                    proxy      canonical residual   pred pressure   meas total   pred total   err%
+    TN614-211T            0.017409    0.00770          0.00806         0.04150      0.06925       66.9%
+    TN614-111             0.017428    0.00806          0.00806         0.04010      0.06606       64.7%
+    TN614-121T            0.041472    0.00753          0.00869         0.04050      0.06838       68.8%
+    TN614-221             0.041502    0.00853          0.00869         0.04370      0.07237       65.6%
+    TR291-fr10.00         0.043035    0.00062          0.00873         0.12311      0.13123        6.6%
+    TR291-fr8.00          0.058001    0.00054          0.00913         0.10332      0.11191        8.3%
+    TR291-fr6.00          0.074506   -0.00209          0.00956         0.08020      0.09185       14.5%
+    TR432-Akron           0.090419    0.00019          0.00997         0.05201      0.06560       26.1%
+    TR291-fr4.62          0.105463   -0.00421          0.01037         0.06337      0.07795       23.0%
+    TN614-222             0.119592    0.01073          0.01074         0.04720      0.07677       62.6%
+    TN614-332             0.180789    0.01234          0.01234         0.05080      0.08197       61.4%
+    TR291-fr3.00          0.193669    0.00210          0.01855         0.05162      0.06807       31.9%
+    TR291-fr2.00          0.325233    0.00828          0.08198         0.04624      0.11993      159.4%
+    TR291-fr1.50          0.473288    0.02200          0.15336         0.05412      0.18549      242.7%
+    GOTT-prolate          0.596579    0.03834          0.18137         0.07000      0.21304      204.3%
+    TR291-fr1.00          0.710625    0.06310          0.34260         0.08960      0.36910      311.9%
+    sphere                0.823487    0.18233          0.18236         0.19000      0.19851        4.5%
+    GOTT-oblate           0.891485    0.55613          0.42416         0.57700      0.44503      -22.9%
+    cube                  1.000000    1.03200          1.10206         1.05000      1.12619        7.3%
+    flat-plate            1.000000    1.16304          1.10206         1.17000      1.11139       -5.0%
+
+  Q4 SPINE — |total error| grouped by confidence (absolute-capable air bodies):
+    SUPPORTED  n=10   median |err| 61.4%
+    REDUCED    n=10   median |err| 68.8%
+
+  R451 stern pair: predicted altered/original = 1.023 (report: ~1.05)
+  TM267 pair: predicted square/round = 1.085 (measured 1.087, low accuracy)   A4 round 0.0001 vs square 0.1139
+
+  A5 PASS — engine byte-identical before and after
+  Göttingen: SPENT by this run (90.7 R2). Blind gate held.
+  No calibration, routing or descriptor-authority change. Production untouched.
+
+  wrote item4-run2.json
+

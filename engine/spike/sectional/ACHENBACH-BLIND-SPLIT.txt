@@ -1,0 +1,12 @@
+ACHENBACH 1972 — BLIND SPLIT PREDICTIONS (spec 97). FROZEN BEFORE the decomposition is seen.
+Mechanism exam only: NOT a total-Cd validation (total is calibration-adjacent), NOT an anchor.
+Declared grid Re_D {1e5, 3e5, 1e6, 3e6, 6e6} spanning the published 5e4-6e6.
+
+Re_D      proxy      class    CdTot    press    fric     FRICTION FRACTION of predicted total
+1.0e+5   0.823487  rounded  0.50552  0.47206  0.03347   6.6%
+3.0e+5   0.823487  rounded  0.47867  0.45376  0.02491   5.2%
+1.0e+6   0.823487  rounded  0.20118  0.18236  0.01882   9.4%
+3.0e+6   0.823487  rounded  0.19851  0.18236  0.01615   8.1%
+6.0e+6   0.823487  rounded  0.19851  0.18236  0.01615   8.1%
+
+engine obj.js:84f52aee18ec062f sections.js:90c925e9a7e490db cdEstimator.js:b4aff600a6b33233 dynamicsGeometry.js:8e8482dfcfcaa6ab dynamicsCore.js:7ec3a19a6f21b1e8

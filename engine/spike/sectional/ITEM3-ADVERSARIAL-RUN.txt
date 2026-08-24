@@ -1,0 +1,73 @@
+
+ITEM 3 — ADVERSARIAL SECTION SHAPES (spec 87)
+  A(x) held IDENTICAL across every row; only the SECTION SHAPE varies.
+  Frontal area matched by construction. Only WETTED area differs.
+  L = 100 m, 100 km/h, 240 rings x 128 azimuths, authored surface (no global hull).
+  Frozen calibration. Diagnostic only. Nothing altered.
+
+  case                        proxy      Cd       press    fric     class    elig         F1      F2a    F3      F4      F5      wetted     dPx%  conf
+  circle (control)            0.023597 0.05109  0.00823  0.04286  rounded  ELIGIBLE     0.6017  4.187 1.9593 0.3731 0.0000     3,472   0.0  SUPPORTED
+  ellipse k=1.5               0.024092 0.05241  0.00824  0.04417  rounded  ELIGIBLE     0.6018  4.026 1.9602 0.3731 0.0000     3,578   0.0  SUPPORTED
+  ellipse k=2.0               0.024534 0.05495  0.00825  0.04669  rounded  ELIGIBLE     0.6020  3.753 1.9616 0.3730 0.0000     3,781   0.0  SUPPORTED
+  ellipse k=3.0               0.026560 0.06085  0.00830  0.05254  rounded  ELIGIBLE     0.6022  3.263 1.9639 0.3729 0.0000     4,252   0.0  SUPPORTED
+  ellipse k=5.0               0.025752 0.07222  0.00828  0.06393  rounded  ELIGIBLE     0.6025  2.639 1.9664 0.3728 0.0000     5,161   0.0  SUPPORTED
+  superellipse n=3            0.023359 0.05160  0.00822  0.04338  rounded  ELIGIBLE     0.6017  4.178 1.9594 0.3731 0.0000     3,514   0.0  SUPPORTED
+  superellipse n=4            0.024123 0.05228  0.00824  0.04404  rounded  ELIGIBLE     0.6017  4.145 1.9596 0.3731 0.0000     3,568   0.0  SUPPORTED
+  superellipse n=6            0.024820 0.05328  0.00826  0.04502  rounded  INELIGIBLE   0.6018  4.107 1.9598 0.3731 0.0000     3,647   0.0  SUPPORTED
+  superellipse n=10           0.025630 0.05435  0.00828  0.04607  rounded  INELIGIBLE   0.6018  4.090 1.9599 0.3731 0.0000     3,732   0.0  SUPPORTED
+  superellipse n=20 (near-square) 0.027023 0.05535  0.00832  0.04704  rounded  INELIGIBLE   0.6018  4.090 1.9599 0.3731 0.0000     3,809   2.5  SUPPORTED
+
+  PRE-REGISTERED PREDICTIONS (spec 87.2), checked:
+    P1 scalar invariant to section shape at fixed A(x):
+       proxy spread 3.66e-3 = 15.53% of the control   -> FAILS
+       classes present: rounded  -> HOLDS
+    P2 Cd moves only through friction / wetted area:
+       pressure spread 9.59e-5   friction spread 2.11e-2   -> HOLDS
+    P3 F5 rises with ellipse aspect ratio:
+       F5 0.0000 -> 0.0000 -> 0.0000 -> 0.0000 -> 0.0000   -> FAILS
+    P4 F5 is BLIND to superellipses (180-degree symmetry), despite gross shape change:
+       worst superellipse F5 0.0000 vs control 0.0000   -> HOLDS — F5 sees nothing
+
+  IF THE SCALAR IS BLIND, WHAT IS NOT? (the item-3 question)
+    case                        wetted vs control   Cd vs control   elig / E4 shift      OOD
+    circle (control)            +0.00%  +0.00%          ELIGIBLE    0.00%    SUPPORTED
+    ellipse k=1.5               +3.04%  +2.59%          ELIGIBLE    0.00%    SUPPORTED
+    ellipse k=2.0               +8.90%  +7.55%          ELIGIBLE    0.00%    SUPPORTED
+    ellipse k=3.0               +22.46%  +19.10%         ELIGIBLE    0.00%    SUPPORTED
+    ellipse k=5.0               +48.64%  +41.35%         ELIGIBLE    0.00%    SUPPORTED
+    superellipse n=3            +1.20%  +1.00%          ELIGIBLE    2.82%    SUPPORTED
+    superellipse n=4            +2.75%  +2.34%          ELIGIBLE    4.38%    SUPPORTED
+    superellipse n=6            +5.02%  +4.29%          INELIGIBLE  5.40%    SUPPORTED
+    superellipse n=10           +7.46%  +6.39%          INELIGIBLE  5.71%    SUPPORTED
+    superellipse n=20 (near-square) +9.70%  +8.34%          INELIGIBLE  5.89%    SUPPORTED
+
+  Frozen calibration. No knot, convention, estimator, classifier or ribbon change.
+
+
+RASTER SHAPE-SENSITIVITY (spec 87.4) — why P1 failed
+  Circle and 5:1 ellipse share r(x), so their TRUE section area is identical
+  at every station. Only the rastered measurement can differ.
+
+  x/L     r(x)       circle err%    ellipse k=5 err%
+  0.30   0.48794       -0.00%         -0.15%
+  0.70   0.42915       -0.05%         -0.21%
+  0.80   0.35589       -0.03%         -0.85%
+  0.85   0.30555        0.10%         -0.11%
+  0.90   0.22930       -0.11%         -1.63%
+  0.94   0.16078        0.05%         -1.88%
+  0.97   0.09483        0.11%          2.32%
+
+  worst |error| over the whole body:  circle 5.28%   ellipse k=5 15.57%
+
+  THE MECHANISM: a flattened section is resolved by fewer cells across its
+  thin axis, and the deficit GROWS through the aft closure as the section
+  shrinks. That is precisely the region the aft-penalty descriptor reads.
+  Through the mid-aft closure the ellipse runs 0.8-1.9% low against the circles
+  <=0.11%; the worst errors, near the tips where sections are tiny, are 5.28%
+  for the circle and 15.57% for the ellipse. softAft is a THRESHOLD functional
+  of the equivalent-radius profile, so an error concentrated there does not
+  average out -- it emerges as the 15.5% spread in compositeV1 that P1 predicted
+  could not happen.
+
+  Recorded, not repaired. The scorer is frozen.
+

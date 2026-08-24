@@ -1,0 +1,321 @@
+<title>Smart Tail Response Basin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#f4f6f8; --ground:#ffffff; --ink:#0d1418; --ink-2:#44535d; --ink-3:#7a8892;
+  --rule:#dde3e8; --rule-2:#eaeef1;
+  --band:#0d6f68; --band-fill:rgba(13,111,104,.11);
+  --knot:#a8501b; --knot-fill:rgba(168,80,27,.10);
+  --shadow:0 1px 2px rgba(13,20,24,.05), 0 8px 24px rgba(13,20,24,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0b1014; --ground:#131b21; --ink:#e7edf1; --ink-2:#9db0bb; --ink-3:#6c7d88;
+    --rule:#24303a; --rule-2:#1b242c;
+    --band:#45b8ab; --band-fill:rgba(69,184,171,.13);
+    --knot:#df9257; --knot-fill:rgba(223,146,87,.13);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0b1014; --ground:#131b21; --ink:#e7edf1; --ink-2:#9db0bb; --ink-3:#6c7d88;
+  --rule:#24303a; --rule-2:#1b242c;
+  --band:#45b8ab; --band-fill:rgba(69,184,171,.13);
+  --knot:#df9257; --knot-fill:rgba(223,146,87,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px; margin:0 auto; padding:56px 24px 88px; display:flex; flex-direction:column; gap:44px}
+header{display:flex; flex-direction:column; gap:18px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+h1{
+  margin:0; font-size:clamp(30px,4.4vw,46px); line-height:1.1; font-weight:600;
+  letter-spacing:-.02em; text-wrap:balance; max-width:22ch;
+}
+.standfirst{margin:0; max-width:62ch; color:var(--ink-2); font-size:18px}
+.verdict{
+  border-left:3px solid var(--band); padding:14px 0 14px 20px; margin:0;
+  font-size:19px; max-width:60ch; text-wrap:pretty;
+}
+.verdict strong{font-weight:600}
+h2{
+  margin:0 0 4px; font-size:13px; font-family:"IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:500;
+}
+section{display:flex; flex-direction:column; gap:18px}
+p{margin:0; max-width:66ch; color:var(--ink-2)}
+p.lead{color:var(--ink)}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:20px}
+.card{
+  margin:0; background:var(--ground); border:1px solid var(--rule); border-radius:4px;
+  padding:18px 18px 14px; display:flex; flex-direction:column; gap:12px; box-shadow:var(--shadow);
+}
+figcaption{display:flex; align-items:baseline; gap:10px}
+.card h3{margin:0; font-size:17px; font-weight:600; letter-spacing:-.01em}
+.key{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px; font-weight:500;
+  letter-spacing:.09em; color:var(--ink-3); border:1px solid var(--rule); border-radius:3px;
+  padding:2px 6px;
+}
+.plot{overflow-x:auto}
+.plot svg{display:block; width:100%; height:auto; min-width:300px}
+.plot.wide svg{min-width:660px}
+.facts{
+  display:flex; gap:22px; margin:0; padding-top:10px; border-top:1px solid var(--rule-2);
+  flex-wrap:wrap;
+}
+.facts div{display:flex; flex-direction:column; gap:1px}
+.facts dt{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
+.facts dd{
+  margin:0; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:13px;
+  font-variant-numeric:tabular-nums; color:var(--ink);
+}
+.band{fill:var(--band-fill)}
+.grid line, line.grid{stroke:var(--rule); stroke-width:1}
+.axis{stroke:var(--rule); stroke-width:1}
+.seg{stroke:var(--ink-2); stroke-width:1.6; fill:none}
+.seg-knot{stroke:var(--knot); stroke-width:2.4; stroke-dasharray:5 3}
+.knotline{stroke:var(--knot); stroke-width:1.6; stroke-dasharray:5 4}
+.pt{fill:var(--ink); stroke:var(--ground); stroke-width:1.2}
+.pt.pinned{fill:var(--ground); stroke:var(--ink); stroke-width:2}
+.halo{fill:none; stroke:var(--band); stroke-width:2}
+text{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+.tick{font-size:11px; fill:var(--ink-3)}
+.axlab{font-size:11px; fill:var(--ink-3); letter-spacing:.05em}
+.baselab{font-size:11px; fill:var(--band); font-weight:600; font-family:"IBM Plex Sans",sans-serif}
+.knotlab{font-size:11px; fill:var(--knot); font-weight:600; font-family:"IBM Plex Sans",sans-serif}
+.knotlab.big{font-size:13px}
+.knotsub{font-size:11px; fill:var(--ink-3); font-family:"IBM Plex Sans",sans-serif}
+.tablewrap{overflow-x:auto; background:var(--ground); border:1px solid var(--rule); border-radius:4px; box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; min-width:820px; font-size:14px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--rule-2)}
+thead th{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500; border-bottom:1px solid var(--rule);
+}
+tbody th{font-weight:500; white-space:nowrap}
+tbody tr:last-child th, tbody tr:last-child td{border-bottom:none}
+td.n{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; white-space:nowrap}
+.at{display:block; font-size:11px; color:var(--ink-3)}
+.legend{display:flex; gap:20px; flex-wrap:wrap; font-size:13px; color:var(--ink-2); align-items:center}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.sw{width:13px; height:13px; border-radius:50%; display:inline-block}
+.sw.round{background:var(--ink)}
+.sw.pin{background:var(--ground); border:2px solid var(--ink)}
+.sw.bandsw{border-radius:2px; background:var(--band-fill); border:1px solid var(--band)}
+.sw.knotsw{border-radius:2px; background:var(--knot); height:3px; width:16px}
+.cautions{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px}
+.caution{
+  background:var(--ground); border:1px solid var(--rule); border-top:3px solid var(--knot);
+  border-radius:4px; padding:20px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow);
+}
+.caution h3{margin:0; font-size:17px; font-weight:600; letter-spacing:-.01em}
+.caution p{font-size:15px}
+.gates{display:flex; flex-wrap:wrap; gap:8px}
+.gate{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; padding:5px 10px;
+  border:1px solid var(--rule); border-radius:3px; background:var(--ground); color:var(--ink-2);
+}
+.gate b{color:var(--band); font-weight:600}
+footer{
+  border-top:1px solid var(--rule); padding-top:22px; color:var(--ink-3); font-size:13px;
+  display:flex; flex-direction:column; gap:6px;
+}
+footer code{font-family:"IBM Plex Mono",ui-monospace,monospace; color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Step 3 · spec 84–85 · 2026-08-21</div>
+  <h1>Is the Sunship Smart Tail a basin or a knife-edge?</h1>
+  <p class="standfirst">Five one-at-a-time sweeps around the authored Smart Tail surrogate, 32 distinct
+  variants, run through the frozen production estimator. No calibration was read or written and no
+  aerodynamic direction was pre-registered.</p>
+  <p class="verdict"><strong>A basin.</strong> 19 of 32 variants land in Cd 0.02–0.03, and every one of the
+  five families holds a contiguous in-band run straight through the baseline. But the basin's upper edge
+  is not geometry — it is a calibration knot.</p>
+  <div class="gates">
+    <span class="gate">G0 refactor identity <b>byte-for-byte</b></span>
+    <span class="gate">G0b one engine <b>pass</b></span>
+    <span class="gate">S1 determinism <b>pass</b></span>
+    <span class="gate">A5 frozen path <b>pass</b></span>
+    <span class="gate">Cd ≠ f(ribbons) <b>36/36</b></span>
+    <span class="gate">eligible <b>32/32</b></span>
+  </div>
+</header>
+
+<section>
+  <h2>The five curves</h2>
+  <p class="lead">Cd on a log axis against each parameter. The tinted band is 0.02–0.03. A ringed point is
+  the baseline; a hollow point is classified <em>pinned</em> rather than <em>rounded</em>. A dashed
+  segment is where that step crosses calibration knot 2.</p>
+  <div class="legend">
+    <span><i class="sw round"></i>rounded</span>
+    <span><i class="sw pin"></i>pinned</span>
+    <span><i class="sw bandsw"></i>Cd 0.02–0.03</span>
+    <span><i class="sw knotsw"></i>crosses the knot</span>
+  </div>
+  <div class="grid">
+<figure class="card">
+  <figcaption><span class="key">T-LEN</span><h3>Deployed length</h3></figcaption>
+  <div class="plot"><svg viewBox="0 0 460 300" role="img" aria-label="Deployed length: Cd against EXTRA_M, metres beyond the 300 m envelope"><rect class="band" x="62" y="213.3" width="380" height="27.6"/><line class="grid" x1="62" y1="240.8" x2="442" y2="240.8"/><text class="tick" x="53" y="244.3" text-anchor="end">0.02</text><line class="grid" x1="62" y1="213.3" x2="442" y2="213.3"/><text class="tick" x="53" y="216.8" text-anchor="end">0.03</text><line class="grid" x1="62" y1="178.5" x2="442" y2="178.5"/><text class="tick" x="53" y="182.0" text-anchor="end">0.05</text><line class="grid" x1="62" y1="131.4" x2="442" y2="131.4"/><text class="tick" x="53" y="134.9" text-anchor="end">0.1</text><line class="grid" x1="62" y1="84.3" x2="442" y2="84.3"/><text class="tick" x="53" y="87.8" text-anchor="end">0.2</text><line class="grid" x1="62" y1="37.2" x2="442" y2="37.2"/><text class="tick" x="53" y="40.7" text-anchor="end">0.4</text><line class="seg" x1="62.0" y1="28.6" x2="125.3" y2="91.8"/><line class="seg" x1="125.3" y1="91.8" x2="188.7" y2="129.8"/><line class="seg" x1="188.7" y1="129.8" x2="252.0" y2="188.6"/><line class="seg seg-knot" x1="252.0" y1="188.6" x2="315.3" y2="233.8"/><text class="knotlab" x="290.7" y="205.2">knot</text><line class="seg" x1="315.3" y1="233.8" x2="378.7" y2="234.4"/><line class="seg" x1="378.7" y1="234.4" x2="442.0" y2="234.0"/><circle class="pt pinned" cx="62.0" cy="28.6" r="4.2"/><circle class="pt" cx="125.3" cy="91.8" r="4.2"/><circle class="pt" cx="188.7" cy="129.8" r="4.2"/><circle class="pt" cx="252.0" cy="188.6" r="4.2"/><circle class="halo" cx="315.3" cy="233.8" r="8.5"/><circle class="pt" cx="315.3" cy="233.8" r="4.2"/><text class="baselab" x="315.3" y="218.8" text-anchor="middle">baseline</text><circle class="pt" cx="378.7" cy="234.4" r="4.2"/><circle class="pt" cx="442.0" cy="234.0" r="4.2"/><text class="tick" x="62.0" y="266" text-anchor="middle">0</text><text class="tick" x="315.3" y="266" text-anchor="middle">216</text><text class="tick" x="442.0" y="266" text-anchor="middle">324</text><line class="axis" x1="62" y1="248" x2="442" y2="248"/><text class="axlab" x="62" y="288">EXTRA_M, metres beyond the 300 m envelope</text><text class="axlab" x="16" y="16">Cd</text></svg></div>
+  <dl class="facts">
+    <div><dt>in band</dt><dd>3 of 7</dd></div>
+    <div><dt>Cd range</dt><dd>0.02197 – 0.45389</dd></div>
+    <div><dt>eligible</dt><dd>7 of 7</dd></div>
+  </dl>
+</figure>
+<figure class="card">
+  <figcaption><span class="key">T-ATT</span><h3>Fairing pickup</h3></figcaption>
+  <div class="plot"><svg viewBox="0 0 460 300" role="img" aria-label="Fairing pickup: Cd against ATTACH, fraction of envelope length"><rect class="band" x="62" y="213.3" width="380" height="27.6"/><line class="grid" x1="62" y1="240.8" x2="442" y2="240.8"/><text class="tick" x="53" y="244.3" text-anchor="end">0.02</text><line class="grid" x1="62" y1="213.3" x2="442" y2="213.3"/><text class="tick" x="53" y="216.8" text-anchor="end">0.03</text><line class="grid" x1="62" y1="178.5" x2="442" y2="178.5"/><text class="tick" x="53" y="182.0" text-anchor="end">0.05</text><line class="grid" x1="62" y1="131.4" x2="442" y2="131.4"/><text class="tick" x="53" y="134.9" text-anchor="end">0.1</text><line class="grid" x1="62" y1="84.3" x2="442" y2="84.3"/><text class="tick" x="53" y="87.8" text-anchor="end">0.2</text><line class="grid" x1="62" y1="37.2" x2="442" y2="37.2"/><text class="tick" x="53" y="40.7" text-anchor="end">0.4</text><line class="seg" x1="62.0" y1="239.4" x2="125.3" y2="238.7"/><line class="seg" x1="125.3" y1="238.7" x2="188.7" y2="238.6"/><line class="seg" x1="188.7" y1="238.6" x2="252.0" y2="238.5"/><line class="seg" x1="252.0" y1="238.5" x2="315.3" y2="233.8"/><line class="seg seg-knot" x1="315.3" y1="233.8" x2="378.7" y2="119.3"/><text class="knotlab" x="354.0" y="170.6">knot</text><line class="seg" x1="378.7" y1="119.3" x2="442.0" y2="71.4"/><circle class="pt pinned" cx="62.0" cy="239.4" r="4.2"/><circle class="pt" cx="125.3" cy="238.7" r="4.2"/><circle class="pt" cx="188.7" cy="238.6" r="4.2"/><circle class="pt" cx="252.0" cy="238.5" r="4.2"/><circle class="halo" cx="315.3" cy="233.8" r="8.5"/><circle class="pt" cx="315.3" cy="233.8" r="4.2"/><text class="baselab" x="315.3" y="218.8" text-anchor="middle">baseline</text><circle class="pt pinned" cx="378.7" cy="119.3" r="4.2"/><circle class="pt pinned" cx="442.0" cy="71.4" r="4.2"/><text class="tick" x="62.0" y="266" text-anchor="middle">0.6</text><text class="tick" x="315.3" y="266" text-anchor="middle">0.8</text><text class="tick" x="442.0" y="266" text-anchor="middle">0.9</text><line class="axis" x1="62" y1="248" x2="442" y2="248"/><text class="axlab" x="62" y="288">ATTACH, fraction of envelope length</text><text class="axlab" x="16" y="16">Cd</text></svg></div>
+  <dl class="facts">
+    <div><dt>in band</dt><dd>5 of 7</dd></div>
+    <div><dt>Cd range</dt><dd>0.02044 – 0.24184</dd></div>
+    <div><dt>eligible</dt><dd>7 of 7</dd></div>
+  </dl>
+</figure>
+<figure class="card">
+  <figcaption><span class="key">T-EXP</span><h3>Closure law</h3></figcaption>
+  <div class="plot"><svg viewBox="0 0 460 300" role="img" aria-label="Closure law: Cd against P, taper exponent"><rect class="band" x="62" y="213.3" width="380" height="27.6"/><line class="grid" x1="62" y1="240.8" x2="442" y2="240.8"/><text class="tick" x="53" y="244.3" text-anchor="end">0.02</text><line class="grid" x1="62" y1="213.3" x2="442" y2="213.3"/><text class="tick" x="53" y="216.8" text-anchor="end">0.03</text><line class="grid" x1="62" y1="178.5" x2="442" y2="178.5"/><text class="tick" x="53" y="182.0" text-anchor="end">0.05</text><line class="grid" x1="62" y1="131.4" x2="442" y2="131.4"/><text class="tick" x="53" y="134.9" text-anchor="end">0.1</text><line class="grid" x1="62" y1="84.3" x2="442" y2="84.3"/><text class="tick" x="53" y="87.8" text-anchor="end">0.2</text><line class="grid" x1="62" y1="37.2" x2="442" y2="37.2"/><text class="tick" x="53" y="40.7" text-anchor="end">0.4</text><line class="seg" x1="62.0" y1="194.7" x2="109.5" y2="228.8"/><line class="seg seg-knot" x1="109.5" y1="228.8" x2="133.3" y2="232.7"/><text class="knotlab" x="128.4" y="224.7">knot</text><line class="seg" x1="133.3" y1="232.7" x2="157.0" y2="233.8"/><line class="seg" x1="157.0" y1="233.8" x2="180.8" y2="234.1"/><line class="seg" x1="180.8" y1="234.1" x2="204.5" y2="233.7"/><line class="seg seg-knot" x1="204.5" y1="233.7" x2="263.9" y2="200.7"/><text class="knotlab" x="241.2" y="211.2">knot</text><line class="seg" x1="263.9" y1="200.7" x2="323.3" y2="163.5"/><line class="seg" x1="323.3" y1="163.5" x2="442.0" y2="114.7"/><circle class="pt" cx="62.0" cy="194.7" r="4.2"/><circle class="pt" cx="109.5" cy="228.8" r="4.2"/><circle class="pt" cx="133.3" cy="232.7" r="4.2"/><circle class="halo" cx="157.0" cy="233.8" r="8.5"/><circle class="pt" cx="157.0" cy="233.8" r="4.2"/><text class="baselab" x="157.0" y="218.8" text-anchor="middle">baseline</text><circle class="pt" cx="180.8" cy="234.1" r="4.2"/><circle class="pt" cx="204.5" cy="233.7" r="4.2"/><circle class="pt" cx="263.9" cy="200.7" r="4.2"/><circle class="pt" cx="323.3" cy="163.5" r="4.2"/><circle class="pt" cx="442.0" cy="114.7" r="4.2"/><text class="tick" x="62.0" y="266" text-anchor="middle">0.4</text><text class="tick" x="157.0" y="266" text-anchor="middle">0.8</text><text class="tick" x="442.0" y="266" text-anchor="middle">2</text><line class="axis" x1="62" y1="248" x2="442" y2="248"/><text class="axlab" x="62" y="288">P, taper exponent</text><text class="axlab" x="16" y="16">Cd</text></svg></div>
+  <dl class="facts">
+    <div><dt>in band</dt><dd>5 of 9</dd></div>
+    <div><dt>Cd range</dt><dd>0.02209 – 0.12788</dd></div>
+    <div><dt>eligible</dt><dd>9 of 9</dd></div>
+  </dl>
+</figure>
+<figure class="card">
+  <figcaption><span class="key">T-WST</span><h3>Flare and waist</h3></figcaption>
+  <div class="plot"><svg viewBox="0 0 460 300" role="img" aria-label="Flare and waist: Cd against W, mid-fairing radius perturbation"><rect class="band" x="62" y="213.3" width="380" height="27.6"/><line class="grid" x1="62" y1="240.8" x2="442" y2="240.8"/><text class="tick" x="53" y="244.3" text-anchor="end">0.02</text><line class="grid" x1="62" y1="213.3" x2="442" y2="213.3"/><text class="tick" x="53" y="216.8" text-anchor="end">0.03</text><line class="grid" x1="62" y1="178.5" x2="442" y2="178.5"/><text class="tick" x="53" y="182.0" text-anchor="end">0.05</text><line class="grid" x1="62" y1="131.4" x2="442" y2="131.4"/><text class="tick" x="53" y="134.9" text-anchor="end">0.1</text><line class="grid" x1="62" y1="84.3" x2="442" y2="84.3"/><text class="tick" x="53" y="87.8" text-anchor="end">0.2</text><line class="grid" x1="62" y1="37.2" x2="442" y2="37.2"/><text class="tick" x="53" y="40.7" text-anchor="end">0.4</text><line class="seg seg-knot" x1="62.0" y1="194.8" x2="157.0" y2="233.3"/><text class="knotlab" x="116.5" y="208.0">knot</text><line class="seg" x1="157.0" y1="233.3" x2="204.5" y2="234.0"/><line class="seg" x1="204.5" y1="234.0" x2="252.0" y2="233.8"/><line class="seg" x1="252.0" y1="233.8" x2="299.5" y2="233.1"/><line class="seg" x1="299.5" y1="233.1" x2="347.0" y2="231.8"/><line class="seg seg-knot" x1="347.0" y1="231.8" x2="442.0" y2="203.7"/><text class="knotlab" x="401.5" y="211.7">knot</text><circle class="pt" cx="62.0" cy="194.8" r="4.2"/><circle class="pt" cx="157.0" cy="233.3" r="4.2"/><circle class="pt" cx="204.5" cy="234.0" r="4.2"/><circle class="halo" cx="252.0" cy="233.8" r="8.5"/><circle class="pt" cx="252.0" cy="233.8" r="4.2"/><text class="baselab" x="252.0" y="218.8" text-anchor="middle">baseline</text><circle class="pt" cx="299.5" cy="233.1" r="4.2"/><circle class="pt" cx="347.0" cy="231.8" r="4.2"/><circle class="pt" cx="442.0" cy="203.7" r="4.2"/><text class="tick" x="62.0" y="266" text-anchor="middle">-0.2</text><text class="tick" x="252.0" y="266" text-anchor="middle">0</text><text class="tick" x="442.0" y="266" text-anchor="middle">0.2</text><line class="axis" x1="62" y1="248" x2="442" y2="248"/><text class="axlab" x="62" y="288">W, mid-fairing radius perturbation</text><text class="axlab" x="16" y="16">Cd</text></svg></div>
+  <dl class="facts">
+    <div><dt>in band</dt><dd>5 of 7</dd></div>
+    <div><dt>Cd range</dt><dd>0.02212 – 0.03937</dd></div>
+    <div><dt>eligible</dt><dd>7 of 7</dd></div>
+  </dl>
+</figure>
+<figure class="card">
+  <figcaption><span class="key">T-BAS</span><h3>Terminal radius</h3></figcaption>
+  <div class="plot"><svg viewBox="0 0 460 300" role="img" aria-label="Terminal radius: Cd against rTip / ra, base radius as a fraction of attach radius"><rect class="band" x="62" y="213.3" width="380" height="27.6"/><line class="grid" x1="62" y1="240.8" x2="442" y2="240.8"/><text class="tick" x="53" y="244.3" text-anchor="end">0.02</text><line class="grid" x1="62" y1="213.3" x2="442" y2="213.3"/><text class="tick" x="53" y="216.8" text-anchor="end">0.03</text><line class="grid" x1="62" y1="178.5" x2="442" y2="178.5"/><text class="tick" x="53" y="182.0" text-anchor="end">0.05</text><line class="grid" x1="62" y1="131.4" x2="442" y2="131.4"/><text class="tick" x="53" y="134.9" text-anchor="end">0.1</text><line class="grid" x1="62" y1="84.3" x2="442" y2="84.3"/><text class="tick" x="53" y="87.8" text-anchor="end">0.2</text><line class="grid" x1="62" y1="37.2" x2="442" y2="37.2"/><text class="tick" x="53" y="40.7" text-anchor="end">0.4</text><line class="seg" x1="62.0" y1="233.8" x2="116.3" y2="233.7"/><line class="seg" x1="116.3" y1="233.7" x2="170.6" y2="233.3"/><line class="seg" x1="170.6" y1="233.3" x2="279.1" y2="231.9"/><line class="seg" x1="279.1" y1="231.9" x2="366.0" y2="230.0"/><line class="seg seg-knot" x1="366.0" y1="230.0" x2="442.0" y2="195.7"/><text class="knotlab" x="411.0" y="206.9">knot</text><circle class="halo" cx="62.0" cy="233.8" r="8.5"/><circle class="pt" cx="62.0" cy="233.8" r="4.2"/><text class="baselab" x="62.0" y="218.8" text-anchor="middle">baseline</text><circle class="pt" cx="116.3" cy="233.7" r="4.2"/><circle class="pt" cx="170.6" cy="233.3" r="4.2"/><circle class="pt" cx="279.1" cy="231.9" r="4.2"/><circle class="pt pinned" cx="366.0" cy="230.0" r="4.2"/><circle class="pt pinned" cx="442.0" cy="195.7" r="4.2"/><text class="tick" x="62.0" y="266" text-anchor="middle">0</text><text class="tick" x="442.0" y="266" text-anchor="middle">0.35</text><line class="axis" x1="62" y1="248" x2="442" y2="248"/><text class="axlab" x="62" y="288">rTip / ra, base radius as a fraction of attach radius</text><text class="axlab" x="16" y="16">Cd</text></svg></div>
+  <dl class="facts">
+    <div><dt>in band</dt><dd>5 of 6</dd></div>
+    <div><dt>Cd range</dt><dd>0.02217 – 0.03883</dd></div>
+    <div><dt>eligible</dt><dd>6 of 6</dd></div>
+  </dl>
+</figure>
+  </div>
+</section>
+
+<section>
+  <h2>Summary</h2>
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th scope="col">family</th><th scope="col">n</th><th scope="col">Cd min</th><th scope="col">Cd max</th>
+      <th scope="col">in band</th><th scope="col">eligible</th><th scope="col">flips</th>
+      <th scope="col">worst Δproxy</th><th scope="col">contiguous run through baseline</th>
+    </tr></thead>
+    <tbody><tr>
+      <th scope="row"><span class="key">T-LEN</span> Deployed length</th>
+      <td class="n">7</td>
+      <td class="n">0.02197<span class="at">at 270</span></td>
+      <td class="n">0.45389<span class="at">at 0</span></td>
+      <td class="n">3/7</td>
+      <td class="n">7/7</td>
+      <td class="n">1</td>
+      <td class="n">73.1%</td>
+      <td>EXTRA_M 216 – 324</td>
+    </tr><tr>
+      <th scope="row"><span class="key">T-ATT</span> Fairing pickup</th>
+      <td class="n">7</td>
+      <td class="n">0.02044<span class="at">at 0.6</span></td>
+      <td class="n">0.24184<span class="at">at 0.9</span></td>
+      <td class="n">5/7</td>
+      <td class="n">7/7</td>
+      <td class="n">2</td>
+      <td class="n">77.2%</td>
+      <td>ATTACH 0.60 – 0.80</td>
+    </tr><tr>
+      <th scope="row"><span class="key">T-EXP</span> Closure law</th>
+      <td class="n">9</td>
+      <td class="n">0.02209<span class="at">at 0.9</span></td>
+      <td class="n">0.12788<span class="at">at 2</span></td>
+      <td class="n">5/9</td>
+      <td class="n">9/9</td>
+      <td class="n">0</td>
+      <td class="n">79.6%</td>
+      <td>P 0.6 – 1.0</td>
+    </tr><tr>
+      <th scope="row"><span class="key">T-WST</span> Flare and waist</th>
+      <td class="n">7</td>
+      <td class="n">0.02212<span class="at">at -0.05</span></td>
+      <td class="n">0.03937<span class="at">at -0.2</span></td>
+      <td class="n">5/7</td>
+      <td class="n">7/7</td>
+      <td class="n">0</td>
+      <td class="n">57.7%</td>
+      <td>W −0.10 – +0.10</td>
+    </tr><tr>
+      <th scope="row"><span class="key">T-BAS</span> Terminal radius</th>
+      <td class="n">6</td>
+      <td class="n">0.02217<span class="at">at 0</span></td>
+      <td class="n">0.03883<span class="at">at 0.35</span></td>
+      <td class="n">5/6</td>
+      <td class="n">6/6</td>
+      <td class="n">1</td>
+      <td class="n">48.2%</td>
+      <td>rTip/ra 0 – 0.28</td>
+    </tr></tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Why every cliff is the same cliff</h2>
+  <p class="lead">Plotting all 36 rows against the scalar they are scored from collapses the five families
+  onto one curve — and the elbow sits exactly at the knot. The frozen pressure map is piecewise-linear in
+  the proxy, and its slope jumps from 0.02617 to 0.70888 at proxy 0.180789. Every large Cd step in this
+  experiment is a row crossing that line.</p>
+  <div class="plot wide"><svg viewBox="0 0 940 400" role="img" aria-label="Cd against the production scalar for all 36 rows, with calibration knot 2 marked"><rect class="band" x="74" y="290.4" width="840" height="37.8"/><line class="grid" x1="74" y1="328.2" x2="914" y2="328.2"/><text class="tick" x="65" y="331.7" text-anchor="end">0.02</text><line class="grid" x1="74" y1="290.4" x2="914" y2="290.4"/><text class="tick" x="65" y="293.9" text-anchor="end">0.03</text><line class="grid" x1="74" y1="242.7" x2="914" y2="242.7"/><text class="tick" x="65" y="246.2" text-anchor="end">0.05</text><line class="grid" x1="74" y1="178.1" x2="914" y2="178.1"/><text class="tick" x="65" y="181.6" text-anchor="end">0.1</text><line class="grid" x1="74" y1="113.4" x2="914" y2="113.4"/><text class="tick" x="65" y="116.9" text-anchor="end">0.2</text><line class="grid" x1="74" y1="48.8" x2="914" y2="48.8"/><text class="tick" x="65" y="52.3" text-anchor="end">0.4</text><text class="tick" x="74.0" y="356" text-anchor="middle">0.06</text><text class="tick" x="237.2" y="356" text-anchor="middle">0.1</text><text class="tick" x="425.1" y="356" text-anchor="middle">0.18</text><text class="tick" x="588.3" y="356" text-anchor="middle">0.3</text><text class="tick" x="751.5" y="356" text-anchor="middle">0.5</text><text class="tick" x="901.7" y="356" text-anchor="middle">0.8</text><line class="knotline" x1="426.5" y1="28" x2="426.5" y2="338"/><text class="knotlab big" x="435.5" y="42">calibration knot 2 — proxy 0.180789</text><text class="knotsub" x="435.5" y="58">map slope jumps 27×</text><circle class="pt pinned" cx="898.4" cy="37.0" r="4"/><circle class="pt" cx="889.9" cy="123.7" r="4"/><circle class="pt" cx="740.1" cy="175.9" r="4"/><circle class="pt" cx="541.5" cy="256.5" r="4"/><circle class="halo" cx="389.8" cy="318.6" r="9.5"/><circle class="pt" cx="389.8" cy="318.6" r="4"/><text class="baselab" x="379.8" y="322.6" text-anchor="end">Sunship baseline 0.1612</text><circle class="pt" cx="326.7" cy="319.4" r="4"/><circle class="pt" cx="287.2" cy="318.8" r="4"/><circle class="pt pinned" cx="204.4" cy="326.2" r="4"/><circle class="pt" cx="220.7" cy="325.3" r="4"/><circle class="pt" cx="223.2" cy="325.2" r="4"/><circle class="pt" cx="235.5" cy="325.0" r="4"/><circle class="pt" cx="389.8" cy="318.6" r="4"/><circle class="pt pinned" cx="606.7" cy="161.5" r="4"/><circle class="pt pinned" cx="745.3" cy="95.7" r="4"/><circle class="pt" cx="516.2" cy="264.9" r="4"/><circle class="pt" cx="431.4" cy="311.6" r="4"/><circle class="pt" cx="402.9" cy="317.0" r="4"/><circle class="pt" cx="389.8" cy="318.6" r="4"/><circle class="pt" cx="397.2" cy="318.9" r="4"/><circle class="pt" cx="418.1" cy="318.4" r="4"/><circle class="pt" cx="506.0" cy="273.1" r="4"/><circle class="pt" cx="618.7" cy="222.1" r="4"/><circle class="pt" cx="796.0" cy="155.2" r="4"/><circle class="pt" cx="521.5" cy="265.0" r="4"/><circle class="pt" cx="418.9" cy="317.8" r="4"/><circle class="pt" cx="394.7" cy="318.8" r="4"/><circle class="pt" cx="389.8" cy="318.6" r="4"/><circle class="pt" cx="399.0" cy="317.6" r="4"/><circle class="pt" cx="422.3" cy="315.7" r="4"/><circle class="pt" cx="494.0" cy="277.2" r="4"/><circle class="pt" cx="389.8" cy="318.6" r="4"/><circle class="pt" cx="382.4" cy="318.4" r="4"/><circle class="pt" cx="380.7" cy="317.9" r="4"/><circle class="pt" cx="393.5" cy="315.9" r="4"/><circle class="pt pinned" cx="422.0" cy="313.3" r="4"/><circle class="pt pinned" cx="462.0" cy="266.3" r="4"/><line class="axis" x1="74" y1="338" x2="914" y2="338"/><text class="axlab" x="74" y="384">compositeV1 — the production scalar</text><text class="axlab" x="16" y="20">Cd</text></svg></div>
+  <div class="cautions">
+    <div class="caution">
+      <h3>The basin's edge is a calibration feature</h3>
+      <p>The baseline sits at proxy 0.161170 — 10.9% below the knot. A modest geometry change that pushes
+      the proxy past 0.180789 produces a disproportionate Cd jump, because the map is 27× steeper on the
+      far side. This is the same knot spec 81.4 already flagged for a 3.3% provenance discrepancy: it
+      computes 0.186851 through the harness path while <em>being</em> the knot at 0.180789. Nothing was
+      moved.</p>
+    </div>
+    <div class="caution">
+      <h3>The baseline is not the best-supported point</h3>
+      <p>At the baseline the authored and hulled representations differ by 40.3% in proxy while Cd moves
+      7.5% — spec 78.4's “most dangerous” case, where agreement is a property of a flat map region rather
+      than of the geometry. Every earlier fairing pickup (ATTACH 0.60–0.75) scores 6.6–7.8% <em>lower</em>
+      on robust geometry, Δproxy 0.0–4.9%, within the same class.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The prediction that was frozen first</h2>
+  <p class="lead">Before the terminal-radius family was built, the classifier crossing was pre-registered
+  between rTip/ra 0.20 and 0.28, derived from the frozen threshold: a base trips it once rTip exceeds
+  rMax·√TAU = 25.27 m = 0.2751 ra. It flipped exactly there, fired by trigger (b), terminal base 0.0574
+  against TAU 0.05. The measured base fraction runs 10.8% above analytic — the same fixed-cell raster
+  over-count recorded in spec 83.3, at the same magnitude, in a second independent family.</p>
+</section>
+
+<footer>
+  <div>Estimator-response experiment, not aerodynamic validation. No statement about the real drag of any
+  shape follows from it.</div>
+  <div>Production byte-untouched at <code>12e8c5e</code> · engine fingerprint identical before and after the
+  run · <code>CalcV2</code> spec 85</div>
+</footer>
+</div>

@@ -1,0 +1,30 @@
+
+RIBBON CLOCK-ANGLE ANISOTROPY (spec 89) — SHADOW DIAGNOSTIC
+  Measures the EXISTING ribbonContext positional field. F1-F5 untouched,
+  70.4 schema untouched, no Cd read differently anywhere.
+
+  case                  A1       A2       A4      max/min  analytic     d%      F5(frozen)
+  circle (control)      0.0000  0.0000  0.0000  1.0000                       0.0000
+  ellipse k=1.5         0.0000  0.2004  0.0300  1.4981   A2=0.201    -0.3%   0.0000
+  ellipse k=2           0.0000  0.3369  0.0845  1.9952   A2=0.338    -0.3%   0.0000
+  ellipse k=3           0.0000  0.5149  0.1947  2.9838   A2=0.518    -0.6%   0.0000
+  ellipse k=5           0.0000  0.7084  0.3606  4.9266   A2=0.715    -0.9%   0.0000
+  superellipse n=3      0.0000  0.0000  0.0560  1.1185   A4=0.057    -2.4%   0.0000
+  superellipse n=4      0.0000  0.0000  0.0826  1.1810   A4=0.086    -3.9%   0.0000
+  superellipse n=6      0.0000  0.0000  0.1054  1.2453   A4=0.112    -5.9%   0.0000
+  superellipse n=10     0.0000  0.0000  0.1193  1.2977   A4=0.129    -7.2%   0.0000
+  superellipse n=20     0.0000  0.0000  0.1270  1.3376   A4=0.137    -7.0%   0.0000
+  camber k=0.2 (82.3)   0.0429  0.0005  0.0000  1.0897                       1.3160
+
+  PRE-REGISTERED CHECKS:
+    Q1 circle all modes < 0.01:            HOLDS  (A1 0.00000, A2 0.00000, A4 0.00000)
+    Q2 ellipse A2 monotone, A2 > 3x A4:    FAILS  (A2: 0.200 -> 0.337 -> 0.515 -> 0.708)
+    Q3 superellipse A4 monotone, A2 < 0.01: HOLDS  (A4: 0.056 -> 0.083 -> 0.105 -> 0.119 -> 0.127)
+    Q4 camber A1-dominant:                 HOLDS  (A1 0.0429, A2 0.0005, A4 0.0000)
+
+  F5 column: the frozen descriptor, for contrast — it sees A1 (camber) and
+  nothing else, exactly as spec 87.3 established.
+
+  SHADOW ONLY. Descriptor set 59.3 and schema 70.4 unchanged; adopting any
+  A_m as an F6 is a separate dated ruling. Production untouched.
+

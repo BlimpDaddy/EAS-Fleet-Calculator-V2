@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>viz bench — V1 skeleton</title>
+<style>
+  /* deliberately plain — V1 is the ugly skeleton; aesthetics arrive at V4 */
+  body { background: #111; color: #ddd; font: 13px/1.5 monospace; margin: 16px; }
+  canvas { background: #111; border: 1px solid #333; display: block; margin: 8px 0; }
+  .row { margin: 4px 0; }
+  label { margin-right: 14px; }
+  input[type=number] { width: 70px; }
+  #hud { color: #9a9a9a; white-space: pre; }
+  #bench { color: #c9c9c9; }
+  button { font: inherit; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <label>body
+      <select id="body"><option value="sunship" selected>sunship</option><option value="sphere">sphere</option><option value="cube">cube</option><option value="cigar">cigar (page preset)</option><option value="airshipcigar">airship cigar (analytic)</option><option value="washingmachine">washing machine</option></select>
+    </label>
+    <label>view
+      <select id="view"><option value="elevation" selected>elevation (side)</option><option value="plan">plan (top-down)</option><option value="frontal">frontal (nose-on)</option></select>
+    </label>
+    <label>flow
+      <select id="flow"><option value="LR" selected>left → right</option><option value="TB">top → bottom (portrait)</option></select>
+    </label>
+    <label>airspeed <input id="v" type="range" min="0" max="140" step="5" value="0"> <span id="vLabel">0 km/h (PARKED)</span></label>
+  </div>
+  <div class="row">
+    <label>Cd <input id="cd" type="number" min="0.009" max="1.2" step="0.001" value="0.043"></label>
+    <label><input id="tail" type="checkbox" checked> Smart Tail</label>
+    <label><input id="bli" type="checkbox" checked> BLI</label>
+    <label>S <input id="s" type="range" min="0" max="0.75" step="0.05" value="0.30"> <span id="sLabel">0.30</span></label>
+  </div>
+  <div class="row">
+    <!-- pitch/yaw/pause live INSIDE the panel now (product in-rectangle
+         buttons, owner ruling) — the bench shows the same UI it ships -->
+    <span id="axisLabel"></span>
+    <label>seed <input id="seed" type="number" value="1" step="1"></label>
+    <label>particles <input id="count" type="number" value="1800" step="50" min="50" max="3000"></label>
+    <button id="reset">reset run</button>
+    <button id="benchBtn">benchmark 30 s (mobile count)</button>
+    <span id="bench"></span>
+  </div>
+  <div id="cv-host" style="max-width: 960px; border: 1px solid #333; margin: 8px 0;"></div>
+  <div id="hud"></div>
+  <script type="module" src="./bench.mjs"></script>
+</body>
+</html>

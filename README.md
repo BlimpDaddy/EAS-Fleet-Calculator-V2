@@ -20,7 +20,9 @@ kept intact as the provenance record and rollback line.
 
 ```
 site/     the deployed tree — Cloudflare Pages serves exactly this folder, nothing else
-tools/    dev scripts: local server, engine bake, release gate, site sync
+engine/   the headless engine's development home — sources, dev bench, gate suites,
+          payload runner, research lab. site/calcv2 is BAKED from this (see below)
+tools/    dev scripts: local server, engine bake, release gate, sync
 test/     fixtures (plain Node, zero dependencies)
 ```
 
@@ -136,18 +138,27 @@ site/
     viz/                the visualizer: payload generator, flow engine, renderer, fixtures
     spike/sectional/    the ribbon machinery's pure closure (browser-safed at bake time)
 
+engine/
+  src/                the headless engine sources (canonical)
+  viz/                the visualizer: payload generator, flow engine, renderer,
+                      the dev bench, the four gate suites, the payload runner
+  spike/sectional/    the ribbon machinery — research programme + frozen modules
+  lab/, test/         research harnesses and the engine's own fixture suites
+
 test/                 fixtures (plain node, zero deps)
 tools/
   serve.mjs           the local mirror server
-  bake-calcv2.mjs     copies the engine from the CalcV2 repo into site/calcv2/
+  bake-calcv2.mjs     bakes engine/ into site/calcv2/
   gate-calcv2.mjs     the release gate
-  sync-site.mjs       dev-machine sync of site/ from the working checkout
+  sync-site.mjs       dev-machine sync scripts (transitional — see their headers)
+  sync-engine.mjs
 ```
 
 ### Where the physics actually lives
 
-`site/calcv2/` is a **baked copy** of a separate headless library —
-[EAS-CalcV2](https://github.com/BlimpDaddy/EAS-CalcV2). It has no DOM and no
+`site/calcv2/` is a **baked copy** of the headless library in `engine/` — the
+shippable subset (dev bench and gate suites excluded), copied byte-identically
+with two mechanical, hash-verified transforms. The engine has no DOM and no
 dependencies, so every number it produces is testable in plain Node. It holds the
 shape metrics (VS/VS∞/VE), the dynamics model (drag → power → fuel), and a
 low-order **sectional geometric drag-coefficient estimator** that measures a
@@ -167,9 +178,9 @@ selected numbers, it never generates them.
 deploys: `main.js` hash unchanged (before *and* after baking) → bake →
 byte-parity sweep of the baked engine → every fixture suite against **both** the
 source and baked engines → and a guard that the bake touched *only*
-`site/calcv2/` paths. The engine repo carries its own fixture suites (including
-the visualizer's four gate suites); this gate proves the copy that ships is the
-engine that passed them.
+`site/calcv2/` paths. The engine carries its own fixture suites in
+`engine/test/` and the visualizer's four gate suites in `engine/viz/test/`;
+this gate proves the copy that ships is the engine that passed them.
 
 ## Deployment
 

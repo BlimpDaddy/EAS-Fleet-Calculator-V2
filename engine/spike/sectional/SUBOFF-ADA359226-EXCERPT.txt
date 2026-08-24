@@ -1,0 +1,3831 @@
+CRDKNSWC/HD-1 298-11  Summary  of  DARPA  Suboff  Experimental  Program  Data 
+
+
+Naval  Surface  Warfare  Center, 
+Carderock  Division  (NSWCCD) 
+
+9500  MacArthur  Blvd.,  West  Bethesda,  MD  20817-5700 
+
+
+CRDKNSWC/HD-1 298-1 1  June  1 998 
+Hydromechanics  Directorate 
+
+
+Summary  of  DARPA  Suboff 
+Experimental  Program  Data 
+
+
+by 
+
+Han-Lieh  Liu 
+Thomas  T.  Huang 
+
+
+Approved  public  release:  Distribution  Unlimited. 
+
+
+$ 
+
+
+L 
+
+
+19990125  082 
+
+
+REPORT  DOCUMENTATION  PAGE 
+
+Form  Approved 
+
+r\hAO  nvnA  n*oo 
+
+Public  reporting  burden  for  this  collection  of  information  is  estimated  to  average  1  hour  per  response,  including  the  time  for  reviewing  instructions,  searching  existing  data  sources,  gathering  and  maintaining 
+the  data  needed,  and  completing  and  reviewing  the  collection  of  information.  Send  comments  regarding  this  burden  estimate  or  any  other  aspect  of  this  collection  of  information,  including  suagestionsfor 
+reducing  this  burden  to  Washington  Headquarters  Services.  Directorate  for  Information,  Operations  and  Reports,  1215  Jefferson  Davis  Highway,  Suite  1204,  Arlington,  VA  22202-4302,  and  to  the  Office  of 
+Management  and  Budget,  Paperwork  Reduction  Project  (0704-0188),  Washington,  DC  20503. 
+
+1 .  AGENCY  USE  ONLY  (Leave  blank)  2.  REPORT  DATE 
+
+July,  1998 
+
+3.  REPORT  TYPE  AND  DATES  COVERED 
+
+Final 
+
+4.  TITLE  AND  SUBTITLE 
+
+Summary  of  DARPA  Suboff  Experimental  Program  Data 
+
+5.  FUNDING  NUMBERS 
+
+Sponsor:  DARPA 
+
+Task  Area:  S 1974-030 
+
+Program  Element:  63569N 
+
+6.  AUTHOR(S) 
+
+Han-Lieh  Liu  and  Thomas  T.  Huang 
+
+7.  PERFORMING  ORGANIZATION  NAME(S)  AND  ADDRESS(ES) 
+
+Carderock  Division,  Naval  Surface  Warfare  Center 
+
+9500  MacArthur  Blvd. 
+
+West  Bethesda,  MD  20817-5700 
+
+8.  PERFORMING  ORGANIZATION 
+
+REPORT  NUMBER 
+
+CRDKNSWC/HD- 1298-1 1 
+
+9.  SPONSORING  /  MONITORING  AGENCY  NAME(S)  AND  ADDRESS(ES) 
+
+Defense  Advanced  Research  Projects  Agency 
+
+3701  N.  Fairfax  Dr. 
+
+Arlington,  VA  22203 
+
+10.  SPONSORING  /  MONITORING 
+
+AGENCY  REPORT  NUMBER 
+
+11.  SUPPLIMENTARY  NOTES 
+
+1 2a.  DISTRIBUTION  /  AVAILABILITY  STATEMENT 
+
+Approved  for  public  release;  distribution  unlimited 
+
+12b.  DISTRIBUTION  CODE 
+
+A 
+
+13.  ABSTRACT  (Maximum  200  words) 
+
+Experimental  measurements  of  the  flow  fields  from  an  axi-symmetrical  body  with  and  without  appendages 
+were  made  in  the  Carderock  Division,  Naval  Surface  Warfare  Center  (CDNSWC)  and  Tracor  Hydronautics  Ship 
+
+Model  Basin  (HSMB).  These  experimental  data  are  intended  to  serve  as  the  data  base  for  the  Computational  Fluid 
+
+Dynamics  (CFD)  validations  and  other  submarine  related  flow  field  analyses  and  was  identified  as  the  Defense 
+
+Advanced  Research  Projects  Agency  (DARPA)  SUBOFF  project.  Previous  reports  have  documented  various  aspects  of  this 
+SUBOFF  test  program.  This  report  summarizes  all  collected  data  set  in  tabulated  formats  and  serves  as  the  final  database 
+for  future  submarine  flow  research. 
+
+14.  SUBJECT  TERMS 
+
+DARPA  SUBOFF  Towing  Tanks  Data  Analysis 
+
+Anechoic  Flow  Facility  Uncertainty  Analysis  Pretest  Analysis 
+
+15.  NUMBER  OF  PAGES 
+
+15 
+
+16.  PRICE  CODE 
+
+17.  SECURITY  CLASSIFICATION 
+
+OF  REPORT 
+
+Unclassified 
+
+security  classification 
+
+OF  THIS  PAGE 
+
+Unclassified 
+
+19.  SECURITY  CLASSIFICATION 
+
+OF  ABSTRACT 
+
+Unclassified 
+
+20.  LIMITATION  OF  ABSTRACT 
+
+Unclassified/Unlimited 
+
+Standard  Form  298  (Rev.  2-89) 
+
+
+1 
+
+
+CONTENTS 
+
+
+ABSTRACT .  1 
+
+ADMINISTRATIVE  INFORMATION . 1 
+
+INTRODUCTION . 1 
+
+EXPERIMENT  PROGRAM  SUMMARIES . 1 
+
+PHASE  I  -  GEOMETRIC  CHARACTERISTICS  OF  D ARPA  SUBOFF  MODELS . 2 
+
+Hull . 2 
+
+Bridge  Fairwater . . . 2 
+
+Stern  Appendages . . . 2 
+
+Ring  Wings . 2 
+
+Ring  Wing  Struts . . . 2 
+
+PHASE  D  -  INSTRUMENTATION . 3 
+
+Wind  Tunnel  (AFF)  Tests . 3 
+
+A.  Anechoic  Flow  Facility  and  Model  Set-Up . 3 
+
+B.  Pressure  Taps . 4 
+
+C.  Pressure  Transducer. . 4 
+
+D.  Hot  Wire  Anemometer . . 4 
+
+E.  Traversing  System . 4 
+
+Towing  Tank  Tests . 5 
+
+PHASE  m  -  TEST  PLAN  AND  PRETEST  ANALYSIS . . . 5 
+
+A.  AFF  Experiments . 5 
+
+B.  Towing  Tank  Tests . 6 
+
+C.  Pretest  Analysis . 6 
+
+PHASE  IV  -  PART  I :  AFF  DATA  ACQUISITION  AND  DATA  FILE  STRUCTURES . . ; . . 6 
+
+PHASE  IV  -  PART  B :  TOW  TANK  DATA  ACQUISITION  AND  DATA  FILE  STRUCTURES . 8 
+
+CONCLUSION . . . 9 
+
+ACKNOWLEDGMENT . 9 
+
+
+ii 
+
+
+REFERENCES 
+
+
+11 
+
+
+FIGURES 
+
+
+1.  Schematic  of  DARPA  SUBOFF  Model  components  and  stem  configurations . 12 
+
+2.  Schematic  view  of  Model  in  closed-  and  open-jet  test  section . 13 
+
+TABLES 
+
+1 .  Model  Configuration  Definition. . . . . . , . 14 
+
+2.  Velocity  and  Pressure  Survey  Planes  (x/L). . . . . 15 
+
+3.  Surface  Pressure  Surveys . 15 
+
+4.  Surface  Pressure  Tap  Identification . 16 
+
+5.  Velocity  Bias  Uncertainty . . . . 16 
+
+6.  Velocity  Precision  Uncertainty . . . . 16 
+
+7.  Data  Directory  Organization . . . . . 1 . 17 
+
+8.  Wake  Survey:  Model  Configurations  and  Test  Numbers . . . 19 
+
+9.  Static  Pressure  Survey:  Model  Configurations  and  Test  Numbers . 20 
+
+10.  Boundary  Layer  Velocity  Profiles  and  Test  Numbers . 20 
+
+11.  Surface  Pressure  and  Test  Numbers . 21 
+
+12.  Skin  Friction  Measurement  and  Test  Numbers . 21 
+
+13.  Data  File  Structures . 22 
+
+14.  DARPA  SUBOFF  Model  5470  DTMB  Tow  Tank  Results . * . 23 
+
+15.  File  Directory  Structure . . . . . • . . 24 
+
+
+m 
+
+
+ABSTRACT 
+
+Experimental  measurements  of  the  flow  fields  from  an  axi-symmetrical  body 
+with  and  without  appendages  were  made  in  the  Carderock  Division  Naval  Surface 
+Warfare  Center  (CDNSWC)  and  Tracor  Hydronautics  Ship  Model  Basin 
+(HSMB).  These  experimental  data  is  intended  to  serve  as  the  data  base  for  the 
+Computational  Fluid  Dynamics  (CFD)  validations  and  other  submarine  related 
+flow  field  analyses  and  was  identified  as  the  Defense  Advanced  Research  Projects 
+Agency  (DARPA)  SUBOFF  project.  Previous  reports  have  documented  various 
+aspects  of  this  SUBOFF  test  program.  This  report  summarizes  all  collected  data 
+set  in  tabulated  formats  and  serves  as  the  final  database  for  future  submarine  flow 
+research. 
+
+
+ADMINISTRATIVE  INFORMATION 
+
+This  work  was  funded  under  DARPA,  Task  Area  SI 974-030,  Program  Element  63569N,  with 
+internal  DTRC  Work  Unit  Numbers  -1542-123,  -1542-126  and  -1542-127. 
+
+
+INTRODUCTION 
+
+The  Submarine  Technology  Program  (STP)  Office  of  DARPA  funded  a  concerted  and  coordinated 
+Computational  Fluid  Dynamics  (CFD)  Program  to  assist  in  the  development  of  advanced  submarines  for 
+the  future.  The  SUBOFF  project  provides  a  forum  for  the  CFD  community  to  compare  the  numerical 
+predictions  of  the  flow  field  over  an  axisymmetric  hull  model  with  and  without  various  typical  appendage 
+components  with  experimental  data. 
+
+Detailed  and  accurate  flow  measurements  around  an  axisymmetric  body  were  conducted  in  the  wind 
+tunnel  and  towing  basins.  In  addition,  resistance  and  force  measurements  for  maneuvering  were  also 
+performed  in  the  towing  tanks.  Brief  summaries  of  different  phases  of  this  SUBOFF  experimental 
+program  are  presented  in  the  Experiment  Program  Summaries  section.  This  includes  the  discussion  of  the 
+tests  for  circumferential  wake  surveys,  static  pressure  surveys,  boundary  layer  surveys,  and  surface 
+pressure/shear  stress  distributions.  Detail  discussion  of  each  test  series  can  be  found  in  the  specific 
+reports  listed  in  the  references  on  page  11.  Papers  have  also  been  presented  on  the  SUBOFF  data  and 
+results  at  conferences  and  symposiums. 
+
+
+EXPERIMENT  PROGRAM  SUMMARIES 
+
+The  SUBOFF  experiment  program  is  divided  into  four  phases:  the  initial  model  definition,  model 
+construction  and  instrumentation,  test  plan  design  and  pretest  analysis,  and  data  acquisition.  A  brief 
+
+
+1 
+
+
+discussion  of  each  of  these  phases  is  presented  below.  Detailed  discussion  of  the  subject  matter  can  be 
+found  in  the  referenced  reports. 
+
+PHASE  I  -  GEOMETRIC  CHARACTERISTICS  OF  DARPA  SUBOFF  MODELS 
+
+The  model  geometry  for  the  two  SUBOFF  models,  DTRC  Model  5470  and  5471,  are  identical.  The 
+two  models  differ  only  in  the  location  of  the  surface  pressure  taps.  Each  model  component  is  described 
+by  equations  giving  either  the  axial  and  radial  values  for  axisymmetric  components  or  the  Cartesian 
+coordinates  (x,y,z)  for  non-axisymmetric  components,  (Ref.  1).  Figure  1  shows  a  general  layout  of  the 
+model. 
+
+Hull 
+
+The  model  has  an  overall  length  of  14.2917  ft  (4.356  m).  The  hull  is  composed  of  a  fore-body 
+length  of  3.3333  ft  (1.016  m),  a  parallel  mid-body  length  of  7.3 125  ft  (2.229  m),  an  aft-body  of  length 
+of  3.6458  ft  (1 . 1 1 1  m),  and  an  end  cap  length  of  0.3 125  ft  (0.095m). 
+
+Bridge  Fairwater 
+
+The  fairwater  is  located  on  the  hull  at  top  dead  center  of  the  model  with  its  leading  edge  positioned  at 
+x=3.0330  ft  (0.924  m)  and  the  trailing  edge  at  x=4.2413  ft  (1.293  m)  for  a  total  length  of  1.2083  ft 
+(0.368  m).  The  bridge  fairwater  is  closed  at  top  with  an  ellipsoid.  In  addition  to  the  sail  cap,  the  bridge 
+fairwater  is  defined  in  terms  of  a  fore-body,  a  parallel  mid-body,  and  an  aft-body. 
+
+Stem  Appendages 
+
+The  stem  appendages  consist  of  four  identical  appendages  mounted  on  the  model  hull  at  angles  of 
+zero  degree  (top  dead  center)  90,  180  and  270  degrees.  The  basic  stem  appendage  assembly  can  be 
+shifted  to  attach  to  the  hull  at  three  different  axial  positions:  designated  as  the  upper-stream,  base,  and  the 
+down  stream  positions. 
+
+Ring  Wings 
+
+Two  ring  wings  have  been  designed  for  the  SUBOFF  models.  The  wings,  designated  as  Ring  Wing 
+1  and  Ring  Wing  2,  have  the  same  section  shape  and  differ  only  in  their  angle  of  attack. 
+
+Ring  Wing  Struts 
+
+
+2 
+
+
+Strut  supports  are  necessary  in  mounting  the  ring  wings  to  the  hull.  Four  separate,  identical  struts 
+are  mounted  equally  spaced  along  the  hull  girth.  The  struts  are  attached  at  the  same  axial  position, 
+x=13.589  ft  (4.142  m)  and  have  the  same  section  profile.  At  the  inner  surface  of  each  wing,  the  struts  are 
+contoured  to  match  the  surface. 
+
+PHASE  H  -  INSTRUMENTATION 
+
+The  instrumentation  required  during  this  SUBOFF  program  depended  on  the  type  of  measurements. 
+For  the  wind  tunnel  (AFF)  tests,  detail  pressure  and  velocity  surveys  were  needed;  force  measurements 
+were  performed  in  the  towing  tanks;  and  stability  and  control  for  maneuvering  characteristics  were 
+conducted  in  the  Rotating  Arm  Facility.  A  brief  discussion  of  the  instrumentation  employed  in  the  test 
+program  is  presented  below. 
+
+Wind  Tunnel  fAFFl  Tests 
+
+A.  Anechoic  Flow  Facility  and  Model  Set-Up 
+
+The  Anechoic  Flow  Facility  (AFF)  is  a  closed-loop,  atmospheric  pressure  wind  tunnel  with  a 
+maximum  air  speed  of  200  fps  (61  mps).  The  tunnel  has  a  10  to  1  area  contraction  upstream  leading  to 
+an  8  ft  (2.4  m)  square  by  13.75  ft  (4.2  m)  long  closed-jet  test  section.  The  contraction  and  closed-jet 
+have  1.75  ft  (0.53  m)  fillets  to  reduce  any  secondary  flows  associated  with  the  corners.  The  closed-jet 
+opens  into  a  large  acoustically  lined  chamber  23.5  ft  (7.1  m)  square  and  21  ft  (6.4  m)  long. 
+
+The  DARPA  model  was  mounted  in  the  AFF  with  the  nose  and  most  of  the  parallel  mid-body 
+located  within  the  closed  jet,  as  shown  in  Figure  2.  The  aft-section  of  the  model  extended  into  the  open- 
+jet  anechoic  chamber.  This  position  minimized  tunnel  blockage  effects  on  the  flow  around  the  primary 
+interest  region:  the  stem.  Pretest  analyses  by  Liu  et  al  (Ref.  5)  demonstrated  that  the  effect  of  the  open 
+and  closed  jet  model  positioning  had  minimal  effect  on  the  flow  parameters  if  the  reference  pressure  and 
+velocity  were  selected  in  the  open  jet  area,  corresponding  to  x/L  =  0.88. 
+
+The  model  was  supported  by  two  thin  NACA  0015  struts  located  at  x/L  =  0.24  and  0.63.  The  strut 
+bases  were  mounted  below  the  tunnel  floor  for  minimal  flow  disturbance.  The  model  end  of  the  strut 
+was  connected  to  a  gimble  secured  to  the  model  strongback.  For  added  model  stability,  two  1/16-inch 
+
+
+3 
+
+
+cables  were  attached  laterally  to  the  strut  and  anchored  to  the  tunnel  wall.  This  support  arrangement 
+allowed  the  freedom  required  to  align  the  model  for  various  angles  of  attack  or  drift. 
+
+B.  Pressure  Taps 
+
+For  both  DTRC  Model  5471  (the  Wind  Tunnel  Model)  and  DTRC  Model  5470  (the  Towing  Tank 
+Model),  a  number  of  pressure  taps  were  located  on  the  hull  surface  (Ref.  1).  On  both  models,  the 
+pressure  taps  were  located  on  the  hull  surface  (H),  the  fairwater  surface  (FW)  and  the  baseline  stem 
+appendage  surface  (SA).  On  Model  5471,  taps  were  also  located  on  the  fairwater/hull  intersection  (FH) 
+and  at  the  intersection  surface  of  baseline  stem  appendage/hull  (AH).  In  addition,  surface  pressure  taps 
+were  located  on  both  ring  wings.  A  total  of  222  surface  pressure  taps  were  located  on  the  wind  tunnel 
+Model  5471.  Table  1  presents  the  surface  pressure  tap  identification  scheme  for  the  Wind  Tunnel  model. 
+
+C.  Pressure  Transducer 
+
+The  pressure  taps  were  made  of  0.063-inch  outside  diameter  and  0.03125-inch  inside  diameter 
+stainless  steel  tubing  sanded  flush  to  the  surface.  The  pressure  measuring  system  was  a  set  of  five  rotary 
+pressure  scanning  units,  operating  in  parallel.  Each  unit  had  a  silicon  diaphragm,  differential  pressure 
+transducer  attached  to  48  mechanically  scanned  measurement  ports.  The  analog  output  signal  was 
+conditioned,  amplified,  filtered,  and  finally  connected  to  the  A/D  converter  of  the  computer  - 
+MASSCOMP.  The  pressure  data  were  low  pass  filtered  at  10  KHz  and  sampled  at  1  KHz  for  100  ms  on 
+each  tap  (Ref.  4). 
+
+D.  Hot  Wire  Anemometer 
+
+The  velocity  measurement  system  utilized  standard  hot  film  techniques  to  obtain  the  magnitudes  and 
+directions  of  the  velocity  vectors.  Both  single  and  3-component  probes  were  used  in  the  survey.  Single 
+element  probe  is  used  in  the  boundary  layer  surveys  while  3-component  probe  were  used  for  the  wake 
+surveys.  A  TSI  Model  IFA-lOO  Intelligent  Flow  Analyzer  with  Model  150  anemometers  and  Model  157 
+signal  conditioning  unit,  was  used  for  instantaneous  velocity  components. 
+
+E.  Traversing  System 
+
+A  traversing  system  was  designed  and  constructed  to  move  velocity  or  pressure  probes  efficiently  in 
+the  model’s  stem  region.  The  probe  position  was  controlled  in  the  axial,  angular,  and  radial  directions. 
+
+
+4 
+
+
+The  traversing  unit,  shown  schematically  in  Figure  2,  allowed  a  probe  to  be  positioned  anywhere  within 
+an  annular  volume  59  in  (1.5  m)  long  and  from  3  in  (7.6  cm)  to  28  in  (71  cm)  in  radius.  As  shown  in 
+Figure  2,  the  traversing  unit  was  mounted  inside  the  anechoic  chamber  directly  behind  the  model.  This 
+mounting  location  provided  easy  access  to  the  model’s  stem  region.  Ward  and  Gowing  (Ref.  4)  provide 
+a  complete  description  of  the  traversing  system  and  its  full  capabilities. 
+
+Towing  Tank  Tests 
+
+Resistance  on  SUBOFF  model  was  measured  in  two  towing  tanks  -  on  Carriage  II  of  NSWCCD 
+and  HSMB  of  Tracor  Hydronautics,  Inc.  The  difference  was  in  their  model  support  -  NSWCCD  used 
+single  stmt  model  support  (Ref.  8)  while  HSMB  used  twin  smaller  model  struts  for  the  measurement 
+(Ref.  3).  Standard  block  gages  were  used  in  both  facilities. 
+
+Stability  and  control  tests  for  maneuvering  were  conducted  in  the  HSMB  for  vertical  and  horizontal 
+plane  Planar  Motion  Mechanism  tests  (Ref.  3).  Rotary  coefficients  were  performed  in  the  NSWCCD 
+Rotating  Arm  Facility  (Ref.  ????). 
+
+PHASE  m  -  TEST  PLAN  AND  PRETEST  ANALYSIS 
+
+The  experimental  SUBOFF  program  was  presented  in  Ref.  2.  It  consisted  of  the  following: 
+
+A.  AFF  Experiments 
+
+The  AFF  experimental  program  involved  the  measurement  of  the  flow  quantities  along  an 
+axisymmetric  body.  They  were  the  three  components  of  mean  velocities  and  their  turbulence  intensities; 
+two  Reynolds  stresses;  boundary  layer  surveys  along  the  upper  meridian  at  five  locations;  static  wall 
+pressures  along  four  meridians  of  the  body;  skin  frictions  at  selected  meridians/locations;  and  static 
+pressure  distributions  in  the  near  wake.  In  the  wake  survey  experiments,  both  circumferential  (spatial) 
+and  limited  time  varying  (at  selected  spatial  locations),  were  measured. 
+
+Eight  basic  model  configurations  were  tested  for  the  SUBOFF  Program  as  outlined  in  Ref.  2 
+(configurations  1  through  8).  However,  limited  additional  measurements  (mostly  pressure 
+measurements)  were  taken  when  the  model  was  configured  for  basic  tests.  They  were  named  as  AFF-9 
+through  19  for  additional  information  of  interests.  The  basic  designated  AFF-*  numbers  are: 
+
+1 .  axisymmetric  body  at  0°  angle  of  attack  and  drift  (designated  as  AFF-1-*) 
+
+
+5 
+
+
+2.  axisymmetric  body  with  fairwater  (designated  as  AFF-2-*) 
+
+3.  axisymmetric  body  with  four  identical  stem  appendages  (designated  as  AFF-3-*) 
+
+4.  axisymmetric  body  with  fairwater  at  angle  of  attack  and  zero  drift  (designated  as  AFF-4-*) 
+
+5.  axisymmetric  body  with  fairwater  at  drift  and  zero  angle  of  attack  (designated  as  AFF-5-*) 
+
+6.  axisymmetric  body  with  ring  wing  1  (designated  as  AFF-6-*) 
+
+7.  axisymmetric  body  with  ring  wing  2  (designated  as  AFF-7-*) 
+
+8.  axisymmetric  body  with  fairwater  and  four  identical  stem  appendages  at  zero  angle  of  attack  and  zero 
+drift  (designated  as  AFF-8-*) 
+
+These  basic  model  configurations  and  additional  configurations  are  summarized  in  Table  1: 
+
+The  actual  wake  and  pressure  surveys  are  summarized  in  Tables  2  and  3  respectively.  Definition  of 
+measurement  location  is  presented  in  various  tables  in  Ref.  1.  A  brief  summary  of  the  pressure  tap 
+identification  scheme  is  shown  in  Table  4. 
+
+B.  Towing  Tank  Tests 
+
+Resistance  tests  were  conducted  in  the  NSWC/CD  Towing  Tank  on  Carriage  II.  The  model 
+configurations  are: 
+
+Config.  1  Bare  hull  only 
+
+Config.  3  Hull  with  four  stem  appendages 
+
+Config.  8  Hull  with  sail  and  four  stem  appendages 
+
+Config.  6  Hull  with  ring  wing  #1 
+
+Config.  7  Hull  with  ring  wing  #2 
+
+Test  speed  ranges  were  limited  from  6  to  18  knot  model  speeds. 
+
+Resistance  tests  with  same  configurations  listed  above  were  repeated  in  the  HSMB.  In  addition,  PMM 
+tests  were  also  conducted  in  the  HSMB  for  the  following  configurations: 
+
+a)  Vertical  plane  statics  -  angle  of  attack  variation,  -20°  <  a  <  20° 
+
+>  Configuration  1 
+
+>  Configuration  6 
+
+b)  Horizontal  Plane  Statics  -  Angle  of  Drift  Variation,  -20°  <  (3  <  20° 
+
+>  Configuration  2 
+
+C.  Pretest  Analysis 
+
+To  ensure  the  quality  of  all  experimental  data  measured  in  the  AFF,  potential  flow  and  boundary 
+layer  computer  programs  were  used  to  determine  the  effects  of  tunnel  blockage,  the  supporting  struts,  the 
+open  jet  and  the  procedure  to  align  the  model  with  the  flow  in  the  wind  tunnel.  The  results  of  these  pre¬ 
+test  analyses  were  then  used  to  guide  the  experimental  setup  and  tunnel  reference  velocity  selection. 
+Detailed  discussion  of  this  analysis  is  presented  in  Ref.  5. 
+
+PHASE  IV  -  PART  I :  AFF  DATA  ACQUISITION  AND  DATA  FILE  STRUCTURES 
+
+
+6 
+
+
+A.  AFF  Velocity  Uncertainty  Analysis 
+
+In  Ref.  6,  Blanton  et  al.  estimated  the  uncertainties  associated  with  using  the  hot-film  measurement 
+system.  The  estimates  included  bias  uncertainties  and  precision  uncertainties.  Bias  uncertainties  were 
+found  by  perturbing  the  data  reduction  equation  with  estimates  of  individual  uncertainty.  The  bias 
+uncertainties  were  due  to  (1)  temperature,  (2)  probe  alignment,  (3)  analog  to  digital  conversion,  (4)  speed 
+calibration,  and  (5)  angle  calibration  which  are  all  summarized  in  Table  5. 
+
+Precision  uncertainty  was  determined  for  both  boundary-layer  type  measurements  and  wake-survey 
+type  measurements.  In  the  boundary-layer  simulation,  30  data  values  were  collected  while  the  hot-film 
+sensor  remained  stationary  in  both  the  free-stream  (TI=0.5%)  and  the  turbulent  wake  (TI=4%).  In  the 
+wake  survey  estimate,  the  probe  was  moved  to  different  radii  and  q  in  a  30-minute  time  interval,  then 
+returned  to  its  initial  position.  The  precision  uncertainty  for  these  conditions,  summarized  in  Table  6,  is 
+much  smaller  than  the  bias  uncertainties  shown  in  Table  5. 
+
+B.  AFF  Pressure  Uncertainty 
+
+Gowing,  (Ref.  7),  identified  the  major  sources  of  error  in  the  pressure  and  shear  stress 
+measurements.  Misalignment  of  the  reference  Pitot  tubes  and  temperature  drifts  in  the  electronics  were 
+the  major  sources  of  pressure  measurement  error.  The  Pitot  tube  readings  were  compared  during  testing 
+to  check  for  misalignment  and  thermal  drift  in  the  electronics  was  compensated  by  repeated  calibrations  at 
+the  elevated  temperatures.  Over  an  estimated  tunnel  maximum  temperature  rise  of  7°C,  the  true  pressure 
+coefficients  will  be  within  +0.01  and  -0.0085  of  the  measured  value.  The  pressure  coefficient  for  the 
+model  nose  will  be  within  +0.013  and  -0.012  of  the  measured  value.  For  small  friction  coefficient 
+values,  the  greatest  error  occurred  in  measuring  the  small  difference  between  two  pressure  coefficients. 
+For  larger  friction  coefficients,  the  major  error  sources  were  the  accuracy  limits  of  the  published 
+calibrations  for  Preston  tubes  and  flow  misalignment.  Overall,  Gowing  (Ref.  7)  estimated  the  true 
+friction  coefficients  to  be  within  +0.0002  of  their  measured  values. 
+
+C.  AFF  Flow  Data  and  File  Name 
+
+AFF  model  configurations,  Table  1,  and  test  plan,  Tables  2  and  3,  were  combined  to  provide  a 
+summary  table  for  all  tests  conducted  for  the  SUBOFF  program.  The  tests  were  labeled  in  Test.***  and 
+
+
+7 
+
+
+grouped  in  the  directory  tree  according  to  Table  7.  The  actual  test  number  corresponding  to  the  detail  test 
+configurations  were  further  grouped  as:  Table  8  -  wake  surveys;  Table  9  -  static  pressure  surveys  in  the 
+wakes;  Table  10  -  boundary  layer  surveys;  Table  11  -  surface  pressure  measurements  on  and  around  the 
+control  surfaces;  Table  12  -  skin  friction  measurements. 
+
+All  AFF  test  data  were  grouped  into  three  presentation  formats  as  shown  in  Table  13a-e.  A  brief 
+explanation  of  the  format  follows: 
+
+a)  Tables  13a  and  13b  are  velocity  measurements 
+
+>  First  line  describes  type  of  measurement,  model  configuration,  and  measurement  plan 
+
+>  Second  line  indicates  number  of  data  points  in  the  file 
+
+>  Third  line  to  the  end  of  file  are  the  normalized  velocities  from  measurements 
+
+>  The  parameters  listed  in  the  columns  are  shown  as  the  last  line  of  the  Table;  i.e.,  r/R,0, 3-D 
+velocities,  3-D  fluctuation  velocities,  and  Reynolds  stresses 
+
+b)  Tables  1 3c  and  1 3d  are  surface  pressure  measurements 
+
+>  First  line  indicates  the  type  of  measurement:  P  for  surface  pressure  and  S  for  skin  friction 
+measurements.  Location  of  pressure  taps  are  labeled  according  to  Table  4 
+
+>  Second  line  is  the  number  of  data  points 
+
+>  Third  line  to  the  end  of  file  are  the  normalized  pressure  data 
+
+>  The  parameters  listed  in  the  columns  are  shown  as  the  last  line  of  the  Table;  i.e.,  Tap  ID,  x/L, 
+and  Cp 
+
+c)  Table  13e  is  the  static  pressure  survey  file 
+
+>  First  line  indicates  the  model  configuration  in  the  survey. 
+
+>  Second  line  is  the  number  of  data  points 
+
+>  Third  line  to  the  end  of  file  are  the  data 
+
+>  The  parameters  listed  in  the  columns  are  shown  as  the  last  line  of  the  Table;  i.e.,  r/R,  Angle, 
+and  Cp 
+
+D.  AFF  data  Analysis 
+
+Flow  data  from  the  AFF  experiments  have  been  used  in  a  number  of  CFD  analyses.  The  published 
+papers,  from  NSWC/CD,  are  listed  in  Refs.  10  to  14. 
+
+PHASE  IV  -  PART  U :  TOW  TANK  DATA  ACQUISITION  AND  DATA  FILE  STRUCTURES 
+
+Tow  tank  resistance  tests  are  presented  in  Refs.  3  and  8.  As  an  example,  Table  14  is  reproduced 
+from  Ref.  8.  Investigations  of  the  stability  and  control  characteristics  for  several  configurations  are 
+presented  in  Ref.  3  and  9. 
+
+
+8 
+
+
+All  test  data  are  grouped  into  the  SUBOFF  database  with  file  structure  as  shown  in  the  Table  15. 
+Data  is  presented  in  ASCII  format  with  headings  that  describe  the  nature  of  the  data  that  follows.  All  test 
+data  are  stored  in  the  companion  PC  Zip  diskette  with  this  report. 
+
+CONCLUSION 
+
+A  SUBOFF  database  was  established  in  the  Navy’s  Hydrodynamics  and  Hydroacoustic  Center 
+(H/HTC).  These  test  data  were  intended  for  CFD  validation  and  other  flow  research  on  body  of 
+revolution  with  and  without  various  types  of  appendages.  They  will  serve  as  the  data  resource  for  the 
+future  submarine  research  and  development. 
+
+ACKNOWLEDGMENT 
+
+The  authors  would  like  to  thank  Mr.  Gary  Jones  of  DARPA  for  his  support  in  this  SUBOFF 
+project. 
+
+
+9 
+
+
+10 
+
+
+REFERENCES 
+
+
+1 .  Groves,  N.C.,  Huang,  T.T.,  Chang,  M.,  "Geometric  Characteristics  of  DARPA  Models  (DTRC 
+Model  Nos.  5470  and  5471)",  DTRC/SHD- 1298-01,  March,  1989. 
+
+2.  Huang,  T.T.,  Liu,  H.L.,  Groves,  N.C.,  "Experiments  of  the  DARPA  SUBOFF  Program", 
+DTRC/SHD- 1 298-02,  December,  1989. 
+
+3.  Kowalyshyn,  R.,  "Resistance  and  Static  Plannar  Motion  Mechanism  Tests  for  DTRC  Model  5470", 
+Tracor  Hydronautics  Technical  Report  88006.10-1,  December,  1990. 
+
+4.  Ward,  K.C.,  and  Gowing,  S.,  "Hardware  and  Instrumentation  of  the  DARPA  SUBOFF 
+Experiments",  DTRC/SHD-1298-03,  February,  1990. 
+
+5.  Liu,  H.L.,  Jiang,  C.W.,  Fry,D.J.,  and  Chang,  M.S.,  "Installation  and  Pretest  Analysis  of  DARPA 
+SUBOFF  Model  in  the  DTRC  Anechoic  Wind  Tunnel",  DTRC/SHD- 1298-04,  March,  1990. 
+
+6.  Blanton,  J.N.,  Forlini,  T.J.,  and  Purtell,  L.P.,  "Hot-Film  Velocity  Measurement  Uncertainty  for 
+DARPA  SUBOFF  Experiment",  DTRC/SHD- 1298-05,  March,  1990. 
+
+7.  Gowing,  S.,  "Pressure  and  Shear  Stress  Measurement  Uncertainty  for  DARPA  SUBOFF 
+Experiment",  DTRC/SHD- 1298-06,  January,  1990. 
+
+8.  Crook,  L.B.,  "Resistance  for  DARPA  SUBOFF  as  Represented  by  Model  5470",  DTRC/SHD- 
+1298-07,  March,  1990. 
+
+9.  Roddy,  R.F.,  "Investigation  of  the  Stability  and  Control  Characteristics  of  Several  Configurations  of 
+the  DARPA  SUBOFF  Model  (DTRC  5470)  from  Captive-Model  Experiments",  DTRC/SHD- 1298- 
+OS,  September  1990. 
+
+10.  Jiang,  C.W.,  Liu,  H.L.,  Huang,  T.T.,  "Determination  of  Wind  Tunnel  Wall  Effects  and 
+Corrections",  Presented  at  the  Discussion  of  the  Report  to  the  19th  ITTC  Cavitation  Committee, 
+September  1990,  Madrid,  Spain. 
+
+11.  Gorski,  J.,  Coleman,  R.M.,  and  Haussling,  H.J.,  "Computation  of  Incompressible  Flow  Around 
+the  DARPA  SUBOFF  Bodies",  DTRC-90/016,  July  1990. 
+
+12.  Sung,  C.H.,  Tsai,  J.F.,  Huang,  T.T.,  Smith,  W.E.,  "Effects  of  Turbulence  Models  on 
+Axisymmetric  Stem  Flows  Computed  by  an  Incompressible  Viscous  Flow  Solver",  Proceedings,  6th 
+International  Conference  on  Numerical  Ship  Hydrodynamics,  Iowa  City,  Iowa,  August  2-5, 1993. 
+
+13.  Tsai,  J.F.,  Sung,  C.H.,  Griffin,  M.J.,  and  Huang,  T.T.,  "Effects  of  Grid  Resolution  on 
+Axisymmetric  Stem  Flows  Computed  by  an  Incompressible  Viscous  Flow  Solver",  Symposium  on 
+Quantification  of  Uncertainty  in  Computational  Fluid  Dynamics",  ASME  Fluids  Engineering 
+Conference,  Washington  D.C.,  June  20-24,  1993. 
+
+14.  Huang,  T.,  Liu,  H.  L.,  Groves,  N.C.,  Forlini,  T.J.,  Blanton,  J.N.,  and  Gowing,  S.,  " 
+Measurements  of  Flows  Over  an  Axisymmetric  Body  with  Various  Appendages  (DAPA  SUBOFF 
+Experiments)",  Proceedings,  19th  Symposium  on  Naval  Hydrodynamics,  PP.321-346,  National 
+Academy  Press,  Washington  D.C.,  1994. 
+
+
+11 
+
+
+STERN  CONFIGURATIONS 
+
+
+o 
+
+
+Schematic  of  DARPA  SUBOFF  Model  components  and  stern  configurations. 
+
+
+Stepping 
+
+Motor 
+
+
+LO 
+
+00 
+
+
+ib 
+
+
+E 
+
+o 
+
+gj  ® 
+
+CM  O 
+
+ii  *r 
+
+_l  T- 
+
+
+< 
+
+< 
+
+c 
+
+o 
+
+o 
+
+Q 
+
+CO 
+
+
+CN 
+
+g> 
+
+Ll 
+
+
+Schematic  view  of  Model  in  closed-  and  open-jet  test  section. 
+
+
+Table  1.  Model  Configuration  Definition. 
+
+
+Config. 
+
+No. 
+
+Axisym 
+
+Body 
+
+Fair- 
+
+water 
+
+4  St 
+
+Base 
+
+line 
+
+sm  Append 
+Up 
+
+stream 
+
+lages 
+
+Down 
+
+stream 
+
+Ring 
+Wing 
+#  1 
+
+Ring 
+
+Wing 
+
+#2 
+
+mm 
+
+■ 
+
+1 
+
+X 
+
+X 
+
+X 
+
+2 
+
+X 
+
+X 
+
+X 
+
+X 
+
+3 
+
+X 
+
+X 
+
+X 
+
+X 
+
+4 
+
+X 
+
+X 
+
+X 
+
+X 
+
+5 
+
+X 
+
+X 
+
+X 
+
+X 
+
+6 
+
+X 
+
+X 
+
+X 
+
+X 
+
+7 
+
+X 
+
+X 
+
+X 
+
+X 
+
+8 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+9 
+
+X 
+
+X 
+
+X 
+
+10 
+
+X 
+
+X 
+
+X 
+
+X 
+
+11 
+
+X 
+
+X 
+
+X 
+
+X 
+
+12 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+13 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+14 
+
+X 
+
+X 
+
+X 
+
+X 
+
+15 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+16 
+
+X 
+
+X 
+
+X 
+
+X 
+
+17 
+
+X 
+
+X 
+
+X 
+
+X 
+
+18 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+19 
+
+X 
+
+X 
+
+X 
+
+X 
+
+X 
+
+14 
+
+
+Table  2.  Velocity  and  Pressure  Survey  Planes  (x/L). 
+
+
+Model 
+
+Config. 
+
+0.875 
+
+0.904 
+
+0.927 
+
+Surv 
+
+0.956 
+
+ey  Planes 
+
+0.978 
+
+x/L 
+
+0.996 
+
+Or 
+
+0.997 
+
+1.040 
+
+1.096 
+
+1.200 
+
+1 
+
+VP 
+
+V,VP,PP 
+
+VP 
+
+VP 
+
+V,VP,PP 
+
+V 
+
+V,PP 
+
+V,  PP 
+
+2 
+
+V,PP 
+
+V,PP 
+
+V 
+
+V,PP 
+
+V 
+
+3 
+
+V,PP 
+
+V,  PP 
+
+V,PP 
+
+V 
+
+4  . 
+
+V,VP 
+
+V,VP 
+
+V 
+
+5 
+
+V,VP 
+
+V,  VP 
+
+V 
+
+6 
+
+V,  VP 
+
+V,  VP 
+
+V 
+
+V 
+
+V 
+
+7 
+
+V,VP 
+
+V,VP 
+
+V 
+
+V 
+
+V 
+
+8 
+
+V,PP 
+
+V,PP 
+
+V,PP 
+
+V 
+
+9 
+
+V,VP 
+
+10 
+
+V 
+
+11 
+
+V 
+
+Note:  V  =  Circumferential  Wake  Survey  with  3-component  Hot-Wire  Anemometer 
+VP  =  Boundary  Layer  Survey  with  single  element  Hot  Wire  Anemometer 
+PP  =  Static  Pressure  Survey  with  Static  Pressure  Probe 
+The  radial  location  of  the  survey  points  are  defined  in  Reference  2,  Table  3 
+
+
+Table  3.  Surface  Pressure  Surveys. 
+
+
+ESS&fl 
+
+HU 
+
+HP 
+
+HS  ! 
+
+HL 
+
+Surface 
+
+FH 
+
+Pressure 
+
+FW 
+
+Tap  Des 
+AH 
+
+ignator 
+
+SA 
+
+W*P 
+
+W*U 
+
+W*S 
+
+W*L 
+
+1 
+
+B 
+
+P,S 
+
+p,s 
+
+P 
+
+P,S 
+
+P,S 
+
+2 
+
+|  P,s 
+
+P,s 
+
+P,S 
+
+P,S 
+
+P,S 
+
+P 
+
+3 
+
+P 
+
+p 
+
+P 
+
+P.S 
+
+4 
+
+P 
+
+P 
+
+p 
+
+P 
+
+P 
+
+P 
+
+P 
+
+5 
+
+P 
+
+P 
+
+6 
+
+P 
+
+p 
+
+P 
+
+P 
+
+P 
+
+7 
+
+P 
+
+p 
+
+P 
+
+P 
+
+P 
+
+8 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p,s 
+
+P,S 
+
+nun 
+
+9 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p 
+
+p 
+
+10 
+
+11 
+
+12 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+13 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+14 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p 
+
+p 
+
+15 
+
+p 
+
+p 
+
+16 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+17 
+
+P 
+
+P 
+
+p 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+18 
+
+P 
+
+P 
+
+p 
+
+P 
+
+P 
+
+p 
+
+P 
+
+p 
+
+P 
+
+19 
+
+P 
+
+P 
+
+p 
+
+P 
+
+, 
+
+p 
+
+p 
+
+P 
+
+p 
+
+P 
+
+Note:  P  =  Surface  Pressure  Measurements 
+S  =  Skin  Friction  Measurements 
+
+
+15 
+
+
+Table  4.  Surface  Pressure  Tap  Identification. 
+
+
+Pressure  Tap 
+Identification 
+
+Pressure  Tap 
+
+Location 
+
+HUi 
+
+Upper  hull  surface 
+
+21 
+
+HPi 
+
+Port  side  hull  surface 
+
+7 
+
+HLi 
+
+Lower  hull  surface 
+
+7 
+
+. HS" . . 
+
+Starboard  side  hull  surface 
+
+7 
+
+FWj 
+
+Fairwater  (Sail)  surface 
+
+30 
+
+FHi 
+
+Fairwater/Hull  intersection  region 
+
+76 
+
+SAi 
+
+Upper  rudder  stem  appendage . . 
+
+33 
+
+AH: 
+
+Stem  appendage/hull  intersection  region 
+
+41 
+
+Total  Surface  Pressure  Taps 
+
+222 
+
+W*Ui 
+
+Ring  Wing  Surface  Pressure  Taps 
+
+Top  of  wing,  both  inner  &  outer  surfaces 
+
+19 
+
+W*Pi 
+
+Portside  of  wing,  inner  &  outer  surfaces 
+
+6 
+
+W*Li 
+
+Bottom  of  wing,  inner  &  outer  surfaces 
+
+6 
+
+W*Si 
+
+Starboard  of  wing,  inner  &  outer  surfaces 
+
+6 
+
+Total  Surface  Pressure  Taps 
+
+37 
+
+Table  5.  Velocity  Bias  Uncertainty. 
+
+
+u/Uref 
+
+% 
+
+v/Uref 
+
+% 
+
+w/Uref 
+
+% 
+
+Temperature 
+
+0.32 
+
+0.32 
+
+0.32 
+
+Probe  Alignment 
+
+- 
+
+0.50 
+
+0.50 
+
+Analog  to  Digital  Conversion 
+
+0.07 
+
+0.13 
+
+0.12 
+
+Speed  Calibration 
+
+2.12 
+
+1.76 
+
+0.88 
+
+Angle  Calibration 
+
+0.53 
+
+1.31 
+
+1.43 
+
+WiilBBHl 
+
+2.21 
+
+2.28 
+
+1.79 
+
+Table  6.  Velocity  Precision  Uncertainty. 
+
+
+u/Uref 
+
+% 
+
+v/Uref 
+
+% 
+
+w/Uref 
+
+% 
+
+Boundary  Layer,  Free-Stream 
+01=0.5%) 
+
+0.04 
+
+0.04 
+
+0.06 
+
+Boundary  Layer  Turbulent  Wake 
+01=4%) 
+
+0.28 
+
+0.16 
+
+0.20 
+
+Wake 
+
+0.16 
+
+0.06 
+
+0.04 
+
+16 
+
+
+Table  7.  Data  Directory  Organization. 
+
+
+Config. 
+
+No. 
+
+
+C 
+
+
+Bare  Hull 
+
+
+Directory  Name 
+
+
+Remarks 
+
+
+Hull  +2°  Pitch 
+
+
+AFFl-P-Surface 
+
+
+AFFl-PP-Static 
+
+
+AFFl-S-Shear 
+
+
+AFF1-VP-BL 
+
+
+AFFl-V-Wake 
+
+
+AFF9-P-Surface 
+
+
+AFF9-VP-BL 
+
+
+AFF9-V-Wake 
+
+
+Sail  Only 
+
+
+Sail  +2°  Pitch 
+
+
+Sail  +2°  Drift 
+
+
+IRSHI 
+
+
+AFF2-PP-Static 
+
+
+AFF2-S-Shear 
+
+
+AFF2-V-Wake 
+
+
+AFF4-P-Surface 
+
+
+I— K 
+
+
+-V-Wake 
+
+
+-P-Surface 
+
+
+-VP-BL 
+
+
+-V-Wake 
+
+
+x/L=0.904,0.927,0.95 6,0.978 
+
+
+x/L=0.904, 0.978, 1 .040, 1 .096, 1 . 
+2 
+
+
+hUjh^hSjhljfh.ah 
+
+x7l=6.978  . 
+
+
+x/L=0.978 
+
+
+x/L=0.904,0.978, 1 .096 
+
+
+x/L=0.904, 0.978,1 .040, 1 .096, 1 . 
+2 
+
+
+x/L=0.904,0.978 
+
+
+x/L=0.904,0.978, 1.096 
+
+
+Base  Appendages 
+
+
+Ring  Wing  #1 
+
+
+RW#l+2°  Pitch 
+
+
+AFF3-P-Surface 
+
+
+AFF3-PP-Static 
+
+
+AFF3-S-Shear 
+
+
+AFF3-V-Wake 
+
+
+AFFIO-V-Wake 
+
+
+AFFll-V-Wake 
+
+
+AFF6-P-Surface 
+
+
+AFF6- VP-BL 
+
+
+AFF6-V-Wake 
+
+
+AFF12-P-Surface 
+
+
+AFF16-P-Surface 
+
+
+AFF18-P-Surface 
+
+
+x/L=0.904, 0.978, 1 .040, 1 .096, 1 . 
+2 
+
+
+x/L=0.978 
+
+
+x/L=0.978 
+
+
+wu,wp,ws,wl 
+
+x7l=0.978,6.996 . . 
+
+
+x/L=0.978, 0.997, 1 .040,1.096,1 . 
+2 
+
+
+wu,wp,ws,wl 
+
+
+hu,hp,hs,hl,wu,wp,ws,wl _ 
+
+
+hu,hp,hs,hl,wu,wp,ws,wl 
+
+
+Ring  Wing  #2 
+
+AFF7-P-Surface 
+
+wu,wp,ws,wl 
+
+AFF7-VP-BL 
+
+x/L=0.978,0.997 
+
+AFF7-V-Wake 
+
+x/L=0.978,0.997,l  .040, 1 .096,1 . 
+
+2 
+
+Sail+  RW#2 
+
+AFF13-P-Surface 
+
+wu,wp,ws,wl 
+
+RW#2+2°  Pitch 
+
+AFF17-P-Surface 
+
+hu,hp,hs,hl,wu,wp,ws,wl,ah 
+
+lEmflHNHI 
+
+AFF19-P-Surface 
+
+hu,hp,hs,hl,wu,wp,ws,wl,ah 
+
+Sail+Base  Append.  AFF8-P-Surface 
+AFF8-PP-Static 
+
+AFF8-S-Shear . 
+
+AFF8-V-Wake . 
+
+
+AFF14-P-Surface 
+
+
+AFF15-P-Surface 
+
+
+Note:  AFF*P-Surface  Surface  Pressure  Measurement 
+
+AFF*PP-Static  Circumferential  Static  Pressure  Survey 
+
+
+17 
+
+
+Table.  7  (Continued) 
+
+Table  7.  Data  Directory  Organization 
+
+
+AFF*S-Shear 
+
+AFF*VP-BL 
+
+AFF*V-Wake 
+
+
+Skin  Friction  Measurement 
+Boundary  Layer  Velocity  Profile  Survey 
+Circiunferential  Wake  Survey 
+
+
+18 
+
+
+Table  8.  Wake  Survey  :  Model  Configurations  and  Test  Numbers. 
+
+
+Model 
+
+Configuration 
+
+
+Bare  Hull 
+
+
+Hull  +  2°  Pitch 
+
+
+Sail 
+
+
+0.35  0.40 
+
+
+r  /  Rmax 
+
+
+0.50  1  0.60 
+
+
+Sail  +  2°  Pitch 
+
+
+Sail  +  2°  Drift 
+
+
+Baseline 
+
+Appendages 
+
+
+650 
+
+102 
+
+653 
+
+112 
+
+921  I  922  I  923  I  924  925  926  927 
+
+
+Fully 
+
+Appended 
+
+
+301  I  302  I  303  I  790  304  305  306  307  308  309  310 
+
+
+792  I  793  I  794  I  795  I  796  |  797  I  798  I  799  I  800  I  801  I  802 
+
+
+312  313  803  804  314  1  315  805  316  317  318  319 
+
+
+806  807  808  I  809  I  810  I  811  I  812  I  813a  |  813b  |  813c  |  813d 
+
+
+239  240 
+
+
+Ring  Wing  #1 
+
+
+Ring  Wing  #2 
+
+
+244  245  246  247  248  24* 
+
+
+722  723  724  725  726  727  I  828 
+
+
+252  253  254  255  256  257 
+
+
+260  261  262  263  264  265  I  729 
+
+
+272  273  274 
+
+
+277  I  750  I  278  I  279  280  281 
+
+
+752 
+
+753 
+
+754 
+
+755 
+
+756 
+
+757 
+
+758 
+
+"284" 
+
+285 
+
+286 
+
+287 
+
+*'288* 
+
+289 
+
+760 
+
+292 
+
+293 
+
+294 
+
+295 
+
+""296” 
+
+297 
+
+761 
+
+Note:  Ring  Wings  also  have  r/R=0.22  surveys  : 
+
+
+Ring  Wing  #1: 
+Ring  Wing  #2: 
+
+
+x/L=978 
+H:  237 
+n:  270 
+
+
+1.040  1.096 
+720  250 
+
+751  282 
+
+
+19 
+
+
+Table  9.  Static  Pressure  Survey  :  Model  Configurations  and  Test  Numbers. 
+
+
+Model 
+
+Config 
+
+x/L 
+
+r  /  Rmax  t 
+
+Configuration 
+
+No. 
+
+0.25 
+
+0.30 
+
+0,35 
+
+0.40 
+
+0.45 
+
+0.50 
+
+0.60 
+
+0.72 
+
+0.92 
+
+1.20 
+
+1.60 
+
+2.0 
+
+Bare  Hull 
+
+i 
+
+0,904 
+
+- 
+
+- 
+
+- 
+
+mm 
+
+- 
+
+- 
+
+554 
+
+555 
+
+556 
+
+557 
+
+558 
+
+559 
+
+0.978 
+
+560 
+
+561 
+
+562 
+
+■Hall 
+
+564 
+
+- 
+
+565 
+
+566 
+
+567 
+
+568 
+
+569 
+
+570 
+
+1.096 
+
+571 
+
+572 
+
+573 
+
+574 
+
+575 
+
+- 
+
+576 
+
+577 
+
+578 
+
+579 
+
+581 
+
+1.200 
+
+582 
+
+mil 
+
+584 
+
+585 
+
+586 
+
+587 
+
+588 
+
+589 
+
+590 
+
+591 
+
+592 
+
+Sail 
+
+2 
+
+0.904 
+
+■ 
+
+■ 
+
+■ 
+
+■ 
+
+■ 
+
+628 
+
+a 
+
+074 
+
+076 
+
+■ 
+
+0.978 
+
+078 
+
+079 
+
+080 
+
+081 
+
+628b 
+
+I 
+
+084 
+
+HM 
+
+086 
+
+■IKM 
+
+088 
+
+1.096 
+
+089 
+
+090 
+
+091 
+
+628c 
+
+628d 
+
+092 
+
+093 
+
+628e 
+
+094 
+
+MtvJM 
+
+mm 
+
+- 
+
+Baseline 
+
+3 
+
+0.978 
+
+138 
+
+139 
+
+141 
+
+668a 
+
+142 
+
+143 
+
+144 
+
+145 
+
+...in.. 
+
+147 
+
+148 
+
+Appendages  1 
+
+1 
+
+1.040 
+
+mm 
+
+■BH 
+
+■ 
+
+668b 
+
+668c 
+
+1 
+
+mm 
+
+668d 
+
+mm 
+
+— 
+
+wmm\ 
+
+1.096 
+
+158 
+
+159 
+
+160 
+
+668e 
+
+i61 
+
+mm 
+
+162 
+
+668g 
+
+163 
+
+164 
+
+MM 
+
+■31 
+
+Fully 
+
+;  8 
+
+0.978 
+
+824 
+
+m 
+
+824b 
+
+824 
+
+824d 
+
+824 
+
+824f 
+
+824g 
+
+824h 
+
+824j 
+
+824k 
+
+Appended 
+
+a 
+
+c 
+
+e 
+
+(Sail  +  Baseline 
+
+1.040 
+
+825 
+
+a 
+
+825b 
+
+825 
+
+c 
+
+825  d 
+
+825 
+
+e 
+
+825f 
+
+825g 
+
+82 5h 
+
+825  i 
+
+82  5j 
+
+'825k 
+
+8251 
+
+Appendages) 
+
+1.096 
+
+826 
+
+826b 
+
+826 
+
+826d 
+
+826 
+
+826f 
+
+826g 
+
+826h 
+
+826i 
+
+826j 
+
+1 
+
+a 
+
+c 
+
+e 
+
+SB 
+
+Table  10.  Boundary  Layer  Velocity  Profiles  and  Test  Numbers. 
+
+
+Model 
+
+Config 
+
+Probe 
+
+x/L 
+
+Circumferential  Angle  (Deg)  i 
+
+Configuration 
+
+No. 
+
+Type 
+
+0 
+
+mm 
+
+18M 
+
+EH31 
+
+IHil 
+
+Bare  Hull 
+
+3-D 
+
+0.904 
+
+002 
+
+473 
+
+.J74. 
+
+mm 
+
+475 
+
+476 
+
+m 
+
+1  0.927 
+
+477 
+
+478 
+
+WUtM 
+
+480 
+
+481 
+
+482 
+
+llllli! 
+
+0.956 
+
+483 
+
+484 
+
+485 
+
+SESJSjj 
+
+487 
+
+488 
+
+0.978 
+
+003 
+
+489 
+
+490 
+
+491 
+
+492 
+
+493 
+
+1 
+
+X 
+
+0.875 
+
+450 
+
+451 
+
+452 
+
+- 
+
+453 
+
+454 
+
+1 
+
+0.904 
+
+455 
+
+456 
+
+457 
+
+458 
+
+459 
+
+460 
+
+IS 
+
+0.927 
+
+461 
+
+462 
+
+463 
+
+464 
+
+465 
+
+466 
+
+| 
+
+0.956 
+
+467 
+
+468 
+
+469 
+
+470 
+
+471 
+
+472 
+
+Hull  +  2°  Pitch 
+
+3-D 
+
+0.978 
+
+830 
+
+- 
+
+- 
+
+- 
+
+- 
+
+- 
+
+Sail  +  2°  Pitch 
+
+3:D . 
+
+0.904 
+
+168 
+
+670 
+
+— 
+
+1 
+
+mm 
+
+671 
+
+169 
+
+■BW 1 
+
+mm 
+
+S3 
+
+m m 
+
+673 
+
+Sail  +  2°  Drift 
+
+5 
+
+3-D 
+
+0.904 
+
+199 
+
+205 
+
+690 
+
+691 
+
+* 
+
+m 
+
+202 
+
+0.978 
+
+200 
+
+206 
+
+692 
+
+693 
+
+* 
+
+■ 
+
+203 
+
+Ring  Wing  #1 
+
+6 
+
+3-D 
+
+0.978 
+
+235 
+
+— 
+
+1 
+
+mm 
+
+mm 
+
+— 
+
+0.996 
+
+236 
+
+mm 
+
+B 
+
+mi 
+
+H 
+
+mm 
+
+Ring  Wing  #2 
+
+3-D 
+
+0,978 
+
+268 
+
+— 
+
+mm 
+
+H 
+
+mm 
+
+m 
+
+■1 
+
+0.997 
+
+269 
+
+mm 
+
+■I 
+
+mm 
+
+S3 
+
+mm 
+
+Note:  The  angle  for  these  two  tests  is  135  deg. 
+
+
+20 
+
+
+Table  11.  Surface  Pressure  and  Skin  Friction  Measurements. 
+
+
+Model  | 
+
+Configuration  I 
+
+Config. 
+
+No. 
+
+HU 
+
+HP 
+
+HS 
+
+HL 
+
+FH 
+
+AH 
+
+SA 
+
+FW 
+
+wu 
+
+WP 
+
+ws 
+
+WL 
+
+Bare  Hull  1 
+
+i 
+
+022 
+
+547 
+
+548 
+
+549 
+
+23 
+
+24 
+
+wm 
+
+MM 
+
+wm 
+
+mm 
+
+wm 
+
+mm 
+
+BareHuii  +  2°  j 
+
+Pitch  1 
+
+9 
+
+852 
+
+853 
+
+854 
+
+855 
+
+856 
+
+857 
+
+m 
+
+B 
+
+m 
+
+B 
+
+B 
+
+B 
+
+Sail  j 
+
+2 
+
+621 
+
+622 
+
+623 
+
+624 
+
+069 
+
+625 
+
+- 
+
+070 
+
+- 
+
+- 
+
+- 
+
+- 
+
+Sail  +  2°  Pitch  ] 
+
+Kg 
+
+686 
+
+687 
+
+688 
+
+689 
+
+196 
+
+689 
+
+a 
+
+- 
+
+197 
+
+- 
+
+- 
+
+- 
+
+- 
+
+— 
+
+- 
+
+- 
+
+233 
+
+mm 
+
+- 
+
+234 
+
+. . . 
+
+MIIIMIPMIII 
+
+. . *••••»»• 
+
+- 
+
+Baseline  | 
+
+Appendages  1 
+
+Append.  +  2°  Pitch  1 
+Sail  +  Base  Append.  \ 
+Sail+ Append. +  26  Pitch  [ 
+
+3 
+
+661 
+
+662 
+
+663 
+
+664 
+
+■ 
+
+136 
+
+137 
+
+- 
+
+- 
+
+- 
+
+- 
+
+- 
+
+•ill !••••••«! 
+
+14 
+
+8 
+
+15 
+
+962 
+
+814 
+
+963 
+
+816 
+
+964 
+
+815 
+
+965 
+
+817 
+
+wm 
+
+960 
+
+"818" 
+
+"970" 
+
+961 
+"  '819 ' 
+971 
+
+. 
+
+- . . 
+
+- 
+
+. . 
+
+. " . 
+
+■  IIH  IMII1 
+
+6 
+
+267 
+
+wm 
+
+wm 
+
+m 
+
+- 
+
+- 
+
+- 
+
+- 
+
+266a 
+
+266b 
+
+266c 
+
+266d 
+
+Sail  +  RW#1  j 
+
+12 
+
+940 
+
+m 
+
+m 
+
+- 
+
+- 
+
+- 
+
+- 
+
+94  i 
+
+942 
+
+943 
+
+944 
+
+RW#i  +  2°  Pitch  ! 
+
+16 
+
+984 
+
+985 
+
+986 
+
+987 
+
+- 
+
+- 
+
+- 
+
+- 
+
+980 
+
+981 
+
+982 
+
+983 
+
+■1 
+
+18 
+
+Tooo” 
+
+1001 
+
+1002 
+
+1003 
+
+■ 
+
+1008 
+
+• 
+
+1004 
+
+1005 
+
+"l006" 
+
+1007 
+
+1  Ring  Wing  #2  ! 
+
+7 
+
+299 
+
+wm 
+
+wm 
+
+PI 
+
+- 
+
+wm 
+
+- 
+
+- 
+
+298a 
+
+298b 
+
+298c 
+
+298d 
+
+■WIT — 
+
+13 
+
+950 
+
+m 
+
+mSm 
+
+■ 
+
+- 
+
+wm 
+
+- 
+
+- 
+
+951 
+
+952 
+
+“953" 
+
+954 
+
+RW#2  +  2°  Pitch  1 
+
+17 
+
+"994" 
+
+995 
+
+996 
+
+997 
+
+- 
+
+998 
+
+- 
+
+. - 
+
+990 
+
+991 
+
+"992" 
+
+993 
+
+19 
+
+Toio" 
+
+1011 
+
+1012 
+
+1013 
+
+1018 
+
+' 
+
+1014 
+
+ioi'6 
+
+“Toi'r 
+
+1017 
+
+Note  :  Definitions  of  HU,  HP,  etc.  are  listed  in  Table  1. 
+
+
+Table  12.  Skin  Friction  Measurements. 
+
+
+Model 
+
+Configuration 
+
+|  Config. 
+j  No. 
+
+HU 
+
+HP 
+
+HS 
+
+HL 
+
+FH 
+
+AH 
+
+SA 
+
+FW 
+
+Bare  Hull 
+
+i  1 
+
+025 
+
+550 
+
+551 
+
+- 
+
+552 
+
+553 
+
+- 
+
+Sail 
+
+!  2 
+
+i 
+
+071 
+
+a 
+
+071b 
+
+071 
+
+c 
+
+071d 
+
+627 
+
+■ 
+
+■ 
+
+626 
+
+Baseline 
+
+Appendages 
+
+3 
+
+665 
+
+■ 
+
+■ 
+
+■ 
+
+■ 
+
+666 
+
+627 
+
+■ 
+
+!  8 
+
+- 
+
+- 
+
+§5, 
+
+- 
+
+823 
+
+821 
+
+822 
+
+LZ] 
+
+21 
+
+
+Table  13.  Data  File  Structures. 
+
+
+Table  13  a.  Wake  Survey  Data  File. 
+
+8/14/89  Wake  Survey  x/L  =  0.904  r/R  =  0.46  Bare  Hull 
+181 
+
+0.4600  0.00  0.3510  -0.0937  0.0215  0.0523  0.0384  0.0495  9.9077E-04  -8.2627E-05 
+
+0.4600  2.00  0.3499-0.0916  0.0206  0.0496  0.0382  0.0514  9.1268E-04 -7.1843E-05 
+
+0.4600  4.00  0.3486  -0.0931  0.0218  0.0510  0.0376  0.0507  8.8125E-04 -1.3235E-04 
+
+0.4600  6.00  0.3515  -0.0923  0.0208  0.0530  0.0394  0.0504  1.1128E-03 -1.5181E-04 
+
+0.4600  8.00  0.3501  -0.0917  0.0200  0.0531  0.0382  0.0517  1.0147E-03  -1.7426E-04 
+
+r/R  Angle  V*  Vr  V,  V*’  V,'  V,’  Re*r  Re*, 
+
+Table  13b.  Boundary  Layer  Survey  Data  File. 
+
+8/15/89  3-D  Boundary  Layer  Survey  x/L  =  0.904  45  deg  Bare  Hull 
+19 
+
+0.4600  45.00  0.3598  -0.0917  0.0268  0.0521  0.0397  0.0490  1.0140E-03  -1.1308E-04 
+
+.  0.4679  45.00  0.3737  -0.0947  0.0244  0.0540  0.0391  0.0504  1.1539E-03  -2.1622E-04 
+
+0.4895  45.00  0.4443  -0.1065  0.0270  0.0545  0.0387  0.0509  1.2126E-03  -1.6545E-04 
+
+0.5111  45.00  0.5078  -0.1136  0.0307  0.0528  0.0386  0.0500  1.1833E-03  -8.7067E-05 
+
+0  5399  45.00  0.5879  -0.1250  0.0287  0.0507  0.0355  0.0458  1.0912E-03  -1.8882E-04 
+
+r/R  Angle  V,  Vr  V,  V*'  Vr'  V,’  Re„  Re„ 
+
+Table  13c.  Static  Pressure  Survey  Data  File. 
+
+AFF-l-pp-0.904  Bare  hull  static  pressure  survey 
+
+
+37 
+
+0.60 
+
+0.0 
+
+0.12398 
+
+0.60 
+
+10.0 
+
+0.12364 
+
+0.60 
+
+20.0 
+
+0.12301 
+
+0.60 
+
+30.0 
+
+0.12246 
+
+r/R 
+
+Angle 
+
+Cp 
+
+Table  13d.  Surface  Pressure  Measurement  Data  File. 
+
+
+test  aff- 1  -p-h-taps  hu  1  -hu2 1 
+
+
+21 
+
+hul  0.000000  0.990007 
+
+hu2  0.034985  -0.113978 
+
+hu3  0.069971  -0.070548 
+
+hu4  0.104956  -0.054790 
+
+hu5  0.180758  -0.097342 
+
+Tap  ID  x/L  Cp 
+
+
+Table  13e.  Skin  Friction  Measurement  Data  File. 
+
+
+aff-l-s  taps  hp8-17  bare  hull 
+5 
+
+hp5  0.18076  3.395684e-03 
+hp8  0.50146  2.673570e-03 
+hpll  0.74052  2.928076e-03 
+hpl2  0.78134  3.401767e-03 
+hpl7  0.90379  5.701664e-04 
+
+Tap  ID  x/L  Skin  Friction  Coeff. 
+
+
+22 
+
+
+Table  14.  DARPA  SUBOFF  Model  5470  DTMB  Tow  Tank  Results. 
+
+
+Config. 
+
+No. 
+
+Model  Configuration 
+
+Model 
+
+Speed 
+
+(knots) 
+
+Model  R 
+Pound 
+
+esistance 
+
+Newton 
+
+Residual 
+
+Resistance 
+
+Coeffi 
+
+Model 
+
+Speed 
+
+(knots) 
+
+Resistance 
+
+Ratio 
+
+8 
+
+Fully  Appended 
+
+5.93 
+
+■EsisHi 
+
+102.3 
+
+0.00065 
+
+63.80 
+
+283.8 
+
+BBBjjBW 
+
+SSI 
+
+11.85  1 
+
+87.50 
+
+389.2 
+
+11.85 
+
+1.169  1 
+
+13.92 
+
+16.00 
+
+17.79 
+
+118.4 
+
+151.9 
+
+184.6 
+
+526.6 
+
+675.6 
+821.1 
+
+iMMMaaimfmMMaaMii 
+
+. 
+
+3 
+
+Stem  Appendages 
+
+5.92 
+
+21.45 
+
+95.41 
+
+0.00050 
+
+ii.85  1 
+
+17.78  1 
+
+81.35 
+
+172.2 
+
+361.8 
+
+765.9 
+
+_ 11.85 
+
+1.087 
+
+1 
+
+Bare  Hull 
+
+5.92 
+10.66 
+11.84 
+
+13.92 
+16.00 
+
+19.65 
+54.45 
+74.85 
+.  101.5 
+129.7 
+
+87.40 
+
+rillffiMHIIIMaMMMIMl 
+
+242.2 
+
+332.9 
+
+451.5 
+
+. 576.9' . 
+
+0.00030 
+
+Wgm 
+
+mgm 
+
+■uixM 
+
+156.7 
+
+697.0 
+
+_ 
+
+6 
+
+Ringed  Wing  #1 
+
+5.93 
+
+21.05 
+
+93.6 
+
+0.00055 
+
+■ 
+
+11  85 
+
+. nuSo . 
+
+■Bfil 
+
+355.4 
+
+747.7 
+
+7 
+
+Ringed  Wing  #2 
+
+5.93 
+
+11.85 
+
+17.78 
+
+21.75 
+
+82.00 
+
+171.3 
+
+BUB 
+
+n 
+
+. lTST . 
+
+1.096 
+
+Hull,  bridge  fairwater  and  four  identical  stern  appendages  all  have  tripwires  installed  at  5  percent  of  chord  length. 
+Ringed  wings  have  no  turbulence  stimulators  applied  to  them 
+
+
+23 
+
+
+Table  15.  File  Directory  Structure. 
+
+
+AFFl-PP-static 
+
+AFFl-P-surface 
+
+AFFl-S-shear 
+
+AFFl-VP-bl 
+
+2comp 
+
+3comp 
+
+AFFl-V-wake 
+.  -  xol_904 
+
+-  xol_978 
+xoll040 
+
+-  xoll096 
+
+-  xoll200 
+AFF2-PP-static 
+AFF2-P-surface 
+AFF2_S-shear 
+AFF2-V-wake 
+
+xol_904 
+
+-  xol_978 
+
+-  xoll040 
+
+-  XO11096 
+
+-  xoll200 
+AFF3-PP-static 
+AFF3-P-surface 
+AFF3-S-shear 
+AFF3-V-wake 
+
+-  xol_978 
+xoll040 
+
+-  xoll096 
+
+-  xoll200 
+AFF4-P-surfece 
+AFF4-VP-bl 
+AFF4-V-wake 
+
+xol_904 
+
+-  xol_978 
+
+-  XO11096 
+AFF5-P-surface 
+AFF5-VP-bl 
+AFF5-V-wake 
+
+xol_904 
+
+-  xol_978 
+xoll096 
+
+AFF6-P-surface 
+
+AFF6-VP-bl 
+
+AFF6-V-wake 
+
+-  xol_978 
+xoll040 
+xoll096 
+xoll200 
+
+AFF7-P-surface 
+
+AFF7-VP-bl 
+
+AFF7-V-wake 
+
+-  xol_978 
+xol_996 
+xol  11040 
+
+-  xol  1200 
+
+
+AFF8-PP-static 
+
+AFF8-P-surface 
+
+AFF-8-V-wake 
+
+-  xol_978 
+
+-  xol  1040 
+
+-  xol  1096 
+xol  1200 
+
+AFF9-P-surface 
+
+AFF9-VP-bl 
+
+AFF9-V-wake 
+
+-  xol_978 
+AFFlO-V-wake 
+
+-  xol_978 
+AFF1 1-V-wake 
+
+-  xol_978 
+AFF12-P-surface 
+AFF13-P-surface 
+AFF14-P-surface 
+AFF15-P-surface 
+AFF16-P-surface 
+AFF17-P-surface 
+AFF18-P-surface 
+AFF19-P-surface 
+
+
+24 
+
+

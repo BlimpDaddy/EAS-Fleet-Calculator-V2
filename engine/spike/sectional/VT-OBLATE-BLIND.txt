@@ -1,0 +1,13 @@
+VT OBLATE (DeMoss 2007) — BLIND PREDICTIONS (spec 98). FROZEN BEFORE any drag result is read.
+geometry: exact analytic (ch 2.2.1), volume self-test PASS (0.09669 vs 0.09676 m3).
+section ellipse aspect 1.7316; PRE-REGISTERED analytic modes A2 0.2703, A4 0.0545.
+Roles: independent oblate-family + first measured non-circular-section drag body. NOT an anchor.
+
+canonical 96x28      Re 1.6e+6  proxy 0.413909  rounded  Cd 0.20772  press 0.12112  fric 0.08660  elig ELIGIBLE  conf REDUCED
+                     F1 0.9886  F2a 0.102  F3 4.9341  F4 0.1934  F5 0.0000  A1 0.0000  A2 0.2700  A4 0.0550  wf 20.409  dPx(hull) 0.0%
+canonical 96x28      Re 4.3e+6  proxy 0.413909  rounded  Cd 0.14988  press 0.07477  fric 0.07510  elig ELIGIBLE  conf REDUCED
+sensitivity 240x128  Re 1.6e+6  proxy 0.418192  rounded  Cd 0.20914  press 0.12297  fric 0.08616  elig ELIGIBLE  conf REDUCED
+                     F1 0.9911  F2a 0.080  F3 4.9497  F4 0.1921  F5 0.0000  A1 0.0000  A2 0.2695  A4 0.0542  wf 20.305  dPx(hull) 0.0%
+sensitivity 240x128  Re 4.3e+6  proxy 0.418192  rounded  Cd 0.15064  press 0.07592  fric 0.07472  elig ELIGIBLE  conf REDUCED
+
+engine obj.js:84f52aee18ec062f sections.js:90c925e9a7e490db cdEstimator.js:b4aff600a6b33233 dynamicsGeometry.js:8e8482dfcfcaa6ab dynamicsCore.js:7ec3a19a6f21b1e8

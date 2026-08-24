@@ -1,0 +1,17 @@
+SUBOFF AFF-1 — BLIND PREDICTIONS (spec 93). FROZEN BEFORE ADA359226 IS OPENED.
+geometry: exact equations, Groves/Huang/Chang 1989 (ADA210642). self-test PASS.
+L 4.3561 m, D 0.5080 m, fineness 8.575. Canonical 96x28 lathe.
+Declared Re_L grid chosen blind; nearest-Re prediction will be used at reveal.
+Status: UNSPENT VALIDATION EVIDENCE — not a calibration anchor candidate.
+
+Re_L 1.20e+7  proxy 0.074430  class rounded  Cd 0.10127  press 0.00956  fric 0.09172  elig ELIGIBLE  conf SUPPORTED
+descriptors  F1 0.9701  F2a 0.154  F2f 0.0299  F3 4.8506  F4 0.2024  F5 0.0000  A1 0.0000  A2 0.0000  A4 0.0001
+zones        19.17  5.00  0.00  0.00  0.00  0.15  17.75  13.24
+geometry     wetted 5.9688 m2  frontal 0.2010 m2  wetted/frontal 29.697
+sensitivity  dPx(hull) 45.33%  dCd(hull) 0.02%
+Re_L 2.00e+7  proxy 0.074430  class rounded  Cd 0.10127  press 0.00956  fric 0.09172  elig ELIGIBLE  conf SUPPORTED
+Re_L 2.80e+7  proxy 0.074430  class rounded  Cd 0.10127  press 0.00956  fric 0.09172  elig ELIGIBLE  conf SUPPORTED
+Re_L 3.60e+7  proxy 0.074430  class rounded  Cd 0.10127  press 0.00956  fric 0.09172  elig ELIGIBLE  conf SUPPORTED
+resolution   proxy 96x28 0.074430  768x224 0.075727  drift 1.74%
+
+engine obj.js:84f52aee18ec062f sections.js:90c925e9a7e490db cdEstimator.js:b4aff600a6b33233 dynamicsGeometry.js:8e8482dfcfcaa6ab dynamicsCore.js:7ec3a19a6f21b1e8

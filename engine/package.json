@@ -1,0 +1,13 @@
+{
+  "name": "eas-calc-v2-shape",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "EAS Calculator V2 - shape metrics pipeline (simple VS, VS_inf, VE) from .obj input",
+  "scripts": {
+    "start": "node serve.mjs",
+    "validate": "node test/validate.mjs"
+  },
+  "dependencies": {
+    "quickhull3d": "^3.1.2"
+  }
+}

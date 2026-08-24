@@ -1,18 +1,20 @@
 /**
- * Bakes the shape pipeline (../../CalcV2: src, vendor, web, viz + the
+ * Bakes the shape pipeline (../engine: src, vendor, web, viz + the
  * spike closure) into ../site/calcv2/ so the deployed static tree is
  * self-contained — Cloudflare Pages has no serve.mjs to route /calcv2/*
  * to a sibling folder.
  *
- * Canonical pipeline development home remains the CalcV2 repo
- * (github.com/BlimpDaddy/EAS-CalcV2). Run `node tools/bake-calcv2.mjs`
- * after pipeline changes, before releasing. serve.mjs prefers
- * site/calcv2 when present, so local testing exercises exactly what
- * deploys.
+ * CONSOLIDATED LAYOUT (2026-08-24): the engine lives in THIS repo at
+ * engine/ (kept in step with the CalcV2 working repo by sync-engine.mjs
+ * until cutover). Run `node tools/bake-calcv2.mjs` after engine
+ * changes, before releasing. serve.mjs prefers site/calcv2 when
+ * present, so local testing exercises exactly what deploys.
  *
  * Repo-layout note: this is CalcV1-site's bake-calcv2.mjs with the
- * output moved to ../site/calcv2 and the source to ../../CalcV2 — the
- * only behavioural difference. Keep the two in step until cutover.
+ * output moved to site/calcv2 and the source to ../engine — plus the
+ * spike re-path string updated for the consolidated layout (the engine
+ * copies already point at site/, see sync-engine.mjs). Behaviour is
+ * otherwise unchanged; keep in step with CalcV1-site's until cutover.
  */
 import { cpSync, rmSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
@@ -32,8 +34,8 @@ const BAKE_EXCLUDE = new Set([
 ]);
 
 const site = fileURLToPath(new URL('../site/', import.meta.url));
-const src = new URL('../../CalcV2/', import.meta.url);
-if (!existsSync(fileURLToPath(src))) throw new Error('../../CalcV2 not found (bake runs on the dev machine, next to the engine checkout)');
+const src = new URL('../engine/', import.meta.url);
+if (!existsSync(fileURLToPath(src))) throw new Error('../engine not found — run node tools/sync-engine.mjs first');
 rmSync(site + 'calcv2', { recursive: true, force: true });
 for (const dir of ['src', 'vendor', 'web', 'viz']) {   // viz added V5 step 1 (2026-08-23)
   cpSync(fileURLToPath(new URL(dir, src)), `${site}calcv2/${dir}`, {
@@ -53,10 +55,10 @@ const SPIKE_MODULES = ['ribbon-context.mjs', 'ribbons.mjs', 'support-skin.mjs',
 mkdirSync(`${site}calcv2/spike/sectional`, { recursive: true });
 for (const f of SPIKE_MODULES) {
   let text = readFileSync(fileURLToPath(new URL(`spike/sectional/${f}`, src)), 'utf8');
-  text = text.replaceAll('../../../CalcV1-site/calcv2/src/', '../../src/');
+  text = text.replaceAll('../../../site/calcv2/src/', '../../src/');
   // node-only CLI self-run guards must not throw in a browser worker
   text = text.replaceAll('if (process.argv[1]', 'if (typeof process !== \'undefined\' && process.argv[1]');
   writeFileSync(`${site}calcv2/spike/sectional/${f}`, text);
 }
-console.log('baked ../../CalcV2/{src,vendor,web,viz} + spike closure -> site/calcv2/ (excluded: ' +
+console.log('baked engine/{src,vendor,web,viz} + spike closure -> site/calcv2/ (excluded: ' +
   [...BAKE_EXCLUDE].join(', ') + ')');

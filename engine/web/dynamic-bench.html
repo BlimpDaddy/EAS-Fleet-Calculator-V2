@@ -1,0 +1,278 @@
+<!doctype html>
+<!--
+  DYNAMIC BENCH — the engineer's control panel. Step 0 of Phase B.
+
+  A deliberately PLAIN page wired directly to the finished headless DYNAMIC
+  engine (src/dynamicsGeometry.js + src/dynamicsCore.js). Its job is to let a
+  human operate the engine — drag speed/Cd/S, switch scenarios, load shapes —
+  and watch every one of the contract's fields respond, so the REAL page's
+  display subset gets DISCOVERED by use rather than guessed from a field list.
+
+  This page is:  a dev instrument. Never linked publicly. Kept forever as the
+                 manual test rig ("why is this status RED?").
+  This page is NOT:  the DYNAMIC product page, the visualiser, or a design
+                 project. No pixel art, no brand language, no tooltips —
+                 deliberately ugly so nobody mistakes it for the product.
+
+  Run:  node CalcV2/serve.mjs   ->   http://localhost:5178/web/dynamic-bench.html
+  The engine is imported as-is; this file contains ZERO physics.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DYNAMIC bench — engine control panel</title>
+<style>
+  /* Functional-only styling: columns, monospace numbers, status colours. */
+  body { font-family: system-ui, sans-serif; margin: 16px; max-width: 1200px; }
+  h1 { font-size: 18px; } h1 small { font-weight: normal; color: #666; }
+  fieldset { margin: 0 0 12px; }
+  legend { font-weight: bold; }
+  .cols { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+  .col { flex: 1 1 260px; min-width: 260px; }
+  label { display: block; margin: 6px 0 2px; }
+  input[type=range] { width: 100%; }
+  .val { font-family: monospace; }
+  dl { margin: 4px 0; }
+  dt { float: left; clear: left; width: 11em; color: #444; }
+  dd { margin: 0 0 2px 11.5em; font-family: monospace; }
+  .GREEN { color: green; font-weight: bold; }
+  .ORANGE { color: darkorange; font-weight: bold; }
+  .RED, .err { color: red; font-weight: bold; }
+  .OK { color: green; font-weight: bold; }
+  button { margin-right: 6px; }
+  button.active { outline: 2px solid #333; }
+  pre { background: #f4f4f4; padding: 8px; overflow: auto; max-height: 340px; font-size: 11px; }
+  .warn { color: #a50; font-family: monospace; }
+</style>
+</head>
+<body>
+<h1>DYNAMIC bench <small>— raw engine control panel, not the product. Every number is live from the headless engine.</small></h1>
+
+<fieldset>
+  <legend>INPUTS</legend>
+  <div class="cols">
+    <div class="col">
+      <label>Shape <select id="shape"></select></label>
+      <label>Flight axis
+        <select id="axis"><option>X</option><option>Y</option><option selected>Z</option></select>
+      </label>
+      <label>Length along flight axis: <span class="val" id="lengthV"></span> m
+        <input type="range" id="length" min="50" max="600" step="10" value="300"></label>
+    </div>
+    <div class="col">
+      <label>Airspeed: <span class="val" id="speedV"></span> km/h
+        <input type="range" id="speed" min="50" max="140" step="1" value="100"></label>
+      <label>Cd (frontal basis): <span class="val" id="cdV"></span>
+        <input type="range" id="cd" min="0.005" max="0.50" step="0.001" value="0.04"></label>
+      <label>S — integrated power saving: <span class="val" id="sV"></span>
+        <input type="range" id="s" min="0" max="0.75" step="0.01" value="0.30"></label>
+      <label><input type="checkbox" id="tail" checked> Smart Tail
+        <small>(OFF → body-only Cd 0.26; affects Cd only — spec §7.1)</small></label>
+      <label><input type="checkbox" id="bli" checked> BLI
+        <small>(OFF → S = 0; affects S only)</small></label>
+    </div>
+    <div class="col">
+      <p>Scenario chips (set Cd + S + provenance metadata; moving a slider afterwards = CUSTOM):</p>
+      <button id="chipC">CONSERVATIVE 0.18 / 0</button>
+      <button id="chipR">REFERENCE 0.10 / 0.10</button>
+      <button id="chipV" class="active">VISION 0.04 / 0.30</button>
+      <p>Active scenario: <span class="val" id="scenarioV">VISION</span></p>
+    </div>
+  </div>
+</fieldset>
+
+<div class="cols">
+  <fieldset class="col"><legend>GEOMETRY</legend><dl id="geo"></dl></fieldset>
+  <fieldset class="col"><legend>FLOORS</legend><dl id="floors"></dl></fieldset>
+  <fieldset class="col"><legend>POWER</legend><dl id="power"></dl></fieldset>
+  <fieldset class="col"><legend>FUEL / PAYLOAD</legend><dl id="fuel"></dl></fieldset>
+  <fieldset class="col"><legend>STATUSES</legend><dl id="status"></dl></fieldset>
+</div>
+
+<fieldset><legend>WARNINGS</legend><div id="warnings" class="warn">—</div></fieldset>
+<fieldset><legend>EVERYTHING — the raw 29-field contract</legend><pre id="dump"></pre></fieldset>
+
+<script type="module">
+import { measureDynamicsGeometry } from '../src/dynamicsGeometry.js';
+import { computeDynamics } from '../src/dynamicsCore.js';
+import { parseObjMesh } from '../src/obj.js';
+
+const $ = (id) => document.getElementById(id);
+const state = {
+  mesh: null,          // { verts, faces } of the loaded shape
+  scenario: 'VISION',
+  cdSource: 'authored', sSource: 'authored',
+  cdLabel: 'REFERENCE ASSUMPTION', sLabel: 'REFERENCE ASSUMPTION',
+};
+
+/* Scenario chips supply BOTH origin metadata and labels explicitly
+   (spec s14 r5 note: a chip must never self-identify as 'user'). */
+/* Body-only Cd: Sunship REFERENCE ASSUMPTION (spec §6; raised 0.22 -> 0.26,
+   Toby 2026-08-13 — "probably a better estimate", and it puts the bare ship
+   plainly RED on the aero screen). The Smart Tail toggle switches to it —
+   the toggle affects Cd ONLY, never S; the BLI toggle forces S = 0 when
+   off, never touching Cd (spec §7.1). On other shapes 0.26 is honestly
+   wrong; the real page's estimator handles that at M6.
+
+   Toggle display rule (Toby, 2026-08-13): when a system goes OFF, its
+   slider SNAPS to the forced value and greys — the user sees it get worse
+   AND get locked. The pre-toggle value is remembered and restored on
+   re-enable. */
+const BODY_ONLY_CD = 0.26;
+
+const CHIPS = {
+  chipC: { scenario: 'CONSERVATIVE', cd: 0.18, s: 0, tail: true, bli: false },
+  chipR: { scenario: 'REFERENCE', cd: 0.10, s: 0.10, tail: true, bli: true },
+  chipV: { scenario: 'VISION', cd: 0.04, s: 0.30, tail: true, bli: true },
+};
+for (const [id, c] of Object.entries(CHIPS)) {
+  $(id).onclick = () => {
+    $('cd').value = c.cd; $('s').value = c.s;
+    $('tail').checked = c.tail; $('bli').checked = c.bli;
+    state.savedCd = state.savedS = null; // chips define fresh state — no stale restores
+    state.scenario = c.scenario;
+    state.cdSource = 'authored'; state.sSource = 'authored';
+    for (const b of Object.keys(CHIPS)) $(b).classList.toggle('active', b === id);
+    recompute();
+  };
+}
+/* Toggle OFF: slider snaps to the forced value and greys (worse AND locked);
+   toggle ON: the remembered pre-toggle value comes back. */
+$('tail').onchange = () => {
+  if (!$('tail').checked) { state.savedCd = $('cd').value; $('cd').value = BODY_ONLY_CD; }
+  else if (state.savedCd != null) { $('cd').value = state.savedCd; state.savedCd = null; }
+  recompute();
+};
+$('bli').onchange = () => {
+  if (!$('bli').checked) { state.savedS = $('s').value; $('s').value = 0; }
+  else if (state.savedS != null) { $('s').value = state.savedS; state.savedS = null; }
+  recompute();
+};
+for (const id of ['cd', 's']) {
+  $(id).oninput = () => {
+    state.scenario = 'CUSTOM';
+    state[id === 'cd' ? 'cdSource' : 'sSource'] = 'user';
+    for (const b of Object.keys(CHIPS)) $(b).classList.remove('active');
+    recompute();
+  };
+}
+for (const id of ['speed', 'length']) $(id).oninput = recompute;
+$('axis').onchange = recompute;
+
+/* Shape list from the corpus via the existing serve.mjs endpoints. */
+async function initShapes() {
+  let names = [];
+  try { names = await (await fetch('/objs-list')).json(); } catch { /* no corpus */ }
+  const sel = $('shape');
+  for (const n of names) sel.append(new Option(n, n));
+  if (!names.length) sel.append(new Option('(no corpus found)', ''));
+  sel.value = names.includes('Sunship.obj') ? 'Sunship.obj' : (names[0] ?? '');
+  sel.onchange = loadShape;
+  await loadShape();
+}
+async function loadShape() {
+  const name = $('shape').value;
+  if (!name) return;
+  const text = await (await fetch(`/objs/${encodeURIComponent(name)}`)).text();
+  state.mesh = parseObjMesh(text);
+  recompute();
+}
+
+const f = {
+  t: (x) => `${x.toFixed(1)} t`,
+  mw: (x) => `${x.toFixed(2)} MW`,
+  cd: (x) => x.toFixed(4),
+  m2: (x) => `${Math.round(x).toLocaleString()} m²`,
+};
+const dl = (el, rows) => {
+  el.innerHTML = rows.map(([k, v, cls]) =>
+    `<dt>${k}</dt><dd${cls ? ` class="${cls}"` : ''}>${v}</dd>`).join('');
+};
+
+function recompute() {
+  // Toggle semantics (spec §7.1): tail OFF snaps Cd to body-only; BLI OFF
+  // snaps S to zero. Each affects ONLY its own term. Sliders grey out while
+  // overridden so the value in force is never ambiguous.
+  const tailOn = $('tail').checked, bliOn = $('bli').checked;
+  const cdUsed = tailOn ? Number($('cd').value) : BODY_ONLY_CD;
+  const sUsed = bliOn ? Number($('s').value) : 0;
+  $('cd').disabled = !tailOn;
+  $('s').disabled = !bliOn;
+
+  $('lengthV').textContent = $('length').value;
+  $('speedV').textContent = $('speed').value;
+  $('cdV').textContent = cdUsed.toFixed(3) + (tailOn ? '' : ' (body-only)');
+  $('sV').textContent = `${Math.round(sUsed * 100)}%` + (bliOn ? '' : ' (BLI off)');
+  $('scenarioV').textContent = state.scenario;
+  if (!state.mesh) return;
+
+  const configurationId = `bench/${$('shape').value}/`
+    + (tailOn ? (bliOn ? 'smartTailBLI' : 'smartTail') : (bliOn ? 'bodyOnly+BLI' : 'bodyOnly'));
+
+  try {
+    const geo = measureDynamicsGeometry(state.mesh.verts, state.mesh.faces, {
+      flightAxis: $('axis').value,
+      lengthM: Number($('length').value),
+    });
+    const r = computeDynamics(geo, {
+      airspeedKmh: Number($('speed').value),
+      cd: cdUsed,
+      s: sUsed,
+      scenario: state.scenario,
+      configurationId,
+      cdSource: tailOn ? state.cdSource : 'authored',
+      sSource: state.sSource,
+      cdLabel: state.cdLabel, sLabel: state.sLabel,
+    });
+    // Declared limitation on display (spec §3.2): BLI credit on an
+    // unconditioned wake is modelled generously in Release 1.
+    if (bliOn && !tailOn && sUsed > 0) {
+      r.warnings.push('bench note: BLI-on with Smart-Tail-off is modelled generously — S assumes a tail-conditioned wake (spec §3.2 declared limitation)');
+    }
+
+    dl($('geo'), [
+      ['frontal area (2D silhouette)', f.m2(r.frontalAreaM2)],
+      ['wetted area (all 3D skin)', f.m2(geo.wettedArea)],
+      ['convex-hull area (integrity ref)', f.m2(geo.hullArea)],
+      ['skin ÷ silhouette', `${geo.wettedOverFrontal.toFixed(2)} (× Cf = friction floor)`],
+      ['wetted source', geo.wettedSource],
+      ['extents (m)', geo.extents.map((e) => Math.round(e)).join(' × ')],
+    ]);
+    dl($('floors'), [
+      ['friction Cd (floor)', f.cd(r.frictionCd)],
+      ['product floor', f.cd(r.productFloor)],
+      ['product Cd·(1−S)', f.cd(r.selectedCd * (1 - r.selectedS))],
+      ['S evidence zone', r.sEvidenceZone],
+    ]);
+    dl($('power'), [
+      ['drag', `${(r.dragN / 1000).toFixed(0)} kN`],
+      ['power, no credit', f.mw(r.powerNoCreditMW)],
+      ['power, with systems', f.mw(r.powerMW)],
+      ['systems delta', `−${Math.round((1 - r.powerMW / r.powerNoCreditMW) * 100)}%`],
+      ['energy / 1000 km', `${r.energyPer1000kmMWh.toFixed(1)} MWh`],
+    ]);
+    dl($('fuel'), [
+      ['LH2 / 1000 km', f.t(r.fuelPer1000kmT)],
+      ['LH2, 10,000 km trip', f.t(r.refTripFuelT)],
+      ['fuel system (×5)', f.t(r.refTripFuelSystemT)],
+      ['payload left', f.t(r.payloadT)],
+      ['trip duration', `${r.refTripDays.toFixed(1)} days`],
+    ]);
+    dl($('status'), [
+      ['aerodynamic', r.aerodynamicStatus, r.aerodynamicStatus],
+      ['floor', r.floorStatus, r.floorStatus],
+      ['fuel mass', r.fuelMassStatus, r.fuelMassStatus],
+      ['provenance', r.provenance.summary],
+    ]);
+    $('warnings').textContent = r.warnings.length ? r.warnings.join('\n') : '— none —';
+    $('dump').textContent = JSON.stringify(r, null, 2);
+  } catch (e) {
+    $('warnings').innerHTML = `<span class="err">ENGINE REJECTED INPUT: ${e.message}</span>`;
+    $('dump').textContent = '';
+  }
+}
+
+initShapes();
+</script>
+</body>
+</html>
