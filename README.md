@@ -7,8 +7,31 @@ An airship design calculator. You pick (or upload) a hull shape, size it, fly it
 build a fleet from it, and find out whether the economics work — with the tool
 arguing honestly at every step about what it does and doesn't know.
 
-Its stance is *"beat us with your own shape"*: drop in your own `.obj` and it will
-measure and price it with exactly the same machinery it uses on the Sunship.
+This calculator is essentially an interactive, complex spreadsheet — designed to
+test and demonstrate all the key assumptions of the EAS project. In particular:
+to show that the Sunship configuration (a Gömböc-based envelope, lifted with hot
+air, and Smart Tail + BLI aerodynamic systems) can scale to perform massive total
+work at a fleet level, and be extremely profitable doing so. In this way it
+serves to demonstrate the feasibility of the whole project by shrinking
+uncertainty around key assumptions, and to bring the EAS project to life by
+letting users visualize the impact of the project at this early stage.
+
+All shapes in the universe are uploadable. Anything can be an airship if it's
+big enough… but only a very small subset of shapes passes the very first test:
+VS/VE on page 1. The calculator is a way for users to learn and interact with
+the maths/design framework underpinning the EAS project, without feeling like
+they are doing maths. Read
+[#5 of the hex knowledge base](https://www.electricairshipping.com/knowledgebase)
+for more info.
+
+This project was built from a core logic flow, written by TobyB in 2024, and
+with help from Fraz the Wizard. V2 is an expanded version, with much help from
+Claude Code in implementing ideas — which were human in origin. Every number is
+transparent, and key assumptions are changeable if you disagree with our
+estimates.
+
+Go your hardest. Any Qs reach out to
+[contact@electricairshipping.com](mailto:contact@electricairshipping.com).
 
 This repo is the calculator's home from **v2.0** onward. The v1 line (through
 v1.8) lives in [EAS-Fleet-Calculator](https://github.com/BlimpDaddy/EAS-Fleet-Calculator),
