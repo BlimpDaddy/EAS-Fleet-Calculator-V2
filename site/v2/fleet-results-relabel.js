@@ -61,7 +61,7 @@ if (box) {
     .section-fleet .fleet-results .fleet-results-data,
     .section-fleet .fleet-results .fleet-results-required-data { text-align: right; }
     .section-fleet .fleet-results-required-header { color: #888; }
-    .section-fleet .fleet-results-required-data { color: #c628a4; font-weight: 700; }
+    .section-fleet .fleet-results-required-data { color: #c428a3; font-weight: 700; }
     .section-fleet .fleet-results .v2-sub {
       display: block; font-size: 12px; color: #888; line-height: 1.15;
     }

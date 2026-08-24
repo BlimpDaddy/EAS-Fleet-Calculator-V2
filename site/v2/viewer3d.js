@@ -33,7 +33,7 @@ import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 
 const ORANGE = 0xff9900;  // V1's accent-2: the true uploaded shape
-const MAGENTA = 0xc628a5; // V1's accent-1: the measured convex hull
+const MAGENTA = 0xc428a3; // V1's accent-1: the measured convex hull
 
 export class ReplicaViewer {
   constructor(canvas) {

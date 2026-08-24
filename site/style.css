@@ -19,7 +19,7 @@
     --color-primary: #eee;
     --color-secondary: #888;
     --color-border: hsl(0, 0%, 25%);
-    --color-accent-1: #C628A5;
+    --color-accent-1: #c428a3;
     --color-accent-2: #FF9900;
     --color-bg-primary: #111;
     --color-bg-secondary: hsl(0, 0%, 4%);
@@ -181,9 +181,9 @@ body {
 
 .shape-button-primary:hover {
     transform: translate3d(0.3rem, -0.3rem, 0);
-    box-shadow: -0.3rem 0.3rem #c628a47e;
+    box-shadow: -0.3rem 0.3rem #c428a37e;
     border: 3px solid var(--color-accent-1);
-    background-color: #c628a40c;
+    background-color: #c428a30c;
 }
 
 .shape-button-secondary:hover {

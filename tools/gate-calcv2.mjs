@@ -13,12 +13,9 @@
  *      ../../CalcV2/{src,vendor,web,viz}, dev-only files excluded).
  *   3. BUNDLE HASH GUARD (post) — main.js byte-identical after the bake.
  *   4. BYTE PARITY SWEEP        — every baked file byte-identical to its
- *      source; no missing files, no strays left in site/calcv2/.
- *      ⚠ KNOWN GAP (2026-08-24, carried over from CalcV1-site): the
- *      sweep still covers only src/vendor/web — viz/ and the spike
- *      closure (added V5) are baked but not yet swept. Queue item:
- *      extend BAKED_DIRS + a transformed-file rule for spike/ before
- *      the V2 release.
+ *      source (viz/ included, bench/test excluded); the transformed
+ *      spike closure swept with the bake's own transforms applied.
+ *      (The V5 sweep gap was closed 2026-08-24.)
  *   5. BAKED-VS-SOURCE FIXTURES — both DYNAMIC suites run against source
  *      AND against the baked engine via DYNAMICS_ENGINE_ROOT. Identical
  *      verdicts required.
@@ -42,8 +39,17 @@ const here = fileURLToPath(new URL('.', import.meta.url));          // tools/
 const root = fileURLToPath(new URL('../', import.meta.url));        // repo root
 const site = fileURLToPath(new URL('../site/', import.meta.url));
 const calcV2 = fileURLToPath(new URL('../engine/', import.meta.url));   // consolidated layout (2026-08-24)
-const BAKED_DIRS = ['src', 'vendor', 'web'];
-const BAKE_EXCLUDE = new Set(['dynamic-bench.html']); // keep in sync with bake-calcv2.mjs
+/* viz added 2026-08-24 (closing the V5 sweep gap) */
+const BAKED_DIRS = ['src', 'vendor', 'web', 'viz'];
+const BAKE_EXCLUDE = new Set(['dynamic-bench.html', 'bench', 'test']); // keep in sync with bake-calcv2.mjs
+/* the spike closure is TRANSFORMED at bake time — swept with the same
+ * transforms (consolidated-layout string: engine copies point at site/) */
+const SPIKE_MODULES = ['ribbon-context.mjs', 'ribbons.mjs', 'support-skin.mjs',
+  'eligibility.mjs', 'skin.mjs', 'ridge.mjs', 'features.mjs'];
+const spikeTransform = (text) => text
+  .replaceAll('../../../site/calcv2/src/', '../../src/')
+  .replaceAll('if (process.argv[1]', 'if (typeof process !== \'undefined\' && process.argv[1]');
+const excluded = (relPath) => relPath.split('/').some((seg) => BAKE_EXCLUDE.has(seg));
 const SUITES = ['test/dynamics-fixtures.mjs', 'test/dynamics-core-fixtures.mjs', 'test/estimator-fixtures.mjs'];
 
 let failures = 0;
@@ -87,7 +93,7 @@ sha256(join(site, 'main.js')) === expected
 console.log('\n[4] byte parity sweep (source vs baked)');
 let compared = 0;
 for (const dir of BAKED_DIRS) {
-  const srcFiles = listFiles(join(calcV2, dir)).filter((f) => !BAKE_EXCLUDE.has(basename(f)));
+  const srcFiles = listFiles(join(calcV2, dir)).filter((f) => !excluded(f));
   const bakedFiles = listFiles(join(site, 'calcv2', dir));
   const srcSet = new Set(srcFiles), bakedSet = new Set(bakedFiles);
   for (const f of srcFiles) {
@@ -98,10 +104,19 @@ for (const dir of BAKED_DIRS) {
   }
   for (const f of bakedFiles) {
     if (!srcSet.has(f)) fail(`stray file in bake (not in source): ${dir}/${f}`);
-    if (BAKE_EXCLUDE.has(basename(f))) fail(`EXCLUDED file leaked into bake: ${dir}/${f}`);
+    if (excluded(f)) fail(`EXCLUDED file leaked into bake: ${dir}/${f}`);
   }
 }
-if (!failures) ok(`${compared} files byte-identical, no strays, exclusions held`);
+for (const f of SPIKE_MODULES) {
+  const src = spikeTransform(readFileSync(join(calcV2, 'spike', 'sectional', f), 'utf8'));
+  const baked = readFileSync(join(site, 'calcv2', 'spike', 'sectional', f), 'utf8');
+  if (src !== baked) fail(`spike closure transform mismatch: ${f}`);
+  compared++;
+}
+for (const f of listFiles(join(site, 'calcv2', 'spike'))) {
+  if (!SPIKE_MODULES.includes(basename(f))) fail(`stray file in baked spike closure: ${f}`);
+}
+if (!failures) ok(`${compared} files byte-identical (incl. viz + transformed spike closure), no strays, exclusions held`);
 
 /* ---- 5. baked-vs-source fixtures ---- */
 console.log('\n[5] fixture suites: source engine, then baked engine');

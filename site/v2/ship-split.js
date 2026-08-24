@@ -36,7 +36,7 @@ const navDynamic = () => $('nav a[href="/dynamic"]');
 function getMode() { return shipMode; }
 function setMode(m) { shipMode = m; }
 
-/* ---- styles (V1 tokens: #111 bg, #eee text, #ff9900 orange, #c628a4 pink) ---- */
+/* ---- styles (V1 tokens: #111 bg, #eee text, #ff9900 orange, #c428a3 pink) ---- */
 const style = document.createElement('style');
 style.textContent = `
   nav a[href="/dynamic"] { display: none; } /* sub-section now — reached via SHIP */
@@ -73,7 +73,7 @@ style.textContent = `
   .section-dynamic .ship-ribbon.rib-left:hover { width: 58px; }
   [data-section="ship"] .ship-ribbon.rib-right { width: 56px; font-size: 23px; }
   [data-section="ship"] .ship-ribbon.rib-right:hover { width: 72px; }
-  .section-dynamic .dyn-key-result { color: #c628a4; font-weight: 700; }
+  .section-dynamic .dyn-key-result { color: #c428a3; font-weight: 700; }
   /* Fleet: the Work Performed readout on ONE line (Toby 2026-08-17 —
      'x Trillion Ton-km / year' wrapped to two): the 222px value input
      shrinks to fit its digits, the unit drops to 14px, nothing wraps. */
@@ -229,7 +229,7 @@ style.textContent = `
      V1's own current-page class too means even the transient between
      V1 routing and our sync can never paint white. */
   nav a[href="/ship"].ship-live,
-  nav a[href="/ship"].current-page { color: #c628a4 !important; }
+  nav a[href="/ship"].current-page { color: #c428a3 !important; }
   .ship-mode-dots {
     /* dots 12→16px, gap 8→10, dropped 19→26px (Toby 2026-08-23: "a
        user had trouble even noticing there was a second page… a touch
@@ -247,8 +247,8 @@ style.textContent = `
     transition: background .15s ease;
   }
   .ship-mode-dots i:hover { background: #888; }
-  .ship-mode-dots i.on { background: #c628a4; }
-  .ship-mode-dots i.on:hover { background: #c628a4; }
+  .ship-mode-dots i.on { background: #c428a3; }
+  .ship-mode-dots i.on:hover { background: #c428a3; }
   /* the live dot breathes — same cue language as the airspeed nudge */
   @keyframes ship-dot-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
   .ship-mode-dots i.on { animation: ship-dot-breathe 1.3s ease-in-out infinite; }

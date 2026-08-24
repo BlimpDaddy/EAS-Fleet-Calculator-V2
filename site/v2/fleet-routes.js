@@ -13,13 +13,13 @@
  * parameter copy of Frazer's renderer). Replica constants read
  * directly from the bundle's globe class (2026-08-17):
  *   sphere(1, 30×20) · material colour 0x888888 × earth.jpg ·
- *   city markers r=0.04 spheres 0xC628A5 at radius 1.02 ·
+ *   city markers r=0.04 spheres 0xc428a3 at radius 1.02 ·
  *   labels 512×64 sprites, scale .512×.064, at radius 1.2 ·
  *   arc: QuadraticBezierCurve3 (mid = normalize(a+b)×1.5), 100 pts,
- *   fat Line2 linewidth 8, 0xC628A5 ·
+ *   fat Line2 linewidth 8, 0xc428a3 ·
  *   rotation +0.0025/frame · camera FOV 50 at z=3 · orbit 2–6, no
  *   pan · transparent clear.
- * Label PNGs (Sydney/LA) are berry #C628A5 text on transparent —
+ * Label PNGs (Sydney/LA) are berry #c428a3 text on transparent —
  * generated city labels render canvas textures in the same style.
  *
  * Distance match: pairs within ±8% (floor ±400 km) of the slider's
@@ -51,7 +51,7 @@ import { ROUTE_CITIES, ROUTE_PAIRS as ROUTE_DIRECT, ROUTE_GATES, ROUTE_GATED } f
  * (distance matching, the debt steering, recent-pair memory) is unchanged. */
 const ROUTE_PAIRS = [...ROUTE_DIRECT, ...ROUTE_GATED].sort((a, b) => a[2] - b[2]);
 
-const BERRY = 0xC628A5;
+const BERRY = 0xc428a3;
 const CYCLE_MS = 2000;          // Toby 2026-08-17: 2s to savour each trip ("might even go 3")
 const SPIN_MS = 450;            // the flick — quick, like spinning a real globe
 let spin = null;                // active flick: {from, to, start, dur}
@@ -160,7 +160,7 @@ if (v1Canvas && figure) {
     const c = document.createElement('canvas');
     c.width = 512; c.height = 64;
     const ctx = c.getContext('2d');
-    ctx.fillStyle = '#C628A5';
+    ctx.fillStyle = '#c428a3';
     ctx.font = '700 58px Arial, sans-serif'; // bumped 44→58 (Toby: hard to see)
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

@@ -53,7 +53,7 @@ import {
 /* V5 step 1 (2026-08-23, local branch): the visualizer embed. ONE-WAY —
  * paint() pushes state in; nothing is ever read back (M9 / feedsNumbers:
  * false is structural: the module returns only an update sink). */
-import { mountDynamicViz } from './dynamic-viz.js?v=dev1';
+import { mountDynamicViz } from './dynamic-viz.js?v=2.0';
 
 // ---------------------------------------------------------------- shape inheritance
 // M6 stage 2: the ACTIVE shape comes from the page-1 channel
@@ -247,7 +247,7 @@ style.textContent = `
     display: flex; height: 3px; margin-top: 2px; opacity: 0.55;
   }
   .dyn-s-zones div:nth-child(1) { width: 20%;   background: var(--color-accent-2, #ff9900); }
-  .dyn-s-zones div:nth-child(2) { width: 26.7%; background: var(--color-accent-1, #c628a4); }
+  .dyn-s-zones div:nth-child(2) { width: 26.7%; background: var(--color-accent-1, #c428a3); }
   .dyn-s-zones div:nth-child(3) { width: 53.3%; background: var(--color-secondary, #888); }
   /* M6: the estimator marker + SILENT ±band on the Cd slider. The band is
      drawn, never worded (ruling 2026-08-16 — rationale in cdEstimator.js);
@@ -264,7 +264,7 @@ style.textContent = `
   }
   .dyn-cd-band .band {
     position: absolute; top: 0; height: 3px;
-    background: var(--color-accent-1, #c628a4); opacity: 0.3;
+    background: var(--color-accent-1, #c428a3); opacity: 0.3;
   }
   /* The tick is 2px wide and its LEFT used to be set to the marker's
      position, which put its centre a pixel to the right of the value it
@@ -273,14 +273,14 @@ style.textContent = `
   .dyn-cd-band .tick {
     position: absolute; top: -2px; width: 2px; height: 7px;
     transform: translateX(-50%);
-    background: var(--color-accent-1, #c628a4);
+    background: var(--color-accent-1, #c428a3);
   }
   /* Anchored beside the band's HIGH edge, not centred on the marker: the
      tick and the ±20% segment occupy the middle, and a centred label sat
      on top of both. Vertically centred on the 3px band. */
   .dyn-cd-band .est-label {
     position: absolute; top: -3px;
-    color: var(--color-accent-1, #c628a4);
+    color: var(--color-accent-1, #c428a3);
     font-size: 0.55em; letter-spacing: 0.08em; white-space: nowrap;
   }
   /* The TYPEABLE Cd readout. Styled to read as text, not as a form field —
@@ -296,7 +296,7 @@ style.textContent = `
   }
   .dyn-cd-input:focus {
     outline: none;
-    border-bottom-color: var(--color-accent-1, #c628a4);
+    border-bottom-color: var(--color-accent-1, #c428a3);
   }
   .dyn-cd-input:disabled { border-bottom-color: transparent; opacity: 1; }
   /* ESTIMATED as its own tag rather than a word inside the number — see
@@ -304,7 +304,7 @@ style.textContent = `
      as the figure. */
   .dyn-cd-est-tag {
     font-size: 0.62em; letter-spacing: 0.08em;
-    color: var(--color-accent-1, #c628a4);
+    color: var(--color-accent-1, #c428a3);
     margin-right: 0.45em; vertical-align: middle;
   }
   /* Inert toggles (M3 shell): visible state, no interaction until M4/M5. */
@@ -319,8 +319,8 @@ style.textContent = `
   .dyn-eas-chip {
     align-self: flex-start;
     font-size: 0.6em; font-weight: 700; letter-spacing: 0.12em;
-    color: var(--color-accent-1, #c628a4);
-    border: 1px solid var(--color-accent-1, #c628a4);
+    color: var(--color-accent-1, #c428a3);
+    border: 1px solid var(--color-accent-1, #c428a3);
     border-radius: 3px; padding: 1px 5px; opacity: 0.8;
   }
   @media (max-width: 900px) {

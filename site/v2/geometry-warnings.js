@@ -139,7 +139,7 @@ if (netliftOut) {
   const syncLift = () => {
     const v = Number(netliftOut.textContent.replace(/[^\d.-]/g, ''));
     setWarn(liftSpan, Number.isFinite(v) && v < 0, 'No Lift!');
-    const berry = Number.isFinite(v) && v > 500 ? '#c628a4' : '';
+    const berry = Number.isFinite(v) && v > 500 ? '#c428a3' : '';
     netliftOut.style.color = berry;
     const unit = document.querySelector('[data-ship="netlift-unit"]');
     if (unit) unit.style.color = berry; // 'tonnes' goes berry with the number (Toby)

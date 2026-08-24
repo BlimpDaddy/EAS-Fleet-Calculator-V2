@@ -225,6 +225,13 @@ css.textContent = `
      ribbon can never touch the first control at any width or state. */
   .section-dynamic { padding-left: 34px; }
   [data-section="ship"] { padding-right: 38px; }
+
+  /* SHIP mode dots (Toby, phone round 2026-08-24: "a little too low and
+     in the way — tuck them back up closer to 'Ship'"). The desktop drop
+     (50% + 26px, ruled 2026-08-23) is proportionally huge at the phone
+     type scale. Two classes so this outranks ship-split's one-class rule
+     regardless of load order. */
+  .header-nav .ship-mode-dots { top: calc(50% + 15px); }
 }
 
 /* M7 PHONE PORTRAIT (ruling 2026-08-18, enacted 2026-08-24): the
@@ -236,6 +243,36 @@ css.textContent = `
    older phone browsers this file exists for. */
 @media (max-width: 768px) and (orientation: portrait) {
   .dyn-visual-panel { height: 72vh; }
+}
+
+/* M7 LANDSCAPE PHONES (Toby, phone round 2026-08-24: rotating the phone
+   gave a "super small" instrument — the ~800px-wide landscape phone
+   misses the 768px PHONE block entirely and fell into the desktop
+   22vh minimum on a ~375px-tall screen. Ruling: "it's fine if the
+   visualizer takes up the screen on landscape and the results is a
+   slide down underneath.") Coarse pointer + short viewport targets
+   phones without catching short desktop windows. The panel mode is
+   already right (landscape → side view, L→R). */
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 520px) {
+  .section-dynamic { grid-template-rows: auto auto auto; height: auto; align-self: start; }
+  .section-dynamic .dyn-panel { min-height: auto; }
+  .dyn-visual-panel { height: 78vh; min-height: 240px; }
+
+  /* Results: the desktop one-line strip overlaps itself at landscape-
+     phone width (Toby, phone round 2026-08-24, screenshot) — same grid
+     treatment as portrait, four across for the wider screen. */
+  .section-dynamic .dyn-results-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem 1rem; align-items: start; padding: 0;
+  }
+  .section-dynamic .dyn-results-row .dyn-stat { min-width: 0; }
+  .section-dynamic .fleet-results-data { font-size: 22px; }
+
+  /* Ribbons: 13 chevrons at 20px need ~260px but a landscape phone's
+     ribbon is ~240px tall — flex squashed them unevenly ("the arrows
+     shrink and resize themselves a little weirdly", same round).
+     Smaller glyphs that genuinely fit, never squashed. */
+  .ship-ribbon .chev, .ship-ribbon .chev-soft { font-size: 13px; flex-shrink: 0; }
 }
 
 /* 5. Tap bubble for our own title-carrying warnings. */
@@ -263,13 +300,14 @@ if (window.matchMedia(PHONE).matches) {
     // height moves with the wrapped nav and the phone type scale.
     if (chooser) {
       const header = document.querySelector('header.header');
-      let top = header ? Math.round(header.getBoundingClientRect().bottom) : 0;
-      // SHIP's two mode dots are its underline and hang BELOW the
-      // header box (top: 50% + 19px) — parking the overlay at
-      // header.bottom covered their lower half (Toby, phone round 7:
-      // dots 83–95px vs overlay top 89px, measured). Park below them.
-      const dots = document.querySelector('.ship-mode-dots');
-      if (dots) top = Math.max(top, Math.round(dots.getBoundingClientRect().bottom) + 4);
+      const top = header ? Math.round(header.getBoundingClientRect().bottom) : 0;
+      // Park at the header's bottom edge, no dot allowance. History:
+      // phone round 7 parked BELOW the dots because the overlay covered
+      // their lower half — but since the 2026-08-24 z-index ruling the
+      // dots (z 60) paint ABOVE the chooser (z 40), and the old gap let
+      // the section's title bleed through above the overlay (Toby,
+      // phone round 2026-08-24: "could see the 'previous properties' of
+      // the Statics page a little bit").
       chooser.style.top = `${Math.max(0, top)}px`;
     }
   };

@@ -135,5 +135,51 @@ gate('G8 payloadId verifies', verifyPayloadId(sun.payload));
   gate('G9 grid contract lengths + tangent domain', okLen && d.i0 > 0 && d.i1 < N_STATIONS - 1 && d.i0 < d.i1);
 }
 
+/* G10 — ORIENTATION BINDING (the plan's V5 assertion, added 2026-08-24:
+   round-2 F3 / round-3 F8 — "orientationAxis exact; A compared within
+   its schema quantization tolerance"). Asserted against the baked
+   24-group variants the product actually swaps to on a snap:
+   - the manifest is complete (24 rotations per body) and the identity
+     rotation maps to the base payload;
+   - every variant carries the body's DECLARED orientationAxis EXACTLY
+     and the payload-frame flight axis '+X' (rotation lives in the
+     geometry, never in a relabelled frame);
+   - frontalAreaM2 tracks rotation honestly: the cube's 24 variants are
+     ONE exact value; the sphere's spread stays within one area quantum;
+     the washing machine's box shows exactly its three face pairs,
+     8 rotations each. */
+{
+  const { readFileSync } = await import('node:fs');
+  const fix = (f) => JSON.parse(readFileSync(join(here, '..', 'fixtures', f), 'utf8'));
+  const manifest = fix('orientations.json');
+  const IDENT = '1,0,0,0,1,0,0,0,1';
+  const AXES = new Set(['+X', '-X', '+Y', '-Y', '+Z', '-Z']);
+  let ok = true, detail = '';
+  for (const [body, rots] of Object.entries(manifest)) {
+    const keys = Object.keys(rots);
+    if (keys.length !== 24) { ok = false; detail = `${body}: ${keys.length} rotations`; break; }
+    if (rots[IDENT] !== `${body}.render.json`) { ok = false; detail = `${body}: identity not the base payload`; break; }
+    const base = fix(rots[IDENT]);
+    const areas = new Map();
+    for (const f of new Set(Object.values(rots))) {
+      const p = fix(f);
+      if (p.frame.orientationAxis !== base.frame.orientationAxis || !AXES.has(p.frame.orientationAxis)
+        || p.frame.flight !== '+X') { ok = false; detail = `${body}/${f}: frame drift`; break; }
+      areas.set(p.frame.frontalAreaM2, (areas.get(p.frame.frontalAreaM2) ?? 0) + 1);
+    }
+    if (!ok) break;
+    if (body === 'cube' && !(areas.size === 1 && areas.has(90000))) { ok = false; detail = 'cube A not exact'; }
+    if (body === 'sphere') {
+      const a = [...areas.keys()];
+      if (Math.max(...a) - Math.min(...a) > Math.pow(10, -Q.AREA_M2) + 1e-9) { ok = false; detail = 'sphere A spread beyond quantum'; }
+    }
+    if (body === 'washingmachine' && !(areas.size === 3 && [...areas.values()].every((n) => n === 8))) {
+      ok = false; detail = 'washingmachine A not 3 face pairs x 8';
+    }
+    if (!ok) break;
+  }
+  gate('G10 orientation binding: axis exact, A tracks rotation within quantum', ok, detail);
+}
+
 console.log(failures ? `\n${failures} FIXTURE(S) FAILED` : '\nALL V0 FIXTURES PASS');
 process.exit(failures ? 1 : 0);
