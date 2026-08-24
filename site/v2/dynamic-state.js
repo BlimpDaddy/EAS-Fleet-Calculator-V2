@@ -1,0 +1,589 @@
+﻿/**
+ * DYNAMIC page state — pure, Node-tested, DOM-free (M3, DYNAMIC-SPEC §14;
+ * M6 estimator amendments 2026-08-16; M6 STAGE 2: per-shape inheritance).
+ *
+ * THE RULE (spec §14 r4, binding): the engine is the ONLY calculator. This
+ * module holds state transitions, the parked gate, and DISPLAY SELECTION +
+ * formatting of engine contract values. No formulas — nothing here may
+ * derive a physical quantity. The (−x%) tag is the S *setting* echoed from
+ * the contract, not a computed power ratio (M3 display amendment 1,
+ * 2026-08-15).
+ *
+ * The engine (computeDynamics) is INJECTED, never imported: the page passes
+ * /calcv2/src/dynamicsCore.js, fixtures pass a counting wrapper — which is
+ * how "parked load calls the engine ZERO times" (r6 pin) is provable. The
+ * M6 estimator seam is injected the same way, for the same reason, and at
+ * stage 2 carries THREE members: { estimateCd, applyGenericTail,
+ * proxyRecord } — both functions are ENGINE code (cdEstimator.js).
+ *
+ * STAGE 2 SHAPE MODEL (rulings 2026-08-16):
+ * - state.shape = { kind: 'preset'|'upload', id, name }. SUNSHIP IDENTITY
+ *   is kind === 'preset' && id === 'sunship' — NEVER a filename (an
+ *   upload named Sunship.obj is a generic shape, Toby's ruling).
+ * - Shape change RESETS Cd to the new geometry's estimate (r8 #4): a
+ *   hand-set Cd is a claim about one body and never travels. Speed, S
+ *   and the toggles are system/flight settings — they persist.
+ * - The Sunship preset with tail ON carries the AUTHORED 0.043 (the EAS
+ *   claim). Every other configuration tracks the estimator: tail ON on a
+ *   generic shape = the §5.4 generic-tail estimate (engine-derived);
+ *   tail OFF anywhere = the bare-hull estimate. Tracking values firm to
+ *   'user' the moment the slider is dragged.
+ * - EAS IDEAL is Sunship-only (M6 amendment #6): applyIdeal() throws on
+ *   any other shape; the page greys the button.
+ *
+ * PARKED STATE (M3 display amendment 2, 2026-08-15): the page loads at
+ * speed 0 — dashes, engine not consulted, estimator dormant. Selections
+ * changed while parked persist into the first movement — never reset.
+ */
+
+/* Canonical Sunship geometry record (M1, pinned 2026-08-13). STAGE-2
+ * NOTE: the live page now builds per-shape geometry from the baked
+ * presetDynamics.js records via scaleGeometryRecord() — this pinned
+ * record remains as the fixtures' canonical baseline and the
+ * no-shape-channel fallback; the records reproduce it to <0.01%
+ * (fixture [J] in the engine suite). */
+export const SUNSHIP_GEOMETRY = Object.freeze({
+  flightAxis: 'Z', scale: 1, lengthM: 300, units: 'm',
+  extents: Object.freeze([249, 237, 300]),
+  frontalArea: 40522, wettedArea: 206795, hullArea: 206503, meshArea: 206795,
+  wettedOverFrontal: 206795 / 40522, wettedSource: 'mesh',
+  // Comparison-metrics amendment 2026-08-16 + owner ruling same day
+  // (r17 Part B (h): "an airship envelope is a compact convex hull in
+  // the framework"): CONVEX-ENVELOPE volume at 300 m (presetDynamics
+  // raw × s³ = 8,085,778.5 — pinned at the areas' integer grade;
+  // ~1.2% above the mesh volume, as a slightly concave body must be).
+  // Near-sphere note: V^⅔ ≈ frontal, so the Sunship's Cd_v ≈ its
+  // frontal Cd.
+  volume: 8085778, volumeSource: 'convex-envelope',
+  warnings: Object.freeze([]),
+});
+
+/* Canonical Sunship SECTIONAL proxy record (M6, pinned 2026-08-16) —
+ * same stage-2 status as the geometry record above (presetDynamics
+ * carries the identical proxy, bit-exact, fixture-guarded). */
+export const SUNSHIP_SECTIONAL = Object.freeze({
+  proxy: 0.7697920595614333,
+  // Graduation 2026-08-16 (r19 sealed): the mechanism class + trigger
+  // values, measured from the corpus mesh and pinned like the proxy.
+  // The Sunship is AFT-dominated by an order of magnitude and smooth
+  // at every trigger — the rounded (drag-crisis) line applies.
+  cls: 'rounded',
+  triggers: Object.freeze({
+    softFore: 0.004553551463451261, softAft: 0.7697920595614333,
+    terminalBaseFrac: 0.004453538757823785, rawRatio: 1, shoulder: 0.10151579449816793,
+  }),
+  axis: '+Z',
+  quality: Object.freeze({ oddColumns: 0, hitColumns: 16616, solidColumns: 16616, oddFraction: 0 }),
+});
+
+/* EAS IDEAL — the one pink button (Display Rulings v1.0, 2026-08-13).
+ * 120 km/h, Smart Tail deployed, S 12%. SUNSHIP-GATED by PRESET IDENTITY
+ * (M6 amendment #6, r8 #3 + Toby ruling 2026-08-16) — greyed elsewhere,
+ * never leaks. Cd is no longer part of the posture: see below. */
+/* Cd tracking sentinel (M6): "Cd follows the estimator for the current
+ * configuration" — the bare hull with the tail OFF, and with it ON either
+ * the DEPLOYED FAIRING's own geometry (Sunship, 2026-08-18) or the §5.4
+ * generic-tail estimate (other shapes). Resolves at compute time; FIRMS
+ * to a number the moment the user drags. Declared above EAS_IDEAL because
+ * the ideal posture now references it. */
+export const CD_TRACKS_ESTIMATE = 'estimate';
+
+export const EAS_IDEAL = Object.freeze({
+  /* 100 -> 120 km/h (Toby, 2026-08-18). The cruise speed was held at 100
+   * because drag scales with v^2 and the authored Cd 0.043 made 120 km/h
+   * cost ~44% more power than the fuel budget wanted to carry. Measuring
+   * the deployed fairing at ~0.0217 halved the coefficient, which buys
+   * back far more than the speed increase spends — so the number Toby
+   * always wanted is affordable now and goes back in. This is a knob on
+   * the ideal POSTURE only; the slider still runs 0-140 and the physics
+   * behind it did not move.
+   *
+   * 120 -> 116 km/h (Toby, 2026-08-19) — "to get the numbers lined up".
+   * The headroom that justified 120 was spent by two corrections that made
+   * the ship honester rather than better: the true-section geometry (r20,
+   * +2.8% Cd) and the skin-roughness allowance (B1, +3.54% Cd). At 120 the
+   * ideal cell had drifted to 16.73 MW against the old 100 km/h production
+   * cell's 15.158 MW — +10.4%, where the posture was originally justified
+   * at ~3%. Power goes as v^3, so 116 km/h gives back (116/120)^3 = 0.903
+   * and lands the cell essentially back on the old figure. This RE-RULES
+   * the posture on the corrected Cd; the earlier 120 ruling was made on a
+   * Cd that has since moved twice. */
+  airspeedKmh: 116,
+  /* AUTHORED Cd RETIRED 2026-08-18 (Toby: "that was just a guess... happy
+   * to remove it"). 0.043 was hand-entered, and the estimator was
+   * deliberately bypassed for the one configuration the whole project
+   * rests on — the last aerodynamic constant in the Sunship's chain that
+   * nothing measured. It is now DERIVED: with the Smart Tail deployed the
+   * ship IS a different body, the estimator measures that body, and it
+   * returns ~0.0217 at a 300 m envelope and 100 km/h. The retired guess
+   * turned out to be CONSERVATIVE, not optimistic — the measured fairing
+   * roughly halves it.
+   * S stays authored: BLI is a separate system (ducted thrust, inlets),
+   * outside geometry entirely, and nothing here validates it. */
+  cd: CD_TRACKS_ESTIMATE,
+  /* S 27% -> 12% (Toby, 2026-08-18, same sitting as the speed rise).
+   *
+   * It reads as a retreat and is the opposite. The zone bar under the S
+   * slider has always said what the evidence is: 0-15% sits WITHIN
+   * PUBLISHED BLI RESULTS, 15-35% only within EAS's own recovery-credit
+   * bound, beyond 35% is design exploration. The ideal posture used to
+   * claim 27% — defensible, but resting on our bound rather than on
+   * anyone's measurements. 12% moves the flagship configuration inside
+   * the published band, so the single most-quoted cell on the site stops
+   * depending on the one number a skeptic could most easily refuse.
+   *
+   * It is affordable for the same reason the speed rise was: the measured
+   * fairing freed up far more than either change spends. At 120 km/h with
+   * S 12% the ship needs 15.57 MW propulsive — against 15.16 MW for the
+   * OLD production cell at 100 km/h on the authored Cd 0.043 and S 27%.
+   * Essentially the same power, 20% faster, on 374 t of fuel system
+   * instead of 437 t, with the credit now inside published results.
+   *
+   * Still AUTHORED, and still the weakest link in the chain: nothing in
+   * this repo validates S. Lowering it shrinks the exposure; it does not
+   * remove it. */
+  s: 0.12,
+  scenario: 'VISION',
+  cdSource: 'estimated', sSource: 'authored',
+  cdLabel: 'ESTIMATED — deployed Smart Tail geometry (derived 2026-08-18)',
+  sLabel: 'EAS IDEAL — S 12%, within published BLI results (ruled 2026-08-18)',
+});
+
+export const SUNSHIP_SHAPE = Object.freeze({ kind: 'preset', id: 'sunship', name: 'SUNSHIP' });
+
+export const isSunship = (shape) => !!shape && shape.kind === 'preset' && shape.id === 'sunship';
+
+const ESTIMATED_BARE_LABEL = 'ESTIMATED — bare hull, sectional estimator (M6, 2026-08-16)';
+const ESTIMATED_GENERIC_TAIL_LABEL = 'ESTIMATED — generic Smart Tail, 20% of pressure removed (REFERENCE ASSUMPTION §5.4)';
+/* The Sunship's tail is not a generic 20%-of-pressure assumption — it is
+ * an authored geometry the estimator measures directly (2026-08-18). */
+const ESTIMATED_SUNSHIP_TAIL_LABEL = 'ESTIMATED — deployed Smart Tail geometry, sectional estimator (2026-08-18)';
+
+/* LAST-RESORT Cd, and nothing more (2026-08-18). §5.5 says the page may
+ * never wedge on the estimator's absence, so a caller wiring no estimator
+ * AND holding no stashed selection still needs a number for the engine.
+ * That role used to be played by the authored EAS_IDEAL.cd; with the
+ * authored value retired the constant survives ONLY here, labelled a
+ * fallback rather than a claim. It is not the Sunship's Cd — the
+ * Sunship's Cd is whatever its declared geometry scores. */
+const CD_FALLBACK_NO_ESTIMATOR = 0.043;
+const CD_FALLBACK_LABEL = 'FALLBACK — no estimator wired (§5.5 non-wedging default, not a claim)';
+
+/* THE DEPLOYED-TAIL BODY, injected — same doctrine as the engine and the
+ * estimator: this module imports no measurement code, it is handed a
+ * seam. Null means "no tailed geometry available" and the Sunship simply
+ * behaves as its bare hull, which is the §5.5 never-wedge rule applied to
+ * geometry. The seam supplies BOTH bodies' figures, because the engine
+ * now needs aero and lift quantities separately:
+ *   geometry(envelopeLengthM) -> a record whose lengthM/wettedArea are the
+ *     DEPLOYED body and whose liftLengthM/liftVolumeM3 are the ENVELOPE
+ *   proxyRecord()             -> the deployed body's sectional proxy */
+let TAILED_BODY = null;
+export function setTailedBody(seam) { TAILED_BODY = seam; }
+
+/* Slider ranges (spec §2; parked amendment extends speed to 0). */
+export const SPEED_MIN = 0, SPEED_MAX = 140;
+export const S_MAX = 0.75;
+
+/* Cd dial fallbacks before any contract/estimate exists (parked load).
+ * TOP floor raised 0.40 → 0.55 (Toby's sphere catch, 2026-08-17): the
+ * graduated estimator honestly reads a big sphere at ~0.19 (high-Re
+ * crisis value), but every textbook reader knows subcritical 0.47 —
+ * the dial must ALWAYS let a skeptic set the familiar value by hand.
+ * Estimator proposes, slider disposes — and the slider must reach the
+ * numbers people arrive with. */
+const CD_DIAL_BOTTOM_PARKED = 0.009;
+const CD_DIAL_TOP_DEFAULT = 0.55;
+
+/** The tracking-vs-authored Cd posture for a fresh configuration of a
+ *  shape (the ONE derivation of "what does Cd reset to" — used by
+ *  initialState, setShape and the tail-ON restore fallback). */
+function freshCd(shape, tailOn) {
+  if (tailOn && isSunship(shape)) {
+    return { cd: EAS_IDEAL.cd, cdSource: EAS_IDEAL.cdSource, cdLabel: EAS_IDEAL.cdLabel };
+  }
+  return {
+    cd: CD_TRACKS_ESTIMATE,
+    cdSource: 'estimated',
+    cdLabel: tailOn ? ESTIMATED_GENERIC_TAIL_LABEL : ESTIMATED_BARE_LABEL,
+  };
+}
+
+/** A shape's PUBLIC arrival posture (the one derivation, used by
+ *  initialState and setShape). TOGGLE GATING (Toby ruling 2026-08-16,
+ *  completing the greyed-Ideal ruling): the EAS systems are Sunship
+ *  tech — on any other shape both toggles arrive OFF and the page
+ *  LOCKS them (pure state stays operable; the lock is interaction
+ *  gating, released by the page's E+A+S engineer chord). The Sunship
+ *  arrives both-ON in ideal posture — the reveal is REMOVAL. */
+function arrivalPosture(shape) {
+  const sun = isSunship(shape);
+  const tailOn = sun, bliOn = sun;
+  const cd = freshCd(shape, tailOn);
+  return { tailOn, bliOn, cd, scenario: sun ? EAS_IDEAL.scenario : 'CUSTOM' };
+}
+
+/** The page's LOAD state: zero of its own variable, and — since Toby's
+ *  ruling of 2026-08-18 — zero of the Sunship's technology too.
+ *
+ *  THE BOOT POSTURE IS BARE (both toggles OFF), which is a deliberate
+ *  reversal of the load half of the 2026-08-16 "reveal is REMOVAL"
+ *  ruling. Removal taught the lesson backwards: arriving at the finished
+ *  ship and switching pieces off asks a visitor to imagine the ship
+ *  getting worse, and nobody volunteers for that. Arriving BARE — an
+ *  honest 300 m envelope, drag-limited, its warnings lit — and then
+ *  pressing the pink button (or ticking a box) makes the same physics
+ *  land as a reveal instead of a concession. That is the whole point of
+ *  the page: aerostatics and aerodynamics are DECOUPLED, and the Smart
+ *  Tail is what couples them.
+ *
+ *  SCOPE: this is the LOAD posture only. arrivalPosture() still governs
+ *  SHAPE CHANGES, where the 2026-08-16 ruling stands untouched — coming
+ *  back to the Sunship from another shape restores its own technology,
+ *  and the toggles remain locked OFF on every non-Sunship body. The two
+ *  events are genuinely different: one is a visitor's first sight of the
+ *  ship, the other is a return to a ship they have already met.
+ *
+ *  Nothing about the physics moves. While parked the engine and the
+ *  estimator are both dormant, so the only visible difference at load is
+ *  two unticked boxes; the warnings arrive with the first movement. */
+export function initialState(shape = SUNSHIP_SHAPE) {
+  const boot = freshCd(shape, false);          // BARE — tail off at load
+  return {
+    airspeedKmh: 0,              // PARKED
+    shape,
+    cd: boot.cd,
+    s: EAS_IDEAL.s,              // the S SELECTION survives; BLI off forces 0 in force
+    tailOn: false,
+    bliOn: false,
+    tailStash: null,             // remembered tail-ON Cd selection while OFF
+    // Bare is not the authored posture, so it may not wear the authored
+    // scenario name — VISION is what applyIdeal grants.
+    scenario: 'CUSTOM',
+    cdSource: boot.cdSource, sSource: EAS_IDEAL.sSource,
+    cdLabel: boot.cdLabel, sLabel: EAS_IDEAL.sLabel,
+  };
+}
+
+export function isParked(state) {
+  return !(state.airspeedKmh > 0);
+}
+
+/** SHAPE CHANGE (M6 stage 2, r8 #4 binding): Cd RESETS to the new
+ *  shape's estimator posture — overriding any preset or hand-set value
+ *  (a Cd is a claim about one body; carrying it across shapes launders
+ *  provenance). The stash dies with the old shape. Speed and the S
+ *  SELECTION persist (flight/system settings); the TOGGLES take the
+ *  new shape's public arrival posture (Sunship ON/ON, generic OFF/OFF
+ *  locked — see arrivalPosture). */
+export function setShape(state, shape) {
+  const p = arrivalPosture(shape);
+  return {
+    ...state,
+    shape,
+    tailOn: p.tailOn, bliOn: p.bliOn,
+    cd: p.cd.cd, cdSource: p.cd.cdSource, cdLabel: p.cd.cdLabel,
+    tailStash: null,
+    scenario: p.scenario,
+  };
+}
+
+/** A user edit: sets one input and re-labels provenance honestly — any
+ *  hand-moved slider makes that input 'user' and the scenario CUSTOM.
+ *  Speed is scenario-neutral (spec §2). Persists while parked (r6).
+ *  Dragging Cd while it tracks the estimate FIRMS it (M6 #2); the
+ *  tail-ON stash is untouched, so re-enabling the tail still restores
+ *  the prior tail-on selection (r10). */
+export function setInput(state, field, value) {
+  const next = { ...state };
+  if (field === 'airspeedKmh') {
+    next.airspeedKmh = value;
+  } else if (field === 'cd') {
+    next.cd = value;
+    next.cdSource = 'user'; next.cdLabel = 'USER SETTING';
+    next.scenario = 'CUSTOM';
+  } else if (field === 's') {
+    next.s = value;
+    next.sSource = 'user'; next.sLabel = 'USER SETTING';
+    next.scenario = 'CUSTOM';
+  } else {
+    throw new Error(`setInput: unknown field '${field}'`);
+  }
+  return next;
+}
+
+/** Toggle a system (M4 Smart Tail / M5 BLI).
+ *  BLI OFF forces S = 0 (its own term only, spec §7.1) without
+ *  destroying the underlying S selection (bench ruling cea306a).
+ *  Tail OFF (M6 #3, r10): STASH the current tail-on Cd selection and
+ *  snap Cd to the tracking sentinel — bare-hull ESTIMATED, slider still
+ *  editable. Tail ON restores the stashed selection exactly; with no
+ *  stash it takes the shape's fresh tail-on posture (authored 0.043 on
+ *  the Sunship, the generic-tail estimate elsewhere). */
+export function setToggle(state, field, on) {
+  if (field === 'bliOn') return { ...state, bliOn: !!on };
+  if (field !== 'tailOn') throw new Error(`setToggle: unknown field '${field}'`);
+  const want = !!on;
+  if (state.tailOn === want) return { ...state };
+  if (!want) {
+    return {
+      ...state, tailOn: false,
+      tailStash: { cd: state.cd, cdSource: state.cdSource, cdLabel: state.cdLabel },
+      cd: CD_TRACKS_ESTIMATE, cdSource: 'estimated', cdLabel: ESTIMATED_BARE_LABEL,
+    };
+  }
+  const stash = state.tailStash ?? freshCd(state.shape, true);
+  // A stashed tracking sentinel re-labels for the tail-ON context (the
+  // sentinel means "follow the estimator", whose tail-on meaning is the
+  // generic-tail estimate — never a stale bare label).
+  const restored = stash.cd === CD_TRACKS_ESTIMATE ? freshCd(state.shape, true) : stash;
+  return {
+    ...state, tailOn: true, tailStash: null,
+    cd: restored.cd, cdSource: restored.cdSource, cdLabel: restored.cdLabel,
+  };
+}
+
+/** The pink button — SUNSHIP-ONLY (M6 amendment #6; Toby ruling
+ *  2026-08-16: greyed elsewhere, gated by preset identity). Idempotent;
+ *  restores the COMPLETE ruled configuration (r7 #1). */
+export function applyIdeal(state) {
+  if (!isSunship(state.shape)) {
+    throw new Error('applyIdeal: EAS IDEAL is Sunship-authored and never leaks onto other shapes');
+  }
+  return {
+    ...state,
+    airspeedKmh: EAS_IDEAL.airspeedKmh,
+    cd: EAS_IDEAL.cd, s: EAS_IDEAL.s,
+    tailOn: true, bliOn: true,
+    tailStash: null,
+    scenario: EAS_IDEAL.scenario,
+    cdSource: EAS_IDEAL.cdSource, sSource: EAS_IDEAL.sSource,
+    cdLabel: EAS_IDEAL.cdLabel, sLabel: EAS_IDEAL.sLabel,
+  };
+}
+
+/** Resolve the Cd IN FORCE with its truthful provenance (r7 #2/#6: ONE
+ *  derivation, shared by compute() and paint()). Stage 2: the sentinel's
+ *  target depends on the configuration — bareEst when the tail is OFF,
+ *  tailedEst (engine applyGenericTail) when ON on a generic shape, and
+ *  the authored 0.043 defensively if a Sunship tail-ON state ever
+ *  carries the sentinel. Fallbacks unchanged from stage 1: estimator
+ *  UNAVAILABLE → the stash under its own label (an ESTIMATED label may
+ *  never ride a non-estimator value); dormant (no estimate at all) →
+ *  cd null, the pending state (resolves on first movement, r6). */
+export function resolveCd(state, bareEst = null, tailedEst = null) {
+  if (state.cd !== CD_TRACKS_ESTIMATE) {
+    return { cd: state.cd, cdSource: state.cdSource, cdLabel: state.cdLabel };
+  }
+  // 2026-08-18: the Sunship's AUTHORED-Cd bypass is GONE. It short-
+  // circuited here and returned 0.043 whenever the tail was on, which is
+  // exactly why the estimator never saw the flagship configuration. The
+  // deployed fairing is now a real geometry, so the ordinary estimated
+  // path below produces the Sunship's Cd from measured shape like every
+  // other body.
+  const target = state.tailOn ? tailedEst : bareEst;
+  const label = state.tailOn
+    ? (isSunship(state.shape) ? ESTIMATED_SUNSHIP_TAIL_LABEL : ESTIMATED_GENERIC_TAIL_LABEL)
+    : ESTIMATED_BARE_LABEL;
+  if (target && target.status === 'ok' && Number.isFinite(target.cdEstimate)) {
+    return { cd: target.cdEstimate, cdSource: 'estimated', cdLabel: label };
+  }
+  if ((bareEst || tailedEst) && state.tailStash && state.tailStash.cd !== CD_TRACKS_ESTIMATE) {
+    return { cd: state.tailStash.cd, cdSource: state.tailStash.cdSource, cdLabel: state.tailStash.cdLabel };
+  }
+  return { cd: null, cdSource: 'estimated', cdLabel: label };
+}
+
+/** The control values IN FORCE (r7 #6). */
+export function effectiveControls(state, bareEst = null, tailedEst = null) {
+  return {
+    cd: resolveCd(state, bareEst, tailedEst).cd,
+    s: state.bliOn ? state.s : 0,
+  };
+}
+
+const shapeKey = (shape) =>
+  shape.kind === 'preset' ? shape.id : `upload:${(shape.name || 'unnamed').toLowerCase()}`;
+
+const configurationId = (state) =>
+  `${shapeKey(state.shape)}/` + (state.tailOn ? (state.bliOn ? 'smartTailBLI' : 'smartTail')
+                                              : (state.bliOn ? 'bodyOnly+BLI' : 'bodyOnly'));
+
+/**
+ * The one seam to the engine. Returns null when parked — neither the
+ * engine NOR the estimator is consulted. At v > 0 returns the untouched
+ * §9 contract; contract.estimate is ALWAYS the BARE-hull estimate (the
+ * marker's truth — the generic-tail derivation shows up in selectedCd
+ * with its own label, never as the marker).
+ *
+ * @param {object} state
+ * @param {function} computeDynamics  the injected engine
+ * @param {object} [geometry]  metres-grade geometry record for the
+ *        ACTIVE shape (the page builds it from the baked preset records
+ *        or the upload's worker measurement via scaleGeometryRecord)
+ * @param {{estimateCd: function, applyGenericTail: function,
+ *          proxyRecord: object}|null} [estimator]
+ */
+export function compute(state, computeDynamics, geometry = SUNSHIP_GEOMETRY, estimator = null, tailedBody = TAILED_BODY) {
+  if (isParked(state)) return null;
+  /* SMART TAIL = A GEOMETRY STATE (Toby ruling 2026-08-18). The tail
+   * retracts, so the Sunship genuinely has two bodies and the toggle picks
+   * between them. Resolved HERE, in the module that owns the tail logic,
+   * rather than by each caller — a caller-side split is precisely what let
+   * tail-lab.mjs drift from the engine for two days. Callers keep passing
+   * the BARE geometry and bare proxy; this swaps in the deployed body when
+   * it applies, and the seam attaches the ENVELOPE's lift figures so
+   * buoyancy is never computed from the fairing. */
+  const deployed = state.tailOn && isSunship(state.shape) && !!tailedBody;
+  const geo = deployed ? tailedBody.geometry(geometry.lengthM) : geometry;
+  const proxyRec = deployed && estimator ? tailedBody.proxyRecord()
+    : (estimator ? estimator.proxyRecord : null);
+  const bareEst = estimator
+    ? estimator.estimateCd(proxyRec, geo, state.airspeedKmh)
+    : null;
+  // When the fairing is deployed the caller's geometry IS the tailed body,
+  // so bareEst already is the tailed estimate. Other shapes have only their
+  // bare geometry and keep the §5.4 generic-tail model.
+  const tailedEst = !(state.tailOn && estimator && bareEst) ? null
+    : (isSunship(state.shape) ? bareEst : estimator.applyGenericTail(bareEst));
+  const resolution = resolveCd(state, bareEst, tailedEst);
+  if (resolution.cd == null) {
+    // Tracking Cd with no estimator wired (pre-M6 caller): fall back so
+    // the engine always receives a number — the page can never wedge on
+    // the estimator's absence (§5.5).
+    Object.assign(resolution, state.tailStash && state.tailStash.cd !== CD_TRACKS_ESTIMATE
+      ? state.tailStash
+      : { cd: CD_FALLBACK_NO_ESTIMATOR, cdSource: 'authored', cdLabel: CD_FALLBACK_LABEL });
+  }
+  const { cd: cdUsed, cdSource, cdLabel } = resolution;
+  const sUsed = state.bliOn ? state.s : 0;
+  return computeDynamics(geo, {
+    airspeedKmh: state.airspeedKmh,
+    cd: cdUsed,
+    s: sUsed,
+    scenario: state.scenario,
+    configurationId: configurationId(state),
+    cdSource,
+    sSource: state.bliOn ? state.sSource : 'authored',
+    cdLabel,
+    sLabel: state.bliOn ? state.sLabel : 'BLI OFF — S = 0 (spec §7.1)',
+    estimate: bareEst,
+  });
+}
+
+/* ------------------------------------------------------------------ *
+ * Display selection — the ruled condensed box (Display Rulings v1.0).
+ * The contract is the full truth; the UI is a selection from it.
+ * Formatting only below this line.
+ * ------------------------------------------------------------------ */
+
+const DASH = '—';
+const fmt = {
+  m2: (x) => `${Math.round(x).toLocaleString('en-US')} m²`,
+  mn: (x) => `${(x / 1e6).toFixed(2)} MN`,
+  mw: (x) => `${x.toFixed(1)} MW`,
+  mwh: (x) => `${Math.round(x).toLocaleString('en-US')} MWh`,
+  t1: (x) => `${x.toFixed(1)} t`,
+  t0: (x) => `${Math.round(x).toLocaleString('en-US')} t`,
+  // Comparison metrics (owner request 2026-08-16): Cd_v shown at 3 dp
+  // (the airship literature quotes 0.02x-class); null → dash, never
+  // invented (contract sends null when the record carries no trusted
+  // volume).
+  cd3: (x) => (x === null ? DASH : x.toFixed(3)),
+};
+
+/**
+ * Cd dial range — the §5.3 pinned per-shape rule (r2 #3): bottom = the
+ * shape's friction screening estimate (ENGINE contract value); top =
+ * max(0.40, 1.5 × estimate), UNCAPPED — ×1.5 guarantees the ±20% band
+ * always fits. Both ends CEIL to the slider's 0.001 step grid. (The old
+ * "sphere undialable" device ended with the 0.26 era — spec 2a.)
+ */
+export function cdDialRange(contract = null, estimate = null) {
+  const grid = (x) => Math.ceil(x * 1000 - 1e-9) / 1000;
+  const bottom = contract && Number.isFinite(contract.frictionCd)
+    ? grid(contract.frictionCd) : CD_DIAL_BOTTOM_PARKED;
+  const top = estimate && estimate.status === 'ok' && Number.isFinite(estimate.cdEstimate)
+    ? Math.max(CD_DIAL_TOP_DEFAULT, grid(1.5 * estimate.cdEstimate))
+    : CD_DIAL_TOP_DEFAULT;
+  return { min: bottom, max: top };
+}
+
+/**
+ * Contract → the ruled display model. NEVER recalculates: every number
+ * is a contract field formatted — except the (−x%) tag (the S SETTING
+ * echoed) — and wetted reads contract.wettedAreaM2 (M6 #4, r7 #5).
+ *
+ * `marker` is the BARE-hull estimator proposal: value + band edges, or
+ * null. The band is DRAWN, never worded (M6 #2). Marker guard checks
+ * band SHAPE (r12 #1a defence-in-depth at the old crash site).
+ */
+export function renderModel(contract) {
+  if (contract === null) {
+    // Serves BOTH null-contract states identically (Toby ruling
+    // 2026-08-17, superseding the same-day amber-line draft: "no
+    // copy — simply N/A, user will learn easily"): PARKED (speed 0)
+    // and NO-SHIP (Ship length never set — the dated reversal of the
+    // stage-2 300 m fallback). Dashes everywhere, silence, engine and
+    // estimator dormant; something with no size cannot have results
+    // at any speed. Selections made while dashed persist.
+    return {
+      parked: true,
+      rows: [
+        ['Frontal area', DASH], ['Wetted area', DASH], ['Drag', DASH],
+        ['Drag area (Cd·A)', DASH], ['Cd (V^⅔ basis)', DASH],
+        ['Propulsion power', DASH],
+        ['LH2 weight (9,000 km)', DASH], ['LH2 + Storage (9,000 km)', DASH],
+      ],
+      powerTag: '', warnings: [], marker: null,
+    };
+  }
+  const savingPct = Math.round(contract.selectedS * 100);
+  // Warnings-only statuses, MINIMAL WORDS (rulings 2026-08-13/15).
+  // `kind` added 2026-08-17 (Toby placement refinement): the page
+  // anchors each icon over the result it warns about — 'fuel' over
+  // LH2 + Storage, everything else ('aero') over Drag.
+  const warnings = [];
+  // Every hover text ends in '!' (Toby house rule, 2026-08-17).
+  if (contract.aerodynamicStatus === 'ORANGE') warnings.push({ level: 'orange', kind: 'aero', text: 'Inefficient dynamics!' });
+  if (contract.aerodynamicStatus === 'RED') warnings.push({ level: 'red', kind: 'aero', text: 'Critically inefficient!' });
+  if (contract.fuelMassStatus === 'ORANGE') warnings.push({ level: 'orange', kind: 'fuel', text: 'High fuel weight!' });
+  if (contract.fuelMassStatus === 'RED') warnings.push({ level: 'red', kind: 'fuel', text: 'Critical fuel weight!' });
+  for (const w of contract.warnings) {
+    if (w.startsWith('cd-below-friction-estimate')) warnings.push({ level: 'red', kind: 'aero', text: 'Cd below friction floor!' });
+    else if (w.startsWith('below-screening-floor')) warnings.push({ level: 'red', kind: 'aero', text: 'Below screening floor!' });
+    else if (w.startsWith('wetted-') || w.startsWith('no-faces')) { /* geometry-source notes stay contract-side */ }
+    else warnings.push({ level: 'orange', kind: 'aero', text: w });
+  }
+  const est = contract.estimate;
+  const marker = est && est.status === 'ok' && Number.isFinite(est.cdEstimate)
+    && Array.isArray(est.band) && Number.isFinite(est.band[0]) && Number.isFinite(est.band[1])
+    ? { value: est.cdEstimate, lo: est.band[0], hi: est.band[1] }
+    : null;
+  return {
+    parked: false,
+    // Fuel pair (rulings 2026-08-15/16): reference-trip LH2 + the 5×
+    // tankage system total; energy row CUT; the /1,000 km rate row CUT
+    // (the §3.6 contract field survives for FLEET at M8).
+    rows: [
+      ['Frontal area', fmt.m2(contract.frontalAreaM2)],
+      ['Wetted area', fmt.m2(contract.wettedAreaM2)],
+      ['Drag', fmt.mn(contract.dragN)],
+      // Comparison metrics (contract amendment 2026-08-16, owner
+      // request): CdA = the absolute drag footprint, immune to
+      // reference-area choice; Cd_v = drag priced against carried
+      // volume (classic airship basis). Values read from the
+      // contract — the page computes nothing (r6 rule).
+      ['Drag area (Cd·A)', fmt.m2(contract.dragAreaM2)],
+      ['Cd (V^⅔ basis)', fmt.cd3(contract.cdVolumetric)],
+      ['Propulsion power', fmt.mw(contract.powerMW)],
+      ['LH2 weight (9,000 km)', fmt.t1(contract.refTripFuelT)],
+      ['LH2 + Storage (9,000 km)', fmt.t0(contract.refTripFuelSystemT)],
+    ],
+    powerTag: savingPct > 0 ? `(−${savingPct}%)` : '',
+    warnings,
+    marker,
+    // NO provenance copy on the page (ruling 2026-08-15) — the contract
+    // keeps the engineer-facing truth.
+  };
+}
