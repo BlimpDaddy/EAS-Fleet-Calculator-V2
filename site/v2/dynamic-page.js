@@ -500,10 +500,6 @@ function toggleRow(labelText) {
 }
 const tailToggle = toggleRow('Smart Tail');
 const bliToggle = toggleRow('BLI');
-// Hover expansions (owner, 2026-08-24). Native title so phones' tap-to-
-// reveal (mobile.js OURS list) is unaffected; desktop hovers explain.
-tailToggle.row.title = 'Retractable rear-mast';
-bliToggle.row.title = 'Boundary Layer Ingestion';
 // EAS-mode chip: self-identifies engineer-unlocked states (visible while
 // the chord is held, and while any generic shape has systems ON) — a
 // screenshot of an unlocked configuration can never pass as public.
@@ -827,8 +823,20 @@ function paint() {
   // move, which is the more urgent question); once unlocked the row says
   // WHICH tail model is in force. One assignment — the first cut set the
   // model text a few lines above and this line silently overwrote it.
-  tailToggle.row.title = toggleLocked ? rowTitle : tailModelTitle;
-  bliToggle.row.title = rowTitle;
+  /* NAME EXPANSIONS on hover (owner, 2026-08-24): the abbreviations say
+     what they stand for. Assigned HERE and nowhere else — a build-time
+     assignment is silently overwritten by this paint (the same trap the
+     note above records), which is exactly how the first cut failed. */
+  const TAIL_EXPANSION = 'Retractable rear-mast';
+  const BLI_EXPANSION = 'Boundary Layer Ingestion';
+  tailToggle.row.title = toggleLocked ? rowTitle
+    : (tailModelTitle ? `${TAIL_EXPANSION} — ${tailModelTitle}` : TAIL_EXPANSION);
+  bliToggle.row.title = toggleLocked ? rowTitle : BLI_EXPANSION;
+  /* the checkbox carries it too: hovering the BOX itself is the natural
+     gesture, and a disabled input does not inherit its parent's tooltip
+     in every browser (owner: "if needed, make it over the checkbox") */
+  tailToggle.box.title = tailToggle.row.title;
+  bliToggle.box.title = bliToggle.row.title;
   easChip.style.display = unlocked || (!sunship && (state.tailOn || state.bliOn)) ? '' : 'none';
 
   // Per-shape Cd dial (§5.3 pinned rule): contract floor + estimate top.

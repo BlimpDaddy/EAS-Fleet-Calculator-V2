@@ -281,13 +281,24 @@ export function createVizPanel({ container, seed: seed0 = 1, count: count0 = COU
     ctx.restore();
   }
 
-  /* INGESTED FLOW REJOINS THE FREESTREAM (owner ruling 2026-08-24): a
-     captured particle reads BLI-green only while it is still with the
-     ship — once it is past the tail tip AND clear of sphere 2 it is
-     ordinary air again and draws white. Colour only: the engine's
-     `captured` flag, the particle's motion and every metric are
-     untouched (this is Layer 3 deciding what the colour MEANS —
-     "ingested right now", not "was ingested once"). Set per paint(). */
+  /* INGESTED FLOW REJOINS THE FREESTREAM (owner ruling 2026-08-24,
+     sharpened same day): a captured particle reads BLI-green only while
+     it is being ingested — at the AFT OF THE BODY and just into the
+     tail's cone. Past that it draws white: "spat out along the tail…
+     the tail helps give the aft wake the structure, but is not doing
+     any ingesting — they're not sucked into and out of the tail
+     itself" (owner). Colour only: the engine's `captured` flag, the
+     particle's motion and every metric are untouched — Layer 3 deciding
+     what the colour MEANS ("being ingested right now").
+
+     WHERE the line sits: a declared fraction along the tail, landing
+     just AFT OF THE CONE KNEE. Measured on the Sunship 2026-08-24, the
+     cone tapers from 45 m at the graft to ~18 m by 19% of tail length
+     and is a near-constant spike (18 → 14 m) for the remaining 80%;
+     0.25 is therefore shortly after the cone on the authored
+     proportions, and the E+A+S pasted tail keeps those proportions on
+     any body. Blessed constant: change only by dated note. */
+  const TAIL_RELEASE_FRAC = 0.25;
   let releaseX = Infinity;
 
   function drawParticle(q, p, alpha = 1) {
@@ -338,10 +349,12 @@ export function createVizPanel({ container, seed: seed0 = 1, count: count0 = COU
     const c = adapter.getControls();
     const st = adapter.getState();
     const geo = activeGeo();
-    /* the hand-back line: aft tip of the state in force, or sphere 2's
-       downstream edge when it is drawn, whichever is further downstream */
-    const s2 = c.smartTail ? payload.spheres.sphere2 : null;
-    releaseX = Math.max(geo.extentM.x1M, s2 ? s2.centerM[0] + s2.radiusM : -Infinity);
+    /* the hand-back line: just aft of the cone when a tail is deployed,
+       else the aft tip of the bare body */
+    const hullEndX = payload.retracted.extentM.x1M;
+    releaseX = geo === payload.extended && geo.extentM.x1M > hullEndX
+      ? hullEndX + TAIL_RELEASE_FRAC * (geo.extentM.x1M - hullEndX)
+      : geo.extentM.x1M;
     ctx.clearRect(0, 0, cv.width, cv.height);
 
     drawSphereCircle(m, payload.spheres.sphere1);
