@@ -281,10 +281,20 @@ export function createVizPanel({ container, seed: seed0 = 1, count: count0 = COU
     ctx.restore();
   }
 
+  /* INGESTED FLOW REJOINS THE FREESTREAM (owner ruling 2026-08-24): a
+     captured particle reads BLI-green only while it is still with the
+     ship — once it is past the tail tip AND clear of sphere 2 it is
+     ordinary air again and draws white. Colour only: the engine's
+     `captured` flag, the particle's motion and every metric are
+     untouched (this is Layer 3 deciding what the colour MEANS —
+     "ingested right now", not "was ingested once"). Set per paint(). */
+  let releaseX = Infinity;
+
   function drawParticle(q, p, alpha = 1) {
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = p.captured ? PALETTE.captured : p.wake ? PALETTE.wake : PALETTE.flow;
-    const s = ((p.wake ? 3 : 4) + (p.captured ? 1 : 0)) * q.scale;
+    const ingesting = p.captured && p.x <= releaseX;
+    ctx.fillStyle = ingesting ? PALETTE.captured : p.wake ? PALETTE.wake : PALETTE.flow;
+    const s = ((p.wake ? 3 : 4) + (ingesting ? 1 : 0)) * q.scale;
     ctx.fillRect(q.sx - s / 2, q.sy - s / 2, s, s);
     ctx.globalAlpha = 1;
   }
@@ -328,6 +338,10 @@ export function createVizPanel({ container, seed: seed0 = 1, count: count0 = COU
     const c = adapter.getControls();
     const st = adapter.getState();
     const geo = activeGeo();
+    /* the hand-back line: aft tip of the state in force, or sphere 2's
+       downstream edge when it is drawn, whichever is further downstream */
+    const s2 = c.smartTail ? payload.spheres.sphere2 : null;
+    releaseX = Math.max(geo.extentM.x1M, s2 ? s2.centerM[0] + s2.radiusM : -Infinity);
     ctx.clearRect(0, 0, cv.width, cv.height);
 
     drawSphereCircle(m, payload.spheres.sphere1);

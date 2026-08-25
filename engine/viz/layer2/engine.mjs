@@ -91,6 +91,27 @@ export const TURN_CAP_RAD = 0.09;        // local aft turning per window that sh
                                          // Trio-tuned: sphere sheds broadly (~0.74 R), the bare
                                          // hull's shoulder (~0.07 rad/10 m) rides through in BOTH
                                          // states, the slender tail's cone crease fires at the crease.
+/* SMART-TAIL ATTACHMENT (owner ruling 2026-08-24, prototype).
+ * WHAT:  on the DEPLOYED tail (stations aft of the retracted hull end)
+ *        a rider tolerates TAIL_ATTACH_MULT × the ordinary aft-turning
+ *        cap before it sheds — the fairing holds flow around its own
+ *        curvature instead of shedding at the cone crease.
+ * WHY:   the deployed tail's whole claim, on the same page, is a body
+ *        that separates late (estimator 0.0217 / ruled 0.028 vs 0.18
+ *        bare). Before this, the visualiser shed at the crease and gave
+ *        the tail NO visible effect until BLI was switched on — the
+ *        picture contradicted the page's own numbers (owner: "ideally
+ *        the tail is working fairly well on its own, atm it really has
+ *        no visible effect").
+ * PROVENANCE: authored visual constant, owner-tuned; the crease geometry
+ *        itself is untouched and every OTHER body keeps the plain cap.
+ * LIMITATION: a styling/test-contract constant, not an aerodynamic
+ *        claim — it says "this designed surface keeps its flow", which
+ *        no solver here verifies.
+ * REPLACE WHEN: a measured separation location for the deployed tail
+ *        exists, or the owner re-rules the look. */
+export const TAIL_ATTACH_MULT = 3.0;
+
 export const JITTER_COEF = 0.05;         // wake radial jitter, × selectedCd × maxRadiusM per tick
 export const SURFACE_BAND_FRAC = 0.03;   // riding offset off the rail, × maxRadiusM
 export const CARDINAL_LANE_FRAC = 0;     // RETIRED (Toby, 2026-08-22): the 10× cardinal spokes
@@ -233,7 +254,7 @@ export function worldPos(payload, p) {
  * domain; the fixture-facing helper below also reports the first firing
  * station at or after `from` (BLI's approaching-detachment predicate).
  */
-export function turningFires(geo, thetaIdx, s, nStations) {
+export function turningFires(geo, thetaIdx, s, nStations, cap = TURN_CAP_RAD) {
   const d = geo.tangentDomain;
   const dxs = geo.extentM.lengthM / (nStations - 1);
   const w = Math.max(1, Math.round(TURN_WINDOW_M / dxs));      // physical window → stations
@@ -244,7 +265,7 @@ export function turningFires(geo, thetaIdx, s, nStations) {
      the phiHere < 0 guard the rule also fired where nose expansion eases
      off — mass shedding at hull-fraction 0.1–0.4, caught by the suction
      diagnostic 2026-08-22. */
-  return phiHere < 0 && phiBack - phiHere > TURN_CAP_RAD;
+  return phiHere < 0 && phiBack - phiHere > cap;
 }
 
 export function nextDetachStation(geo, thetaIdx, from, horizon, nStations) {
@@ -422,7 +443,14 @@ export function step(payload, controls, prev, dt = DT_S) {
       p.wake = true; p.wakeStartX = p.x; p.wakeStartR = p.r;
       return p;
     }
-    if (turningFires(geo, p.thetaIdx, s, nStations)) {      // the frozen-tangent rule: geometry decides WHERE
+    /* the DEPLOYED body is one continuous designed surface — its raised
+       cap applies along the whole of it, not just aft of the graft:
+       measured 2026-08-24, 87% of detachments were happening on the
+       HULL's aft shoulder, upstream of the tail, which is precisely the
+       separation the fairing exists to prevent. The bare hull keeps the
+       plain cap and its honest early shedding. */
+    if (turningFires(geo, p.thetaIdx, s, nStations,
+      geoKey === 'extended' ? TURN_CAP_RAD * TAIL_ATTACH_MULT : TURN_CAP_RAD)) {   // frozen-tangent rule
       p.wake = true; p.wakeStartX = p.x; p.wakeStartR = p.r;
       return p;
     }
