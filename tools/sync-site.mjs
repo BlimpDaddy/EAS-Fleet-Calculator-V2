@@ -11,7 +11,7 @@
  * Run from anywhere:  node tools/sync-site.mjs
  * Dev-machine only: it needs the CalcV1-site sibling checkout.
  */
-import { cpSync, rmSync, existsSync } from 'node:fs';
+import { cpSync, rmSync, existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const SRC = fileURLToPath(new URL('../../CalcV1-site/', import.meta.url));
@@ -31,4 +31,18 @@ for (const entry of DEPLOY) {
   rmSync(SITE + entry, { recursive: true, force: true });
   cpSync(from, SITE + entry, { recursive: true });
 }
-console.log(`site/ synced from CalcV1-site (${DEPLOY.length} top-level entries)`);
+/* THE TEST SUITES TRAVEL TOO. Until 2026-11-09 this script copied only the deploy tree, so the
+ * public repo's test/ folder kept the copy taken at skeleton time and silently went stale: after the
+ * S 12 -> 28 % and deployed-Cd 0.028 rulings it reported 123 passed / 20 FAILED while the working
+ * repo was 143 / 0. An outside reviewer read those 20 as calculator disagreements. They were a
+ * sync gap. Only the two portable suites are copied (the zero-diff gate is git-based and specific
+ * to the working repo); imports are re-targeted from the working layout to this repo's site/. */
+const TESTS = ['dynamic-state-fixtures.mjs', 'economics-fixtures.mjs'];
+const TEST_OUT = fileURLToPath(new URL('../test/', import.meta.url));
+mkdirSync(TEST_OUT, { recursive: true });
+for (const f of TESTS) {
+  const s = readFileSync(SRC + 'test/' + f, 'utf8')
+    .replaceAll("'../calcv2/", "'../site/calcv2/").replaceAll("'../v2/", "'../site/v2/");
+  writeFileSync(TEST_OUT + f, s);
+}
+console.log(`site/ synced from CalcV1-site (${DEPLOY.length} top-level entries) + ${TESTS.length} test suites`);

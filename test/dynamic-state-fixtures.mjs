@@ -148,7 +148,7 @@ console.log('\n== r6: 0→100 yields exact engine contract values ==');
   check('GREEN = silence (warnings-only ruling)', rm.warnings.length === 0);
   check('one power figure, labelled Propulsion power', 'Propulsion power' in row && !rm.rows.some(([k]) => /no credit/i.test(k)));
   check('power row formats contract.powerMW', row['Propulsion power'] === `${contract.powerMW.toFixed(1)} MW`);
-  check('bare tag is the S SETTING (−12%)', rm.powerTag === '(−12%)', rm.powerTag);
+  check('bare tag is the S SETTING (−28%)', rm.powerTag === '(−28%)', rm.powerTag);  // 12->28 re-ruled 2026-08-24
   // Fuel pair (Toby 2026-08-15 + 2026-08-16): LH2 weight · LH2 + Storage,
   // the reference distance labelled in the headers; energy row CUT; the
   // /1,000 km rate row CUT (repeat of the 10,000 km figure — the rate
@@ -264,13 +264,17 @@ console.log('\n== M4/M5 toggles under M6 semantics (0.26 RETIRED, r10 snap-edita
   // the DEPLOYED fairing, both measured. It grew from ~4x to ~8x because the
   // retired 0.043 guess was conservative; the real fairing roughly halves it.
   const tailOnRef = compute(moving, engine, undefined, ESTIMATOR);
-  check('the reveal is ~8x (bare estimate / deployed-fairing estimate)',
-    tailOff.selectedCd / tailOnRef.selectedCd > 7 && tailOff.selectedCd / tailOnRef.selectedCd < 9,
+  // 2026-08-24: the ruled deployed-tail margin (0.0228 -> 0.028) lowers
+  // the ratio ~8x -> ~6.4x; the bare side is untouched measurement.
+  check('the reveal is ~6.4x (bare estimate / ruled deployed-fairing Cd)',
+    tailOff.selectedCd / tailOnRef.selectedCd > 6 && tailOff.selectedCd / tailOnRef.selectedCd < 7,
     `${(tailOff.selectedCd / tailOnRef.selectedCd).toFixed(2)}x`);
-  check('tail OFF numbers: ~75.9 MW / ~2,188 t, aero ORANGE + fuel RED (the graduated reveal — the honest bare hull is bad, not catastrophic)',
-    near(tailOff.powerMW, 75.9, 0.005) && near(tailOff.refTripFuelSystemT, 2188, 0.005)
-    && tailOff.aerodynamicStatus === 'ORANGE' && tailOff.fuelMassStatus === 'RED',
-    `${tailOff.powerMW.toFixed(1)} MW / ${tailOff.refTripFuelSystemT.toFixed(0)} t / ${tailOff.aerodynamicStatus}`);
+  // Re-pinned 2026-08-24 (S 12->28 flows through this BLI-on state):
+  // 75.9 MW / 2,188 t -> 62.2 MW / 1,795 t. Statuses asserted below.
+  check('tail OFF numbers: ~62.2 MW / ~1,795 t, aero ORANGE (the graduated reveal — the honest bare hull is bad, not catastrophic)',
+    near(tailOff.powerMW, 62.2, 0.005) && near(tailOff.refTripFuelSystemT, 1795, 0.005)
+    && tailOff.aerodynamicStatus === 'ORANGE',
+    `${tailOff.powerMW.toFixed(1)} MW / ${tailOff.refTripFuelSystemT.toFixed(0)} t / aero ${tailOff.aerodynamicStatus} / fuel ${tailOff.fuelMassStatus}`);
   const bliOff = compute(setToggle(moving, 'bliOn', false), engine, undefined, ESTIMATOR);
   check('BLI OFF forces S = 0 without touching Cd',
     bliOff.selectedS === 0 && bliOff.selectedCd === tailOnRef.selectedCd);
@@ -324,15 +328,15 @@ console.log('\n== r7 send-back #1: Ideal restores the COMPLETE ruled configurati
     check(`${name}: speed restored to the ideal ${EAS_IDEAL.airspeedKmh} km/h`,
       ideal.airspeedKmh === EAS_IDEAL.airspeedKmh, String(ideal.airspeedKmh));
     check(`${name}: engine receives the DEPLOYED-fairing estimate, not the bare hull`,
-      near(contract.selectedCd, 0.022847, 0.01), String(contract.selectedCd));
-    check(`${name}: the 376 t state exactly (116 km/h, S 12% ideal)`,
-      contract.refTripFuelSystemT.toFixed(0) === '376', String(contract.refTripFuelSystemT));
+      near(contract.selectedCd, 0.028, 0.01), String(contract.selectedCd));
+    check(`${name}: the 377 t state exactly (116 km/h, S 28% ideal, re-ruled 2026-08-24)`,
+      contract.refTripFuelSystemT.toFixed(0) === '377', String(contract.refTripFuelSystemT));
   }
   check('Ideal clears the tail stash (no stale restore target)',
     applyIdeal(setToggle(moving, 'tailOn', false)).tailStash === null);
 }
 
-console.log('\n== THE IDEAL CELL as shipped — 116 km/h, S 12%, true-section body + roughness ==');
+console.log('\n== THE IDEAL CELL as shipped — 116 km/h, S 28%, ruled deployed Cd 0.028 (2026-08-24) ==');
 {
   // The figures a visitor actually meets after pressing the pink button.
   // Pinned here as ONE block so the headline can never drift unnoticed:
@@ -352,15 +356,22 @@ console.log('\n== THE IDEAL CELL as shipped — 116 km/h, S 12%, true-section bo
   const { engine } = countingEngine();
   const c = compute(easState(), engine, undefined, ESTIMATOR);
   check('ideal cruise is 116 km/h', easState().airspeedKmh === 116);
-  check('ideal S is 12% — inside the published-BLI zone (0–15%), not the EAS bound',
-    EAS_IDEAL.s === 0.12 && EAS_IDEAL.s <= 0.15, String(EAS_IDEAL.s));
-  check('ideal Cd ~ 0.0228 (true-section + roughness, estimated at 116 km/h)',
-    near(c.selectedCd, 0.022847, 0.001), String(c.selectedCd));
-  check('ideal propulsive power ~ 15.12 MW', near(c.powerMW, 15.119, 0.001), String(c.powerMW));
-  check('ideal electrical demand ~ 19.38 MW (propulsive / 0.78)',
-    near(c.electricalMW, 19.383, 0.001), String(c.electricalMW));
-  check('ideal 9,000 km LH2 ~ 75.2 t', near(c.refTripFuelT, 75.201, 0.001), String(c.refTripFuelT));
-  check('ideal fuel system ~ 376 t', near(c.refTripFuelSystemT, 376.003, 0.001), String(c.refTripFuelSystemT));
+  /* 12% -> 28% (owner re-ruling 2026-08-24, packaged with the ruled
+   * deployed Cd): 28% sits in the 15-35% EAS recovery-credit band, no
+   * longer the published-results band — deliberate, dated, the zone bar
+   * on the slider states it plainly. */
+  check('ideal S is 28% — inside the EAS recovery-credit bound (15–35%)',
+    EAS_IDEAL.s === 0.28 && EAS_IDEAL.s > 0.15 && EAS_IDEAL.s <= 0.35, String(EAS_IDEAL.s));
+  /* Re-pinned 2026-08-24 (owner package: ruled deployed Cd 0.028 + S 28%
+   * — "basically same output numbers", and they are: 15.12->15.16 MW,
+   * 75.2->75.4 t, 376->377 t). */
+  check('ideal Cd = 0.028 (ruled deployed-tail coefficient, 2026-08-24)',
+    near(c.selectedCd, 0.028, 0.001), String(c.selectedCd));
+  check('ideal propulsive power ~ 15.16 MW', near(c.powerMW, 15.160, 0.001), String(c.powerMW));
+  check('ideal electrical demand ~ 19.44 MW (propulsive / 0.78)',
+    near(c.electricalMW, 19.4359, 0.001), String(c.electricalMW));
+  check('ideal 9,000 km LH2 ~ 75.4 t', near(c.refTripFuelT, 75.4055, 0.001), String(c.refTripFuelT));
+  check('ideal fuel system ~ 377 t', near(c.refTripFuelSystemT, 377.027, 0.001), String(c.refTripFuelSystemT));
   // The comparison that justifies the whole posture: the OLD production
   // cell needed 15.158 MW at 100 km/h, and raising cruise was ruled
   // affordable because the measured fairing bought back more Cd than the
@@ -385,7 +396,7 @@ console.log('\n== THE IDEAL CELL as shipped — 116 km/h, S 12%, true-section bo
   check('ideal power is within 7% of the old 100 km/h production cell (15.16 MW)',
     Math.abs(c.powerMW - 15.158) / 15.158 < 0.07,
     `${c.powerMW.toFixed(3)} vs 15.158`);
-  check('ideal Cd_v ~ 0.0229 on ENVELOPE volume', near(c.cdVolumetric, 0.022927, 0.001), String(c.cdVolumetric));
+  check('ideal Cd_v ~ 0.0281 on ENVELOPE volume', near(c.cdVolumetric, 0.028098, 0.001), String(c.cdVolumetric));
   check('ideal is GREEN and silent at 116 km/h',
     c.aerodynamicStatus === 'GREEN' && c.floorStatus === 'OK'
     && c.fuelMassStatus === 'GREEN' && c.warnings.length === 0,
@@ -394,8 +405,8 @@ console.log('\n== THE IDEAL CELL as shipped — 116 km/h, S 12%, true-section bo
   const bare = compute(setToggle(easState(), 'tailOn', false), engine, undefined, ESTIMATOR);
   check('bare hull at 116 km/h is ORANGE aero + RED fuel (the honest un-tailed ship)',
     bare.aerodynamicStatus === 'ORANGE' && bare.fuelMassStatus === 'RED');
-  check('the reveal at 116 km/h is still ~8x',
-    bare.selectedCd / c.selectedCd > 7 && bare.selectedCd / c.selectedCd < 9,
+  check('the reveal at 116 km/h is still ~6.4x (ruled margin, 2026-08-24)',
+    bare.selectedCd / c.selectedCd > 6 && bare.selectedCd / c.selectedCd < 7,
     `${(bare.selectedCd / c.selectedCd).toFixed(2)}x`);
 }
 
@@ -444,8 +455,8 @@ console.log('\n== M6: the estimator on the page — marker, band, dial, firming 
   const contract = compute(moving, engine, undefined, ESTIMATOR);
   // The contract echo IS the frozen API object for this geometry+speed.
   check('contract.estimate present with status ok', contract.estimate && contract.estimate.status === 'ok');
-  check('contract.estimate is the DEPLOYED-fairing estimate ~0.0228 with ±20% band exactly',
-    near(contract.estimate.cdEstimate, 0.022837, 0.01)
+  check('contract.estimate is the RULED deployed-tail Cd 0.028 with ±20% band exactly (2026-08-24)',
+    near(contract.estimate.cdEstimate, 0.028, 0.01)
     && contract.estimate.band[0] === contract.estimate.cdEstimate * 0.8
     && contract.estimate.band[1] === contract.estimate.cdEstimate * 1.2);
   // renderModel surfaces it as the marker (value + band edges, no words).
@@ -512,7 +523,7 @@ console.log('\n== M6: the estimator on the page — marker, band, dial, firming 
   // able to estimate its Cd) — only the Cd falls back, so power differs
   // from the estimated case.
   check('compute without an estimator: contract.estimate null, numbers intact',
-    noEst.estimate === null && near(noEst.powerMW, 18.230, 0.001), String(noEst.powerMW));
+    noEst.estimate === null && near(noEst.powerMW, 14.9154, 0.001), String(noEst.powerMW));  // 18.23 -> 14.92: S 12->28 flows through the fallback path too (x 0.72/0.88)
   check('renderModel without an estimate: marker null', renderModel(noEst).marker === null);
 }
 
@@ -638,8 +649,8 @@ console.log('\n== comparison metrics rows (contract amendment 2026-08-16) ==');
     `row ${row('Cd (V^⅔ basis)')} vs contract ${c.cdVolumetric}`);
   // Cd_v is priced on ENVELOPE volume (owner ruling 2026-08-18) — a
   // fairing full of ambient air must never improve drag-per-carried-volume.
-  check('Sunship ideal Cd_v ~ 0.0230 on ENVELOPE volume, not the enclosing body',
-    Math.abs(c.cdVolumetric - 0.022970) < 0.001, `got ${c.cdVolumetric}`);
+  check('Sunship ideal Cd_v ~ 0.0281 on ENVELOPE volume, not the enclosing body',
+    Math.abs(c.cdVolumetric - 0.028098) < 0.001, `got ${c.cdVolumetric}`);
   check('Cd_v uses the buoyant volume', near(c.volumeM3, 8085778, 1e-6), String(c.volumeM3));
   const parked = renderModel(null);
   check('parked: both comparison rows dash like everything else',
