@@ -23,6 +23,10 @@ import {
   initialState, isParked, setInput, setToggle, setShape, applyIdeal,
   resolveCd, effectiveControls, compute, renderModel, cdDialRange, setTailedBody,
 } from '../site/v2/dynamic-state.js';
+import {
+  V1_LENGTH_MAX_M, parseTypedLength, sliderTarget, outsideV1Domain, lengthNote, driveLengthSlider,
+  commitTypedLength,
+} from '../site/v2/eas-length.js';
 
 /* The DEPLOYED-TAIL seam, wired exactly as the page wires it. Mixed by
  * design: aero figures for the flow, ENVELOPE figures for buoyancy. */
@@ -665,6 +669,86 @@ console.log('\n== comparison metrics rows (contract amendment 2026-08-16) ==');
   check('geometry without volume: Cd_v row dashes, never invented',
     renderModel(noVol).rows.find(([l]) => l === 'Cd (V^⅔ basis)')[1] === '—'
     && noVol.cdVolumetric === null);
+}
+
+/* TYPED LENGTH (owner F-calcLength400; revised 2026-11-11: "just keep the
+ * slider max to 400 but you can enter 400+ by hand, same as you can type
+ * into the total work and VE boxes but it's kind of hidden that you can").
+ * The V1 bundle is frozen; its slider maps view 0-100 linearly onto
+ * 0-400 m and its model stores whatever domain value arrives (no clamp).
+ * The typed field drives that same slider path with a widened max for one
+ * dispatch, then restores the slider exactly, so the slider never passes 400. */
+{
+  console.log('\n[typed length]');
+  check('V1 slider domain max is 400 m', V1_LENGTH_MAX_M === 400);
+  check('typed "440" -> 440', parseTypedLength('440') === 440);
+  check('typed "1,200 m" -> 1200 (commas, unit and spaces ignored)', parseTypedLength(' 1,200 m ') === 1200);
+  check('typed "437.5" keeps decimals', parseTypedLength('437.5') === 437.5);
+  check('blank, words, zero, negative, Infinity all abandon (null)',
+    ['', 'abc', '0', '-5', 'Infinity', '1e999', '4.4.0'].every((t) => parseTypedLength(t) === null),
+    ['', 'abc', '0', '-5', 'Infinity', '1e999', '4.4.0'].map((t) => `${JSON.stringify(t)}=${parseTypedLength(t)}`).join(' '));
+  // The bundle's own view->domain map: ad(view,0,100,0,400) = 400*(view/100).
+  const bundleDomain = (view) => 400 * ((view - 0) / 100) + 0;
+  const lengths = [20, 122, 300, 400, 420, 437, 440, 441, 600, 1000, 123.4, 5000];
+  check('slider target round-trips through the bundle map to the typed length',
+    lengths.every((L) => Math.abs(bundleDomain(Number(String(sliderTarget(L).view))) - L) < 1e-9),
+    lengths.map((L) => `${L}->${bundleDomain(Number(String(sliderTarget(L).view)))}`).join(' '));
+  check('440 m -> view 110, slider max widened to 110', sliderTarget(440).view === 110 && sliderTarget(440).max === 110);
+  check('at or under 400 m the slider max is never below 100',
+    sliderTarget(300).max === 100 && sliderTarget(400).max === 100 && sliderTarget(20).max === 100);
+  check('441 m: max covers a non-integer view', sliderTarget(441).max >= sliderTarget(441).view);
+  check('outside the V1 domain only ABOVE 400', !outsideV1Domain(400) && outsideV1Domain(400.5) && outsideV1Domain(440) && !outsideV1Domain(300));
+  check('beyond-400 label names the 400 m validated range; none at or under 400',
+    /400/.test(lengthNote(440)) && /structure/i.test(lengthNote(440)) && lengthNote(400) === '' && lengthNote(300) === '');
+
+  /* The DOM drive, against a recording fake slider: during the dispatch the
+   * slider carries the widened max, step 'any' and the target view; after
+   * it every attribute is EXACTLY as before (absent stays absent), so the
+   * normal-mode slider still tops out at 400 m. */
+  const fakeSlider = (attrs) => {
+    const a = new Map(Object.entries(attrs));
+    const seen = [];
+    return {
+      seen, attrs: a, value: '75',
+      getAttribute: (k) => (a.has(k) ? a.get(k) : null),
+      hasAttribute: (k) => a.has(k),
+      setAttribute: (k, v) => { a.set(k, String(v)); },
+      removeAttribute: (k) => { a.delete(k); },
+      dispatchEvent(ev) { seen.push({ type: ev.type, bubbles: ev.bubbles, value: this.value, max: a.get('max'), step: a.get('step') }); return true; },
+    };
+  };
+  const s1 = fakeSlider({});
+  driveLengthSlider(s1, 440);
+  check('drive dispatches exactly one bubbling input event', s1.seen.length === 1 && s1.seen[0].type === 'input' && s1.seen[0].bubbles === true);
+  check('during the dispatch: value 110, max 110, step any',
+    s1.seen[0].value === '110' && s1.seen[0].max === '110' && s1.seen[0].step === 'any', JSON.stringify(s1.seen[0]));
+  check('after the drive: absent max/step are absent again (slider back to 0-100 = 0-400 m)',
+    !s1.attrs.has('max') && !s1.attrs.has('step'), JSON.stringify([...s1.attrs]));
+  const s2 = fakeSlider({ max: '100', step: '1' });
+  driveLengthSlider(s2, 437);
+  check('after the drive: present max/step restored to their exact values',
+    s2.attrs.get('max') === '100' && s2.attrs.get('step') === '1', JSON.stringify([...s2.attrs]));
+  check('437 m dispatches view 109.25 (step any keeps the decimal)', s2.seen[0].value === '109.25', s2.seen[0].value);
+
+  /* Commit path (focusout, like V1's Total work and VE fields): a valid
+   * typed length drives the slider once; anything else drives nothing. */
+  const s3 = fakeSlider({});
+  check('commit "440" drives the slider once and returns 440',
+    commitTypedLength(s3, '440') === 440 && s3.seen.length === 1 && s3.seen[0].value === '110');
+  const s4 = fakeSlider({});
+  check('commit of blank / word / zero / negative drives nothing and returns null',
+    ['', 'abc', '0', '-5'].every((t) => commitTypedLength(s4, t) === null) && s4.seen.length === 0, String(s4.seen.length));
+  const s5 = fakeSlider({});
+  check('commit "250" (under 400) is accepted too: view 62.5',
+    commitTypedLength(s5, '250') === 250 && s5.seen[0].value === '62.5');
+
+  /* The E+A+S chord is retired (owner 2026-11-11: "an old relic"): the
+   * field is always there, hidden in plain sight like Total work and VE. */
+  const src = (await import('node:fs')).readFileSync(new URL('../site/v2/eas-length.js', import.meta.url), 'utf8');
+  check('no E+A+S chord (no key listeners on window, no EAS MODE chip)',
+    !/window\.addEventListener\(\s*'key(down|up)'/.test(src) && !/EAS MODE/.test(src));
+  check("typed field reuses V1's own typeable-number look (marketsize-input class)", /marketsize-input/.test(src));
+  check("typed field commits on focusout, as V1's Total work and VE fields do", /'focusout'/.test(src));
 }
 
 console.log(`\n${passed} passed, ${failed} failed`);
