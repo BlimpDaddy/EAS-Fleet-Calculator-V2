@@ -698,8 +698,8 @@ console.log('\n== comparison metrics rows (contract amendment 2026-08-16) ==');
     sliderTarget(300).max === 100 && sliderTarget(400).max === 100 && sliderTarget(20).max === 100);
   check('441 m: max covers a non-integer view', sliderTarget(441).max >= sliderTarget(441).view);
   check('outside the V1 domain only ABOVE 400', !outsideV1Domain(400) && outsideV1Domain(400.5) && outsideV1Domain(440) && !outsideV1Domain(300));
-  check('beyond-400 label names the 400 m validated range; none at or under 400',
-    /400/.test(lengthNote(440)) && /structure/i.test(lengthNote(440)) && lengthNote(400) === '' && lengthNote(300) === '');
+  check('above 400 m the label reads "Over Max Size" (owner, 2026-11-11); none at or under 400',
+    lengthNote(440) === 'Over Max Size' && lengthNote(400.5) === 'Over Max Size' && lengthNote(400) === '' && lengthNote(300) === '');
 
   /* The DOM drive, against a recording fake slider: during the dispatch the
    * slider carries the widened max, step 'any' and the target view; after

@@ -22,7 +22,7 @@
  * the bundle, so every reader of [data-ship="length-output"] is unchanged.
  *
  * Beyond 400 m the ship is outside the V1 structure (weight) formula's
- * validated range, and the page says so under the length whenever the
+ * validated range, and the page says "Over Max Size" (owner, 2026-11-11) under the length whenever the
  * displayed length is above 400.
  */
 
@@ -51,7 +51,7 @@ export const outsideV1Domain = (lengthM) => Number.isFinite(lengthM) && lengthM 
 /** The disclosure shown beside a length above 400 m ('' otherwise). */
 export function lengthNote(lengthM) {
   return outsideV1Domain(lengthM)
-    ? `Beyond ${V1_LENGTH_MAX_M} m: outside the structure formula's validated range`
+    ? 'Over Max Size'
     : '';
 }
 
