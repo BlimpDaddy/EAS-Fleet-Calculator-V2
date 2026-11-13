@@ -356,6 +356,8 @@ fleetLink.before(dynLink, sep);
 // ---------------------------------------------------------------- build page
 
 let state = initialState();
+// read-only, for SHARE SETTINGS (v2/deep-link.js, 2026-11-13): is Cd a number the person set, or still the estimate?
+window.__v2DynamicCdSet = () => state.cd !== CD_TRACKS_ESTIMATE;
 
 const section = document.createElement('section');
 section.className = 'section-dynamic';
